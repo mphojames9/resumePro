@@ -36,7 +36,13 @@
       margin: 0;
       background-color: hsl(40 22% 94% / var(--tw-bg-opacity));
       color: var(--text);
-
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      overflow-y: scroll;
+      height: 100vh;
     }
 
     .header-right {
@@ -78,24 +84,17 @@
       align-items: center;
       justify-content: center;
       gap: 10px;
-
-      background-color: #200E32;
+      background-color: rgb(0, 132, 255);
       color: #ffffff;
-
       padding: 6px 11px;
       min-width: 140px;
       height: 35px;
-
       border: none;
       border-radius: 14px;
-
       font-size: 14px;
       font-weight: 600;
       letter-spacing: 0.3px;
-
       cursor: pointer;
-
-      box-shadow: 0 8px 24px rgba(32, 14, 50, 0.35);
       transition: all 0.3s ease;
     }
 
@@ -131,12 +130,16 @@
         /* FULL WIDTH ON MOBILE */
         min-width: unset;
       }
+
+      #previewBtn {
+        width: fit-content;
+      }
     }
 
 
     .layout {
       display: grid;
-      grid-template-columns: 650px 1fr;
+      grid-template-columns: 1fr 1fr;
       gap: 24px;
       padding: 24px;
       max-width: 1500px;
@@ -155,6 +158,9 @@
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
       border: 1px solid #f0f0f0;
       transition: 0.3s ease;
+      display: grid;
+      grid-template-columns: 2.5fr 1fr;
+      position: relative;
     }
 
     .profile-section:hover {
@@ -166,11 +172,27 @@
       font-size: 16px;
       font-weight: 600;
       margin-bottom: 18px;
-      color: #111;
+      color: var(--muted);
       letter-spacing: 0.5px;
+      text-transform: none;
     }
 
-    .fa-solid, .fas {
+    .profile-section .Personal-details-main {
+      padding: 0;
+    }
+
+    .profile-section li {
+      margin-bottom: 5px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .Personal-details-main li {
+      list-style-type: none;
+    }
+
+    .fa-solid,
+    .fas {
       font-size: 22px;
       margin-right: 10px;
     }
@@ -229,20 +251,23 @@
 
     /* Preview Container */
     .photo-preview {
-      margin-top: 20px;
       display: flex;
       justify-content: center;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
     }
 
     /* Profile Image */
     .photo-preview img {
-      width: 140px;
-      height: 140px;
+      width: 250px;
+      height: 250px;
       object-fit: cover;
       border-radius: 50%;
-      border: 4px solid #ffffff;
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
       transition: 0.4s ease;
+      z-index: 1000;
+      position: absolute;
+      top: 0;
     }
 
     .photo-preview img:hover {
@@ -251,11 +276,12 @@
 
     .section-block {
       margin-bottom: 20px;
+      overflow-y: scroll;
     }
 
     .section-block h4 i {
-  margin-right: 12px;
-}
+      margin-right: 12px;
+    }
 
 
     input,
@@ -293,23 +319,32 @@
     }
 
     .preview-wrap {
-      background: #ddd;
-      padding: 20px;
-      overflow: auto;
-      width: 794px;
-      height: 1123px;
-      width: 100%;
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      justify-content: center;
+      overflow-x: hidden;
+      padding: 10px;
     }
 
-    .resume-page {
+    @media (min-width:1500px) {
+      .layout {
+        display: grid;
+        grid-template-columns: 600px 1fr;
+        gap: 24px;
+        padding: 24px;
+        max-width: 1500px;
+        margin: 0 auto;
+      }
+    }
+
+    #resumePreview {
       background: white;
       width: 794px;
+      min-width: 794px;
       min-height: 1122px;
-      box-shadow: 0 8px 40px rgba(0, 0, 0, .1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       margin-bottom: 20px;
+      transform-origin: top center;
+      transition: transform 0.2s ease;
     }
 
     /* MOBILE */
@@ -326,13 +361,15 @@
     /* ===== GLOBAL ===== */
     aside {
       width: 100%;
-      padding: 24px;
       overflow-y: auto;
-      height: 100%;
+      height: 100vh;
       font-family: "Inter", sans-serif;
       scrollbar-width: none;
       background: inherit;
       box-shadow: none;
+      padding: 10px;
+      position: relative;
+      transition: 450ms ease-in-out;
     }
 
     /* Scrollbar */
@@ -347,9 +384,10 @@
       border-radius: 18px;
       padding: 18px 20px;
       margin-bottom: 18px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
       transition: all 0.3s ease;
       width: 100%;
+      height: fit-content;
     }
 
     /* HEADER */
@@ -375,7 +413,7 @@
       height: 36px;
       border-radius: 12px;
       border: none;
-      background: #f2f4f8;
+      background: #fbfcfd;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -384,7 +422,11 @@
     }
 
     .toggle-btn:hover {
-      background: #e4e9ff;
+      background: #f3f4f5;
+    }
+
+    .toggle-btn .fa-solid {
+      margin-right: 0;
     }
 
     .chevron {
@@ -396,15 +438,23 @@
       transition: transform 0.3s ease;
     }
 
-    .toggle-btn.active .chevron {
-      transform: rotate(-135deg);
+    .active {
+      transform: rotate(-177deg);
     }
 
     /* CONTENT */
     .section-content {
       overflow: hidden;
+      transition: 300ms ease-in-out;
       height: 0;
-      transition: height 0.35s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .close-section-content {
+      height: 0;
+    }
+
+    .open-section-content {
+      height: fit-content;
     }
 
     /* INNER CONTENT SPACING */
@@ -418,17 +468,18 @@
       padding: 8px 16px;
       border-radius: 10px;
       border: none;
-      background: linear-gradient(to right, #e71b96, #ec008c, #f323a0);
-      color: white;
-      font-size: 17px;
+      background: #f8f9fc;
+      color: var(--primary);
+      font-size: 14px;
       cursor: pointer;
       transition: all 0.25s ease;
       margin: 14px auto;
+      border: 1px solid rgba(195, 203, 218, 0.664);
+      font-weight: 700;
     }
 
     .small-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(79, 124, 255, 0.35);
+      transform: translateY(-1px);
     }
 
 
@@ -443,6 +494,13 @@
       letter-spacing: 1px;
       text-transform: uppercase;
       color: var(--primary);
+      font-weight: 900;
+    }
+
+    .profile-section h4 {
+      text-transform: none;
+      margin-bottom: 0;
+      margin-top: 5px;
     }
 
     /* ===== INPUTS ===== */
@@ -500,23 +558,18 @@
       transition: all 0.25s ease;
     }
 
-    .small-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 10px 20px rgba(79, 70, 229, 0.4);
-    }
-
     /* Move buttons */
     .move {
-      background: var(--primary);
-      color: #cbd5e1;
-      border: 1px solid #334155;
+      background: #fbfcfd;
+      color: var(--muted);
+      border: 1px solid #eef0f3;
       font-weight: 700;
       height: 40px;
+      font-weight: 800;
     }
 
     .move:hover {
-      background: #334155;
-      color: white;
+      background: #f3f4f5;
     }
 
     /* Delete buttons */
@@ -528,8 +581,14 @@
       background: transparent;
     }
 
+    .delete .fa-solid {
+      font-size: 15px;
+      color: rgb(216, 49, 49);
+    }
+
     .delete {
-      font-size: 17px;
+      background: none;
+      border: none;
     }
 
     .delete:hover,
@@ -537,6 +596,11 @@
       background: var(--primary);
       color: white;
       opacity: 0.7;
+    }
+
+    .delete:hover {
+      background: none;
+      border: none;
     }
 
     .delbullet:hover {
@@ -562,7 +626,7 @@
       border: var(--border);
     }
 
-    .addbullet .fa-solid{
+    .addbullet .fa-solid {
       margin-left: 7px;
     }
 
@@ -590,6 +654,486 @@
       font-size: 26px;
       font-weight: bold;
       color: #94a3b8;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      border-radius: 50%;
+      border: 2px solid gray;
+    }
+
+    .profilePhotoUpload {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 20%, rgba(79, 70, 229, .15), transparent 60%), radial-gradient(circle at 70% 80%, rgba(34, 197, 94, .15), transparent 60%), rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(14px);
+      opacity: 0;
+      pointer-events: auto;
+      transition: opacity .45s ease, transform .45s ease;
+      padding: 5px;
+      overflow-y: scroll;
+    }
+
+    .profilePhotoUpload::-webkit-scrollbar {
+      display: none;
+    }
+
+    .profilePhotoUpload.hidden {
+      display: none;
+    }
+
+
+    @media (max-width:550px) {
+      .profilePhotoUpload {
+        padding: 0;
+        background: linear-gradient(180deg, #ffffff, #f8fafc);
+      }
+
+      .profilePhotoUpload .upload-card {
+        border-radius: unset;
+        box-shadow: unset;
+      }
+    }
+
+    @media (min-width:901px) {
+      .preview-wrap .btn-premium {
+        display: none;
+      }
+
+      #previewBtn {
+        display: none;
+      }
+    }
+
+    @media (max-width:900px) {
+      .layout {
+        padding: 0;
+      }
+
+      .closeBtn {
+        color: var(--muted);
+        position: fixed;
+        top: 6px;
+        right: 10px;
+        border-radius: 50px;
+        width: 40px;
+        height: 40px;
+        z-index: 999;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.267);
+      }
+
+      .preview-wrap {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 9998;
+        display: none;
+        background-color: hsl(40 22% 94% / var(--tw-bg-opacity));
+        backdrop-filter: blur(14px);
+        pointer-events: auto;
+        transition: 450ms ease-in-out;
+        padding: 3px;
+        overflow: hidden;
+        opacity: 0;
+      }
+
+      .preview-wrap.open {
+        display:flex ;
+      }
+
+      #resumePreview {
+        transform-origin: top center;
+        margin-top: 3%;
+      }
+
+
+      .header-right .btn-premium {
+        display: none;
+      }
+
+      .preview-wrap .btn-premium {
+        position: fixed;
+        bottom: 10px;
+        max-width: 130px;
+        z-index: 999;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.349);
+      }
+
+      aside {
+        max-width: 650px;
+        margin: 0 auto;
+      }
+
+      .preview-btn {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        border: 1px solid #e5e7eb;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.25s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        position: fixed;
+        bottom: 30px;
+        left: 5px;
+      }
+
+      .preview-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+        border-color: #6366f1;
+      }
+
+      .preview-btn .file-icon {
+        color: #d1d5db;
+        transition: 0.25s ease;
+      }
+
+      .preview-btn .glass-icon {
+        color: #6366f1;
+        transform: scale(0.9);
+        transition: 0.25s ease;
+      }
+
+      .preview-btn:hover .file-icon {
+        color: #c7d2fe;
+      }
+
+      .preview-btn:hover .glass-icon {
+        transform: scale(1.05);
+      }
+    }
+
+    .mainLogo {
+      width: 135px;
+      height: 45px;
+    }
+
+    @media (max-width:500px) {
+      .mainLogo {
+        width: 115px;
+        height: 40px;
+      }
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 9998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 20%, rgba(79, 70, 229, .15), transparent 60%), radial-gradient(circle at 70% 80%, rgba(34, 197, 94, .15), transparent 60%), rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(14px);
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity .45s ease, transform .45s ease;
+      padding: 5px;
+    }
+
+    .upload-card {
+      background: linear-gradient(180deg, #ffffff, #f8fafc);
+      border-radius: 22px;
+      padding: 36px 34px;
+      text-align: center;
+      width: 100%;
+      max-width: 800px;
+      box-shadow: 0 40px 90px rgba(0, 0, 0, .35), inset 0 0 0 1px rgba(255, 255, 255, .6);
+      animation: floatIn .8s cubic-bezier(.2, .8, .2, 1);
+      overflow-y: scroll;
+    }
+
+    .row1 {
+      width: 100%;
+      float: right;
+    }
+
+    .row1 .closeProfilePhotoUpload {
+      float: right;
+    }
+
+    .row1 .closeProfilePhotoUpload .fa-solid {
+      margin-right: 0;
+    }
+
+    .row2 {
+      width: 100%;
+      background: black;
+      min-height: 350px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    .ProfileImageContainer {
+      width: 250px;
+      height: 250px;
+      background: white;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .ProfileImageContainer {
+      width: 250px;
+      height: 250px;
+    }
+
+    .backdrop {
+      position: absolute;
+      background: rgba(0, 0, 0, 0.096);
+      inset: 0;
+    }
+
+    .row3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding: 20px;
+    }
+
+
+    .resizer {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+      max-width: 200px;
+      margin: 0 auto;
+    }
+
+    .resizer input {
+      padding: 0;
+      margin-bottom: 3px;
+    }
+
+    .resizer input {
+      padding: 0;
+      margin-bottom: 3px;
+    }
+
+    .resizer .fa-solid {
+      margin-right: 0;
+    }
+
+    .saveImage {
+      background: rgb(27, 165, 57);
+      color: white;
+
+    }
+
+    .saveImage,
+    .removeImage,
+    .changeImage {
+      width: 150px;
+      margin: 40px auto;
+      font-weight: 900;
+      box-shadow: 0 1px 10px rgba(0, 0, 0, 0.219);
+    }
+
+    .changeImage {
+      border: none;
+      border-radius: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.25s ease;
+      margin: 20px auto;
+    }
+
+    .row3 .left {
+      display: flex;
+      flex-direction: column;
+      max-height: 150px;
+    }
+
+    @media (max-width:550px) {
+      .upload-card {
+        padding: 10px;
+      }
+
+      .saveImage {
+        margin: 8px auto;
+      }
+
+      .row3 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-height:645px) {
+      .upload-card {
+        border-radius: 0;
+      }
+
+      .overlay {
+        padding: 0;
+      }
+    }
+
+    .profile-section .right .photo-preview img {
+      width: 80px;
+      height: 80px;
+      top: unset;
+      cursor: pointer;
+      z-index: unset;
+    }
+
+    .profile-section .right {
+      position: relative;
+      height: 90px;
+    }
+
+
+
+
+    .backdropBtn {
+      background: transparent;
+      width: 80%;
+      height: 100%;
+      z-index: 9998;
+      position: absolute;
+      top: 0;
+      cursor: pointer;
+    }
+
+    .editProfileBtn {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      border: 2px solid rgb(230, 195, 101);
+      border-radius: 10px;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+    }
+
+    .editProfileBtn .fa-solid {
+      font-size: 20px;
+      margin-right: 0;
+      color: rgb(11, 11, 46);
+    }
+
+    @media (max-width:500px) {
+      .profile-section {
+        display: flex;
+        flex-direction: column-reverse;
+      }
+
+      .editProfileBtn {
+        top: 10px;
+      }
+
+      .profile-section .right .photo-preview img {
+        position: unset;
+      }
+    }
+
+    .overlay-content {
+      width: 100%;
+      max-width: 600px;
+    }
+
+    .form-group {
+      padding: 5px;
+    }
+
+    .form-group label {
+      padding-left: 5px;
+      padding-bottom: 5px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .overlay-content .right .photo-preview img {
+      width: 100px;
+      height: 100px;
+      top: unset;
+      cursor: pointer;
+      position: unset;
+    }
+
+    .overlay-personalDetails {
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      scrollbar-width: 0px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #ffffff;
+      backdrop-filter: blur(14px);
+      opacity: 0;
+      pointer-events: auto;
+      transition: ease-in-out 450ms;
+      padding: 5px;
+      padding-bottom: 6em;
+      overflow-y: scroll;
+      height: fit-content;
+      z-index: 999;
+    }
+
+    .overlay-personalDetails.hidden {
+      display: none;
+    }
+
+    .opacity {
+        opacity: 1;
+      }
+
+    .overlay-content h2 {
+      padding: 10px;
+      color: var(--primary);
+    }
+
+    .overlay-content h4 {
+      width: 100%;
+      color: var(--primary);
+      text-align: center;
+    }
+
+    .savePersonalDetails {
+      width: 200px;
+      display: block;
+      margin: 0 auto;
+      font-weight: 600;
+      font-size: 18px;
+      background: rgb(27, 165, 57);
+      color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    /* Scrollbar */
+    .overlay-personalDetails::-webkit-scrollbar {
+      display: none;
+    }
+
+    .section-block::-webkit-scrollbar {
+      display: none;
+    }
+
+
+    @media (max-height:670px) {
+
+      .row2 {
+        height: 280px;
+        max-height: 280px;
+        min-height: unset;
+      }
     }
   </style>
 </head>
@@ -597,7 +1141,9 @@
 <body>
 
   <header class="topbar">
-    <strong>Resume Builder</strong>
+    <div class="logo">
+      <img src="./assets/logo.png" alt="logo" class="mainLogo">
+    </div>
     <div class="header-right">
       <select id="templateSelect">
         <option value="modern">Modern</option>
@@ -619,54 +1165,41 @@
     <aside>
 
       <div class="section-block profile-section">
-        <h4>Profile Photo</h4>
-
-        <div class="photo-upload">
-          <label for="profilePicInput" class="upload-btn">
-            <span>Upload Photo</span>
-            <input type="file" id="profilePicInput" accept="image/*" hidden>
-          </label>
-
-          <button class="remove-btn" id="removePhotoBtn">
-            Remove
-          </button>
+        <div class="editProfileBtn">
+          <i class="fa-solid fa-pen" id="editProfileBtn"></i>
         </div>
+        <div class="left">
+          <h4 class="name" style="font-size: 1.2rem;">Mpho James Matli</h4>
+          <h4 class="tittle" style="color: #7e7b7b;">Software Engineer</h4>
+          <ul class="Personal-details-main">
+            <li><span style="display:inline-flex;align-items:center;margin-right:6px;color:#6f93c1">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                  <path
+                    d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
+                    stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </span>+27725320406</li>
+            <li><span style="display:inline-flex;align-items:center;margin-right:6px;color:#6f93c1">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                  <rect x="3" y="5" width="18" height="14" rx="2" stroke="#6f93c1" stroke-width="1.5"></rect>
+                  <path d="M3 7l9 6 9-6" stroke="#6f93c1" stroke-width="1.5"></path>
+                </svg>
+              </span>mphojames9@gmail.com</li>
+            <li><span style="display:inline-flex;align-items:center;margin-right:6px;color:#6f93c1">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+                  <path d="M12 22s7-7 7-12a7 7 0 1 0-14 0c0 5 7 12 7 12z" stroke="#6f93c1" stroke-width="1.5"></path>
+                  <circle cx="12" cy="10" r="2.5" stroke="#6f93c1" stroke-width="1.5"></circle>
+                </svg>
+              </span>Adonis st 14569 EXT11 Soshanguve South 0152</li>
+          </ul>
 
-        <div id="photoPreviewContainer" class="photo-preview">
-          <img id="profilePreview" src="your-image.jpg" alt="Profile Preview">
         </div>
-      </div>
-
-      <div class="section-block">
-          <h4>
-          <i class="fa-solid fa-user-pen"></i>
-          Summary
-        </h4>
-        <textarea id="summary"></textarea>
-      </div>
-
-      <div class="section-block">
-        <div class="section-header">
-          <h4><i class="fa-solid fa-id-card"></i>Personal</h4>
-          <button class="toggle-btn">
-            <i class="fa-solid fa-chevron-down"></i>
-          </button>
-        </div>
-        <div class="section-content">
-          <div class="section-inner">
-            <input id="fullName" placeholder="Full Name">
-            <input id="title" placeholder="Title">
-            <input id="email" placeholder="Email">
-            <input id="phone" placeholder="Phone">
-            <input id="location" placeholder="Location">
-            <input id="website" placeholder="Website">
-            <input id="linkedin" placeholder="LinkedIn">
+        <div class="right">
+          <div id="photoPreviewContainer" class="photo-preview">
           </div>
+          <div class="backdropBtn"></div>
         </div>
       </div>
-
-
-
 
       <!-- EXPERIENCE -->
       <div class="section-block">
@@ -698,7 +1231,7 @@
           <div class="section-inner">
             <div id="educationContainer"></div>
             <button class="small-btn" id="addEduBtn">
-              <i class="fa-solid fa-plus"></i> Add Education
+              <i class="fa-solid fa-plus"></i> Add Entry
             </button>
           </div>
         </div>
@@ -716,7 +1249,7 @@
           <div class="section-inner">
             <div id="referencesContainer"></div>
             <button class="small-btn" id="addrefBtn">
-              <i class="fa-solid fa-plus"></i> Add Reference
+              <i class="fa-solid fa-plus"></i> Add Entry
             </button>
           </div>
         </div>
@@ -734,7 +1267,7 @@
           <div class="section-inner">
             <div id="skillsContainer"></div>
             <button class="small-btn" id="addSkillBtn">
-              <i class="fa-solid fa-plus"></i> Add Skill
+              <i class="fa-solid fa-plus"></i> Add Entry
             </button>
           </div>
         </div>
@@ -752,35 +1285,137 @@
           <div class="section-inner">
             <div id="interestsContainer"></div>
             <button class="small-btn" id="addinterestBtn">
-              <i class="fa-solid fa-plus"></i> Add Interest
+              <i class="fa-solid fa-plus"></i> Add Entry
             </button>
           </div>
         </div>
+      </div>
+      <div class="overlay-personalDetails hidden" id="editDetails-overay">
+        <div class="overlay-content">
+          <h2>Edit Personal Details</h2>
+          <div class="right">
+            <h4>Profile Picture</h4>
+            <div id="photoPreviewContainer" class="photo-preview">
+              <img src="./assets/profile.png" alt="" class="src">
+            </div>
+          </div>
+          <div class="section-block">
+            <h4>
+              <i class="fa-solid fa-user-pen"></i>
+              Summary
+            </h4>
+            <textarea id="summary" placeholder="Professional Summary"></textarea>
+
+            <div class="section-header">
+              <h4><i class="fa-solid fa-id-card"></i>Personal Details</h4>
+            </div>
+            <div class="section-inner">
+              <div class="form-group">
+                <label>Full Name</label>
+                <input id="fullName" placeholder="Full Name">
+              </div>
+              <div class="form-group">
+                <label>Professional Title</label>
+                <input id="title" placeholder="Title">
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input id="email" placeholder="Email">
+              </div>
+              <div class="form-group">
+                <label>Phone</label>
+                <input id="phone" placeholder="Phone">
+              </div>
+              <div class="form-group">
+                <label>Location</label>
+                <input id="location" placeholder="Location">
+              </div>
+              <div class="form-group">
+                <label>Website</label>
+                <input id="website" placeholder="Website">
+              </div>
+              <div class="form-group">
+                <label>LinkedIn</label>
+                <input id="linkedin" placeholder="LinkedIn">
+              </div>
+            </div>
+
+          </div>
+          <button class="savePersonalDetails">
+            <i class="fa-solid fa-save"></i>Save
+          </button>
+        </div>
+
       </div>
 
     </aside>
 
     <!-- RIGHT PREVIEW -->
-    <section class="preview-wrapper">
-
-      <div class="zoom-controls">
-        <button id="zoomOut">-</button>
-        <span id="zoomLabel">100%</span>
-        <button id="zoomIn">+</button>
-      </div>
-
-      <div class="preview-wrap">
-        <div id="resumePreview"></div>
-      </div>
-
+    <section class="preview-wrap">
+      <button class="closeBtn"><i class="fa-solid fa-multiply" id="editResume"></i></button>
+      <button id="pdfBtn" class="btn-premium">
+        <i class="fa-solid fa-file-arrow-down"></i>
+        Download
+      </button>
+      <div id="resumePreview"></div>
     </section>
 
+    <button class="preview-btn" id="previewBtn">
+      <span class="fa-stack">
+        <i class="fa-regular fa-file fa-stack-2x file-icon"></i>
+        <i class="fa-solid fa-magnifying-glass fa-stack-1x glass-icon"></i>
+      </span>
+    </button>
   </main>
 
-  <!-- html2pdf for PDF export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-  <script src="app.js"></script>
-  <script src="script.js" defer></script>
+  <div class="profilePhotoUpload hidden" id="profilePhotoUpload">
+    <div class="upload-card">
+      <div class="row1">
+        <button class="closeProfilePhotoUpload" id="closeProfilePhotoUpload">
+          <i class="fa-solid fa-multiply"></i>
+        </button>
+      </div>
+      <h3>Image Uploader</h3>
+      <div class="row2">
+        <div class="ProfileImageContainer" id="photoPreviewContainer">
+          <img src="./assets/profile.png" alt="">
+          <div id="photoPreviewContainer" class="photo-preview">
+            <img src="./assets/profile.png" alt="">
+          </div>
+        </div>
+        <div class="backdrop"></div>
+      </div>
+
+      <div class="row3">
+        <div class="right">
+          <div class="resizer">
+            <i class="fa-solid fa-image" style="font-size: 15px;"></i>
+            <input type="range" min="100" max="200" value="100">
+            <i class="fa-solid fa-image"></i>
+          </div>
+
+          <button class="saveImage"><i class="fa-solid fa-save" style="font-size: 18px;"></i>Done
+          </button>
+        </div>
+        <div class="left">
+          <button class="removeImage" id="removePhotoBtn"
+            style=" margin-bottom: 0; margin-top: 15px; color: rgb(236, 55, 55);"><i class="fa-solid fa-trash"
+              style="font-size: 18px;"></i>Remove
+          </button>
+          <label for="profilePicInput" class="changeImage" style=" margin-bottom: 0;"><i class="fa-solid fa-plus"
+              style="font-size: 18px;"></i>
+            <span>Add/Change</span>
+            <input type="file" id="profilePicInput" accept="image/*" hidden>
+          </label>
+        </div>
+      </div>
+
+
+    </div>
+    <!-- html2pdf for PDF export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="app.js"></script>
+    <script src="script.js" defer></script>
 
 
 </body>

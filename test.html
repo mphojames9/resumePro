@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Live Multi-Line Preview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f3f4f6;
+      display: flex;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 600px;
+      background: #ffffff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 15px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 12px;
+      font-size: 16px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+      outline: none;
+      resize: vertical;
+      font-family: inherit;
+    }
+
+    textarea:focus {
+      border-color: #4f46e5;
+    }
+
+    .preview {
+      margin-top: 20px;
+      padding: 15px;
+      background: #eef2ff;
+      border-radius: 8px;
+      min-height: 80px;
+      white-space: pre-wrap;
+      /* THIS preserves line breaks */
+      font-size: 16px;
+    }
+
+
+
+
+
+    .preview-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      border: 1px solid #e5e7eb;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .preview-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      border-color: #6366f1;
+    }
+
+    .preview-btn .file-icon {
+      color: #d1d5db;
+      transition: 0.25s ease;
+    }
+
+    .preview-btn .glass-icon {
+      color: #6366f1;
+      transform: scale(0.9);
+      transition: 0.25s ease;
+    }
+
+    .preview-btn:hover .file-icon {
+      color: #c7d2fe;
+    }
+
+    .preview-btn:hover .glass-icon {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <h2>Live Multi-Line Typing</h2>
+    <textarea id="textInput" placeholder="Start typing..."></textarea>
+    <div class="preview" id="preview"></div>
+    <button class="preview-btn">
+      <span class="fa-stack">
+        <i class="fa-regular fa-file fa-stack-2x file-icon"></i>
+        <i class="fa-solid fa-magnifying-glass fa-stack-1x glass-icon"></i>
+      </span>
+    </button>
+
+  </div>
+
+        <div class="section-block profile-section" style="display: none;">
+        <h4>Profile Photo</h4>
+
+        <div class="photo-upload">
+          <label for="profilePicInput" class="upload-btn">
+            <span>Upload Photo</span>
+            <input type="file" id="profilePicInput" accept="image/*" hidden>
+          </label>
+
+          <button class="remove-btn" id="removePhotoBtn">
+            Remove
+          </button>
+        </div>
+
+        <div id="photoPreviewContainer" class="photo-preview">
+          <img id="profilePreview" src="your-image.jpg" alt="Profile Preview">
+        </div>
+      </div>
+
+
+
+
+  <script>
+    const input = document.getElementById('textInput');
+    const preview = document.getElementById('preview');
+
+    input.addEventListener('input', function () {
+      preview.textContent = input.value;
+    });
+  </script>
+
+</body>
+
+</html>

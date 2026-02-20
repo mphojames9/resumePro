@@ -6,6 +6,7 @@
 
   // Basic stopwords set (simple)
   const STOPWORDS = new Set(("a about above after again against all am an and any are as at be because been before being below between both but by could did do does doing down during each few for from further had has have having he her here hers herself him himself his how i if in into is it its itself just me more most my yourself yourselves no nor not of off on once only or other our ours ourselves out over own same she should so some such than that the their theirs them themselves then there these they this those through to too under until up very was were what when where which while who whom why with would you your yours").split(" "));
+  
 
   // --- DOM refs -------------------------------------------------------------
   const refs = {
@@ -240,7 +241,7 @@
   // --- Render lists (experience, education, skills, references) -----------------------
   function renderLists() {
 
-        // Education
+    // Education
     refs.educationContainer.innerHTML = '';
     data.education.forEach((edu) => {
       const node = document.createElement('div');
@@ -264,7 +265,7 @@
           <button class="move" data-action="downedu" data-id="${edu.id}" class="btn tiny"><svg viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg></button>
-          <button class="delete" data-action="removeedu" data-id="${edu.id}" class="btn tiny"><i class="fa-solid fa-trash"></i> Delele</button>
+          <button class="delete" data-action="removeedu" data-id="${edu.id}" class="btn tiny"><i class="fa-solid fa-trash"></i></button>
           </div>
         </div>
       `;
@@ -300,7 +301,7 @@
           <button class="move" data-action="down" data-id="${exp.id}" class="btn tiny"><svg viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg></button>
-          <button class="delete" data-action="remove" data-id="${exp.id}" class="btn tiny"><i class="fa-solid fa-trash"></i> Delele</button>
+          <button class="delete" data-action="remove" data-id="${exp.id}" class="btn tiny"><i class="fa-solid fa-trash"></i></button>
         </div>
       `;
       refs.experienceContainer.appendChild(node);
@@ -333,7 +334,7 @@
           <button class="move" data-action="downref" data-id="${ref.id}" class="btn tiny"><svg viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg></button>
-          <button class="delete" data-action="removeref" data-id="${ref.id}" class="btn tiny"><i class="fa-solid fa-trash"></i> Delele</button>
+          <button class="delete" data-action="removeref" data-id="${ref.id}" class="btn tiny"><i class="fa-solid fa-trash"></i></button>
         </div>
         </div>
       `;
@@ -486,19 +487,19 @@
   function bindButtons() {
     refs.addExpBtn.addEventListener('click', () => {
 
-     data.experience.unshift({
-     id: id(),
-     role: "",
-     company: "",
-     start: "",
-     end: "",
-     bullets: [""]
-   });
-   renderLists();
-   renderPreview();
-   save();
-});
- 
+      data.experience.unshift({
+        id: id(),
+        role: "",
+        company: "",
+        start: "",
+        end: "",
+        bullets: [""]
+      });
+      renderLists();
+      renderPreview();
+      save();
+    });
+
     refs.addEduBtn.addEventListener('click', () => {
       data.education.unshift({ id: id(), school: "", degree: "", year: "", discription: "" });
       renderLists(); renderPreview(); save();
@@ -523,7 +524,7 @@
     refs.pdfAtsBtn && refs.pdfAtsBtn.addEventListener('click', () => downloadPDF(true));
   }
 
-  
+
   // --- PDF generation (html2pdf) -----------------------------------------
   function downloadPDF(atsMode) {
     const preview = refs.resumePreview;
@@ -561,11 +562,11 @@
           default: return renderModern();
         }
       })();
-      setTimeout(() => {
-        paginateResume(html);
-      }, 100);
+        setTimeout(() => {
+          paginateResume(html);
+        }, 100);
 
-        
+
         break;
     }
     if (highlightKeywords && highlightKeywords.length) {
@@ -573,120 +574,89 @@
     }
   }
 
-function paginateResume(html) {
-  const container = refs.resumePreview;
-  container.innerHTML = '';
+  function paginateResume(html) {
+    const container = refs.resumePreview;
+    container.innerHTML = '';
 
-  const PAGE_HEIGHT = 1122;
+    const PAGE_HEIGHT = 1122;
 
-  const temp = document.createElement('div');
-  temp.style.position = 'absolute';
-  temp.style.visibility = 'hidden';
-  temp.style.width = '794px';
-  temp.innerHTML = html;
-  document.body.appendChild(temp);
+    const temp = document.createElement('div');
+    temp.style.position = 'absolute';
+    temp.style.visibility = 'hidden';
+    temp.style.width = '794px';
+    temp.innerHTML = html;
+    document.body.appendChild(temp);
 
-  const root = temp.firstElementChild;
-  const sidebar = root.querySelector('aside');
-  const main = root.querySelector('main');
+    const root = temp.firstElementChild;
+    const sidebar = root.querySelector('aside');
+    const main = root.querySelector('main');
 
-  if (!sidebar || !main) {
-    console.error('Pagination failed: sidebar or main missing');
-    container.innerHTML = html;
+    if (!sidebar || !main) {
+      console.error('Pagination failed: sidebar or main missing');
+      container.innerHTML = html;
+      document.body.removeChild(temp);
+      return;
+    }
+
+    // ✅ FIRST PAGE WITH SIDEBAR
+    let page = createPageWithSidebar(sidebar);
+
+    [...main.children].forEach(section => {
+      const clone = section.cloneNode(true);
+      page.main.appendChild(clone);
+
+      if (page.page.scrollHeight > PAGE_HEIGHT) {
+        page.main.removeChild(clone);
+
+        // ✅ NEXT PAGES — NO SIDEBAR
+        page = createPageWithoutSidebar();
+        page.main.appendChild(clone);
+      }
+    });
+
     document.body.removeChild(temp);
-    return;
+
+    console.log(
+      'Pages rendered:',
+      container.querySelectorAll('.resume-page').length
+    );
   }
 
-  // ✅ FIRST PAGE WITH SIDEBAR
-  let page = createPageWithSidebar(sidebar);
 
-  [...main.children].forEach(section => {
-    const clone = section.cloneNode(true);
-    page.main.appendChild(clone);
+  function createPageWithSidebar(sidebarNode) {
+    const page = document.createElement('div');
+    page.className = 'resume-page resume professional';
 
-    if (page.page.scrollHeight > PAGE_HEIGHT) {
-      page.main.removeChild(clone);
+    const wrapper = document.createElement('div');
+    wrapper.className = 'resume_Template_1';
 
-      // ✅ NEXT PAGES — NO SIDEBAR
-      page = createPageWithoutSidebar();
-      page.main.appendChild(clone);
-    }
-  });
+    const sidebarClone = sidebarNode.cloneNode(true);
+    const main = document.createElement('main');
+    main.className = 'content_Template_1';
 
-  document.body.removeChild(temp);
+    wrapper.appendChild(sidebarClone);
+    wrapper.appendChild(main);
+    page.appendChild(wrapper);
 
-  console.log(
-    'Pages rendered:',
-    container.querySelectorAll('.resume-page').length
-  );
-}
+    refs.resumePreview.appendChild(page);
 
+    return { page, main };
+  }
 
-function createPageWithSidebar(sidebarNode) {
-  const page = document.createElement('div');
-  page.className = 'resume-page resume professional';
+  function createPageWithoutSidebar() {
+    const page = document.createElement('div');
+    page.className = 'resume-page resume professional';
 
-  const wrapper = document.createElement('div');
-  wrapper.className = 'resume_Template_1';
+    const main = document.createElement('main');
+    main.className = 'content_Template_1';
+    main.style.paddingLeft = '20px';
+    main.style.width = '100%';
 
-  const sidebarClone = sidebarNode.cloneNode(true);
-  const main = document.createElement('main');
-  main.className = 'content_Template_1';
+    page.appendChild(main);
+    refs.resumePreview.appendChild(page);
 
-  wrapper.appendChild(sidebarClone);
-  wrapper.appendChild(main);
-  page.appendChild(wrapper);
-
-  refs.resumePreview.appendChild(page);
-
-  return { page, main };
-}
-
-function createPageWithoutSidebar() {
-  const page = document.createElement('div');
-  page.className = 'resume-page resume professional';
-
-  const main = document.createElement('main');
-  main.className = 'content_Template_1';
-  main.style.paddingLeft = '20px';
-  main.style.width = '100%';
-
-  page.appendChild(main);
-  refs.resumePreview.appendChild(page);
-
-  return { page, main };
-}
-
-// ===== ZOOM CONTROL =====
-let zoomLevel = 1;
-const ZOOM_STEP = 0.1;
-const ZOOM_MIN = 0.5;
-const ZOOM_MAX = 1.5;
-
-const previewWrap = document.querySelector('.preview-wrap');
-const zoomLabel = document.getElementById('zoomLabel');
-
-function applyZoom() {
-  previewWrap.style.transform = `scale(${zoomLevel})`;
-  previewWrap.style.transformOrigin = 'top center';
-  zoomLabel.textContent = Math.round(zoomLevel * 100) + '%';
-}
-
-document.getElementById('zoomIn').addEventListener('click', () => {
-  zoomLevel = Math.min(ZOOM_MAX, zoomLevel + ZOOM_STEP);
-  applyZoom();
-});
-
-document.getElementById('zoomOut').addEventListener('click', () => {
-  zoomLevel = Math.max(ZOOM_MIN, zoomLevel - ZOOM_STEP);
-  applyZoom();
-});
-
-// Initialize
-applyZoom();
-
-
-
+    return { page, main };
+  }
 
   // --- Template renderers -----------------------------------------------
   function photoHtml() {
@@ -701,39 +671,39 @@ applyZoom();
   }
 
   function renderModern() {
-  const p = photoHtml();
+    const p = photoHtml();
 
-  const icon = (svg) =>
-    `<span style="display:inline-flex;align-items:center;margin-right:6px;color:#6f93c1">
+    const icon = (svg) =>
+      `<span style="display:inline-flex;align-items:center;margin-right:6px;color:#6f93c1">
       ${svg}
     </span>`;
 
-  const ICONS = {
-    profile: `
+    const ICONS = {
+      profile: `
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
         <circle cx="12" cy="8" r="4" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
         <path d="M4 20a8 8 0 0 1 16 0" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
       </svg>`,
 
-    education: `
+      education: `
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
         <path d="M3 7l9-4 9 4-9 4-9-4z" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
         <path d="M5 10v6c0 1 3 3 7 3s7-2 7-3v-6" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
       </svg>`,
 
-    experience: `
+      experience: `
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
         <rect x="3" y="7" width="18" height="13" rx="2" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
         <path d="M9 7V5h6v2" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
       </svg>`,
 
-    references: `
+      references: `
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
         <circle cx="12" cy="7" r="3.5" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
         <path d="M5 21a7 7 0 0 1 14 0" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
       </svg>`,
 
-    contact: `
+      contact: `
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
         <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2
         C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
@@ -741,36 +711,36 @@ applyZoom();
       </svg>`,
 
 
-    interests: `
+      interests: `
       <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
         <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2
         4 4 0 0 1 7 2c0 5.6-7 10-7 10z"
         stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
       </svg>`,
 
-    phone: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      phone: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
       <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
         stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>`,
 
-    email: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      email: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
       <rect x="3" y="5" width="18" height="14" rx="2" stroke="#6f93c1" stroke-width="1.5"/>
       <path d="M3 7l9 6 9-6" stroke="#6f93c1" stroke-width="1.5"/>
     </svg>`,
 
-    location: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      location: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
       <path d="M12 22s7-7 7-12a7 7 0 1 0-14 0c0 5 7 12 7 12z"
         stroke="#6f93c1" stroke-width="1.5"/>
       <circle cx="12" cy="10" r="2.5" stroke="#6f93c1" stroke-width="1.5"/>
     </svg>`,
 
-    website: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      website: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
       <circle cx="12" cy="12" r="9" stroke="#6f93c1" stroke-width="1.5"/>
       <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"
         stroke="#6f93c1" stroke-width="1.5"/>
     </svg>`,
 
-    linkedin: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      linkedin: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
       <rect x="3" y="3" width="18" height="18" rx="3"
         stroke="#6f93c1" stroke-width="1.5"/>
       <path d="M8 11v5M8 8h.01M12 16v-3a2 2 0 0 1 4 0v3"
@@ -778,20 +748,20 @@ applyZoom();
     </svg>`,
 
 
-    skills: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      skills: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none">
       <path d="M12 2l2.5 5 5.5.8-4 4 .9 5.7-4.9-2.6-4.9 2.6.9-5.7-4-4 5.5-.8L12 2z"
         stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
     </svg>`,
 
-    company: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+      company: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none">
     <rect x="3" y="7" width="18" height="13" rx="2"
       stroke="#6f93c1" stroke-width="1.5"/>
     <path d="M9 7V5h6v2"
       stroke="#6f93c1" stroke-width="1.5"/>
-  </svg>` 
-  };
+  </svg>`
+    };
 
-  return `
+    return `
   <div class="resume_Template_1">
     <aside class="sidebar_Template_1">
       <div class="photo-wrap_Template_1">${p}</div>
@@ -881,9 +851,9 @@ applyZoom();
               <div class="item-sub_Template_1">${escapeHtml(exp.company)}</div>
               <div class="date">
           ${[exp.start, exp.end].some(d => d && d.trim())
-          ? `<div class="date">${[exp.start, exp.end].filter(d => d && d.trim()).join(' – ')}</div>`
-          : ''
-        }
+        ? `<div class="date">${[exp.start, exp.end].filter(d => d && d.trim()).join(' – ')}</div>`
+        : ''
+      }
 
 </div>
               </div>
@@ -946,7 +916,7 @@ applyZoom();
     </main>
   </div>
   `;
-}
+  }
 
 
   function renderMinimal() {
@@ -1063,17 +1033,38 @@ applyZoom();
   init();
 })();
 
-const previewOverlay = document.querySelector('#preview-wrap-overlay');
+const previewOverlay = document.querySelector('.preview-wrap');
 const previewBtns = document.querySelectorAll('#previewBtn');
 const editResumeBtn = document.querySelector('#editResume');
 const navbar = document.querySelector('.navbar');
+const overlayPersonalDetails = document.querySelector('.overlay-personalDetails');
+const editProfileBtn = document.querySelectorAll('#editProfileBtn, .profile-section .left');
+const savePersonalDetails = document.querySelector('.savePersonalDetails')
+
+editProfileBtn.forEach(btn => btn.addEventListener('click',()=>{
+  overlayPersonalDetails.classList.remove('hidden');
+  setTimeout(() => {
+    overlayPersonalDetails.classList.add('opacity');
+  }, 100);
+}));
+
+savePersonalDetails.addEventListener('click',()=>{
+  overlayPersonalDetails.classList.remove('opacity');
+  setTimeout(() => {
+    overlayPersonalDetails.classList.add('hidden');
+  }, 450);
+
+  
+});
 
 /* OPEN PREVIEW */
 previewBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     // show overlay
-    previewOverlay.classList.remove('hidden');
-    previewOverlay.classList.remove('opacity');
+    previewOverlay.classList.add('open');
+     setTimeout(() => {
+    previewOverlay.classList.add('opacity');
+  }, 450); // MUST match CSS transition
 
     // hide UI
     document.body.classList.add('overlay-open');
@@ -1084,27 +1075,46 @@ previewBtns.forEach(btn => {
 /* CLOSE PREVIEW (EDIT MODE) */
 editResumeBtn.addEventListener('click', () => {
   // start overlay exit animation
-  previewOverlay.classList.add('opacity');
+  
+  previewOverlay.classList.remove('opacity');
 
-  // restore UI
-  document.body.classList.remove('overlay-open');
-  navbar?.classList.remove('hidden-ui');
 
   setTimeout(() => {
-    previewOverlay.classList.add('hidden');
+    previewOverlay.classList.remove('open');
   }, 450); // MUST match CSS transition
-});
+}); 
 
 
 // show overlay when no PDF
 function showpreviewOverlay() {
   previewOverlay.classList.remove("hidden");
+  previewOverlay.classList.add('opacity')
 }
 
 function hidepreviewOverlay() {
   previewOverlay.classList.add("hidden");
+  previewOverlay.classList.add('opacity')
 }
 
+const profilePicPreview = document.querySelectorAll('.backdropBtn');
+const profilePhotoUpload = document.querySelector('#profilePhotoUpload');
+const closeProfilePhotoUpload = document.querySelector('#closeProfilePhotoUpload');
+
+profilePicPreview.forEach(profile => profile.addEventListener('click',()=>{
+  profilePhotoUpload.classList.remove('hidden')
+  setTimeout(() => {
+    profilePhotoUpload.classList.add('opacity')
+  }, 450);
+}))
+
+closeProfilePhotoUpload.addEventListener('click',()=>{
+    profilePhotoUpload.classList.remove('opacity')
+  setTimeout(() => {
+    profilePhotoUpload.classList.add('hidden')
+  }, 450);
+})
+
+console.log(profilePicPreview)
 
 function scalePreview() {
   const stage = document.querySelector('.preview-wrap');
@@ -1114,11 +1124,21 @@ function scalePreview() {
   const w = window.innerWidth;
   let scale;
 
-  const BASE_WIDTH = 794;   // real preview width
-  const START_POINT = 510; // where scale = 0.63
-  const START_SCALE = 0.63;
+  let BASE_WIDTH = 1499;   // real preview width
+  let START_POINT = 1000; // where scale = 0.63
+  let START_SCALE = 0.55;
+  previewOverlay.classList.remove('hidden');
+    previewOverlay.classList.remove('opacity');
 
-  if (w >= 815) {
+  if (window.innerWidth <= 900) {
+    BASE_WIDTH = 794;      // real resume width
+    START_POINT = 510;     // where scale = 0.63
+    START_SCALE = 0.63;
+    previewOverlay.classList.add('hidden');
+    previewOverlay.classList.add('opacity');
+  }
+
+  if (w >= 1500) {
     scale = 1
   } else if (w <= BASE_WIDTH) {
     // smooth proportional scaling from phones up to tablets

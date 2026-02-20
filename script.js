@@ -20,14 +20,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (b && c) {
           b.classList.remove("active");
-          c.style.height = "0px";
+          c.classList.remove("open-section-content")
+          c.classList.add("close-section-content")
         }
       });
 
       // Open clicked one
       if (!isOpen) {
         btn.classList.add("active");
-        content.style.height = content.scrollHeight + "px";
+        content.classList.add("open-section-content");
+        content.classList.remove("close-section-content");
       }
     });
   });
