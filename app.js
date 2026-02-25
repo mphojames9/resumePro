@@ -108,6 +108,8 @@ let zoomControl;
 
 refs.experienceContainer.addEventListener('click', function (e) {
   const header = e.target.closest('.exp-header');
+
+  // If NOT clicking the header, do nothing
   if (!header) return;
 
   const card = header.closest('.exp-card');
@@ -117,7 +119,7 @@ refs.experienceContainer.addEventListener('click', function (e) {
     .forEach(c => {
       if (c !== card) c.classList.remove('active');
     });
-    
+
   card.classList.toggle('active');
 });
 
@@ -649,25 +651,32 @@ refs.referencesContainer.addEventListener('click', function (e) {
     }
     renderPreview(); save();
   }
+ 
+
   function expButtonHandler(e) {
-    const action = e.target.dataset.action;
-    const idVal = e.target.dataset.id;
-    const idx = Number(e.target.dataset.idx);
-    if (action === 'addbullet') {
-      const exp = data.experience.find(x => x.id === idVal);
-      exp.bullets.push('');
-    } else if (action === 'delbullet') {
-      const exp = data.experience.find(x => x.id === idVal);
-      exp.bullets.splice(idx, 1);
-    } else if (action === 'remove') {
-      data.experience = data.experience.filter(x => x.id !== idVal);
-    } else if (action === 'up') {
-      moveItem(data.experience, idVal, -1);
-    } else if (action === 'down') {
-      moveItem(data.experience, idVal, 1);
-    }
-    renderLists(); renderPreview(); save();
+  const action = e.target.dataset.action;
+  const idVal = e.target.dataset.id;
+  const idx = Number(e.target.dataset.idx);
+
+  if (action === 'addbullet') {
+    const exp = data.experience.find(x => x.id === idVal);
+    exp.bullets.push('');
+  } else if (action === 'delbullet') {
+    const exp = data.experience.find(x => x.id === idVal);
+    exp.bullets.splice(idx, 1);
+  } else if (action === 'remove') {
+    data.experience = data.experience.filter(x => x.id !== idVal);
+  } else if (action === 'up') {
+    moveItem(data.experience, idVal, -1);
+  } else if (action === 'down') {
+    moveItem(data.experience, idVal, 1);
   }
+
+  renderLists(); 
+  renderPreview(); 
+  save();
+}
+
   function eduInputHandler(e) {
     const idVal = e.target.dataset.id;
     const field = e.target.dataset.field;
@@ -1192,6 +1201,634 @@ cards.forEach(originalCard => {
   </svg>`
     };
 
+    // Inject ATS + Template CSS once
+if (!document.getElementById('modern-template-style')) {
+  const style = document.createElement('style');
+  style.id = 'modern-template-style';
+
+  style.textContent = `
+    :root {
+      --fa-primary: #68687a;
+      --fa-accent: #9cc7d1;
+      --dark: #191c24;
+      --gray: #64748b;
+      --light: #f8fafc;
+      --border: #e2e8f0;
+    }
+    .ATS-resume {
+      position: relative;
+      margin: auto;
+      padding: 60px;
+    }
+
+    /* ATS-header */
+    .ATS-header {
+      margin-bottom: 40px;
+      position: absolute;
+      background-color: rgba(11, 35, 44, 0.705);
+      color: white;
+      left: 0;
+      right: 0;
+      top: 0;
+      min-width: fit-content;
+      padding: 30px 60px 30px 60px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .ATS-header .right img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+    }
+
+    .ATS-header h1 {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .ATS-header h2 {
+      font-size: 18px;
+      font-weight: 500;
+      color: rgb(199, 192, 192);
+    }
+
+    /* ATS-contact */
+    .ATS-contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 5px;
+      margin-top: 10px;
+      font-size: 14px;
+      color: white;
+    }
+
+    .ATS-contact span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ATS-contact .fa-solid {
+        color: white;
+    }
+
+    .ATS-contact i {
+      background: linear-gradient(135deg, white, gray);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ATS-section s */
+    .ATS-section  {
+      margin-top: 35px;
+    }
+
+    .ATS-section  h3 {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 18px;
+      padding-left: 20px;
+      position: relative;
+      background-color: rgba(11, 35, 44, 0.5);
+      color: white;
+      padding: 5px;
+      text-align: center;
+    }
+
+    /* .ATS-section  h3::before{
+  content:"";
+  width:3px;
+  height:100%;
+  background:linear-gradient(to bottom,var(--accent),var(--primary));
+  position:absolute;
+  left:0;
+  top:0;
+  border-radius:3px;
+}
+
+.ATS-section  h3::after{
+  content:"";
+  width:3px;
+  height:100%;
+  background:linear-gradient(to bottom,var(--accent),var(--primary));
+  position:absolute;
+  right:0;
+  top:0;
+  border-radius:3px;
+} */
+
+    .ATS-section  p {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--gray);
+    }
+
+    /* Experience */
+    .job {
+      margin-bottom: 25px;
+    }
+
+    .job-ATS-header {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .job-ATS-header h4 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .job-ATS-header span {
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .job ul {
+      margin-top: 8px;
+      padding-left: 18px;
+      color: var(--gray);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .skill {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* ATS-skills */
+    .ATS-skills {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      gap: 15px;
+    }
+
+    .bar {
+      height: 5px;
+      background: rgb(48, 40, 40);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(to right, var(--fa-accent), var(--fa-primary));
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 50px;
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /* ================================
+   BASE
+================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #eef2f9;
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+.resume {
+    width: 794px;
+    min-width: 794px;
+    min-height: 1122px;
+    max-height: 1122px;
+    margin-bottom: 30px;
+    background: #ffffff;
+}
+
+.resume_Template_1 {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #ffffff;
+      width: 794px;
+    min-width: 794px;
+    min-height: 1122px;
+}
+
+/* ================================
+   SIDEBAR – GLASS + GRADIENT
+================================ */
+.sidebar_Template_1 {
+  width: 34%;
+  padding: 50px 30px;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  color: #e2e8f0;
+  position: relative;
+  max-height: 1122px;
+  overflow-y: hidden;
+}
+
+.sidebar_Template_1::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at top right, rgba(111,147,193,0.2), transparent 60%);
+  pointer-events: none;
+}
+
+.photo-wrap_Template_1 {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 25px;
+  border: 4px solid rgba(255,255,255,0.15);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.photo-wrap_Template_1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.name_Template_1 {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.role_Template_1 {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 6px;
+  color: #94a3b8;
+}
+
+.side-section_Template_1 {
+  margin-top: 40px;
+}
+
+.section-title_Template_1 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #cbd5e1;
+}
+
+.contact-list_Template_1,
+.skills-list_Template_1 {
+  list-style: none;
+ 
+}
+
+.summary {
+  margin-top: 1rem;
+}
+
+.summary .heading_Template_1 h2 {
+  font-size: 13px;
+  color:#e2e8f0 ;
+  margin-top: 2rem;
+  margin-bottom: -0.5rem;
+}
+
+.skills-list_Template_1 {
+ border-left: 2px solid #e2e8f0;
+ display: grid;
+ grid-template-columns: 1fr 1fr 1fr;
+}
+
+.contact-list_Template_1 li {
+  font-size: 13px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+
+.skills-list_Template_1 li {
+  font-size: 13px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #475569;
+  line-height: 1.5;
+  padding-left: 20px;
+}
+
+/* ================================
+   MAIN CONTENT – CLEAN + AIRY
+================================ */
+.content_Template_1 {
+  width: 66%;
+  padding: 70px 60px;
+  background: #ffffff;
+}
+
+.section_Template_1 {
+  margin-bottom: 55px;
+}
+
+.heading_Template_1 {
+  margin-bottom: 20px;
+}
+
+.heading_Template_1 h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.rule {
+  height: 2px;
+  width: 50px;
+  background: linear-gradient(to right, #6f93c1, #4f46e5);
+  margin-top: 8px;
+  border-radius: 2px;
+}
+
+.about_Template_1 {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #e2e8f0;
+}
+
+/* ================================
+   TIMELINE – MODERN
+================================ */
+.timeline_Template_1 {
+  margin-bottom: 25px;
+  padding-left: 20px;
+  border-left: 2px solid #e2e8f0;
+  position: relative;
+}
+
+.timeline_Template_1::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  background: #6f93c1;
+  border-radius: 50%;
+}
+
+.no-timeline::before {
+  display: none !important;
+}
+
+.item-head_Template_1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.item-head_Template_1 h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.item-sub_Template_1 {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.date {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.item-desc_Template_1 {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #475569;
+}
+
+.item-desc_Template_1 li {
+  margin-left: 18px;
+  margin-bottom: 6px;
+}
+
+/* ================================
+   REFERENCES – CARD STYLE
+================================ */
+.ref-card-wrapper {
+  margin-bottom: 15px;
+}
+
+.ref-card_Template_1 {
+  background: #f8fafc;
+  padding: 18px 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.ref-card_Template_1:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(15,23,42,0.05);
+}
+
+.ref-card_Template_1 h4 {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.ref-line {
+  font-size: 13px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #475569;
+}
+
+
+
+.section_Template_1,
+.ref-card_Template_1,
+.timeline_Template_1 {
+  break-inside: avoid;
+}
+
+/* EDUCATION CARD - Premium Look */
+.edu-card {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.edu-card:hover {
+  border-color: #22c55e;
+  box-shadow: 0 10px 30px rgba(34, 197, 94, 0.15);
+}
+
+/* HEADER */
+.edu-header {
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: linear-gradient(90deg, #0f172a, #111827);
+}
+
+.edu-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #f8fafc;
+}
+
+.edu-sep {
+  color: #22c55e;
+  margin: 0 6px;
+}
+
+.edu-chevron {
+  transition: transform 0.3s ease;
+}
+
+.edu-card.active .edu-chevron {
+  transform: rotate(180deg);
+}
+
+/* BODY */
+.edu-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.35s ease;
+  padding: 0 22px;
+}
+
+.edu-card.active .edu-body {
+  max-height: 900px;
+  padding: 22px;
+}
+
+/* GRID */
+.edu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+/* FIELD */
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.field input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+  background: #0f172a;
+  color: #f1f5f9;
+  transition: 0.25s;
+}
+
+.field input:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+  outline: none;
+}
+
+/* BUTTON ROW */
+.edu-actions-row {
+  margin-top: 22px;
+  display: flex;
+  gap: 10px;
+}
+
+/* MODERN BUTTONS */
+.btn-modern {
+  background: #1e293b;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: #f8fafc;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn-modern:hover {
+  background: #334155;
+}
+
+.btn-danger {
+  background: #7f1d1d;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}
+`;
+
+  document.head.appendChild(style);
+}
+
     return `
   <div class="resume_Template_1">
     <aside class="sidebar_Template_1">
@@ -1345,19 +1982,244 @@ cards.forEach(originalCard => {
 
   function renderMinimal() {
     const p = photoHtml();
+
+    const icon = (svg) =>
+      `<span style="display:inline-flex;align-items:center;margin-right:6px;color:#6f93c1">
+      ${svg}
+    </span>`;
+
+    const ICONS = {
+      profile: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <circle cx="12" cy="8" r="4" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+        <path d="M4 20a8 8 0 0 1 16 0" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+      </svg>`,
+
+      education: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <path d="M3 7l9-4 9 4-9 4-9-4z" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+        <path d="M5 10v6c0 1 3 3 7 3s7-2 7-3v-6" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+      </svg>`,
+
+      experience: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <rect x="3" y="7" width="18" height="13" rx="2" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+        <path d="M9 7V5h6v2" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+      </svg>`,
+
+      references: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <circle cx="12" cy="7" r="3.5" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+        <path d="M5 21a7 7 0 0 1 14 0" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+      </svg>`,
+
+      contact: `
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+        <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2
+        C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
+        stroke="rgb(117, 125, 129)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>`,
+
+
+      interests: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2
+        4 4 0 0 1 7 2c0 5.6-7 10-7 10z"
+        stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+      </svg>`,
+
+      phone: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
+        stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`,
+
+      email: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      <rect x="3" y="5" width="18" height="14" rx="2" stroke="#6f93c1" stroke-width="1.5"/>
+      <path d="M3 7l9 6 9-6" stroke="#6f93c1" stroke-width="1.5"/>
+    </svg>`,
+
+      location: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      <path d="M12 22s7-7 7-12a7 7 0 1 0-14 0c0 5 7 12 7 12z"
+        stroke="#6f93c1" stroke-width="1.5"/>
+      <circle cx="12" cy="10" r="2.5" stroke="#6f93c1" stroke-width="1.5"/>
+    </svg>`,
+
+      website: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      <circle cx="12" cy="12" r="9" stroke="#6f93c1" stroke-width="1.5"/>
+      <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"
+        stroke="#6f93c1" stroke-width="1.5"/>
+    </svg>`,
+
+      linkedin: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      <rect x="3" y="3" width="18" height="18" rx="3"
+        stroke="#6f93c1" stroke-width="1.5"/>
+      <path d="M8 11v5M8 8h.01M12 16v-3a2 2 0 0 1 4 0v3"
+        stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>`,
+
+
+      skills: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <path d="M12 2l2.5 5 5.5.8-4 4 .9 5.7-4.9-2.6-4.9 2.6.9-5.7-4-4 5.5-.8L12 2z"
+        stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+    </svg>`,
+
+      company: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+    <rect x="3" y="7" width="18" height="13" rx="2"
+      stroke="#6f93c1" stroke-width="1.5"/>
+    <path d="M9 7V5h6v2"
+      stroke="#6f93c1" stroke-width="1.5"/>
+  </svg>`
+    };
+    
+
     return `
-      <div style="padding:6mm">
-        ${p}
-        <div class="name" style="margin-top:8px">${escapeHtml(data.personal.fullName || '')}</div>
-        <div class="title">${escapeHtml(data.personal.title || '')}</div>
-        <div class="contact small">${escapeHtml(data.personal.email || '')} • ${escapeHtml(data.personal.phone || '')} • ${escapeHtml(data.personal.website || '')}</div>
-        <div style="margin-top:8px" class="section"><h4>Summary</h4><div class="small">${escapeHtml(data.summary || '')}</div></div>
-        <div class="section"><h4>Experience</h4>${data.experience.map(exp => `<div class="job"><strong>${escapeHtml(exp.role)}</strong> — ${escapeHtml(exp.company)} <div class="meta small">${escapeHtml(exp.start || '')} — ${escapeHtml(exp.end || '')}</div><ul class="bullets">${(exp.bullets || []).map(b => `<li>${escapeHtml(b)}</li>`).join('')}</ul></div>`).join('')}</div>
-        <div class="section"><h4>Education</h4>${data.education.map(edu => `<div class="job"><strong>${escapeHtml(edu.school)}</strong> — <strong>${escapeHtml(edu.discription)}</strong> — ${escapeHtml(edu.degree)} <div class="meta small">${escapeHtml(edu.year || '')}</div></div>`).join('')}</div>
-        <div class="section"><h4>Skills</h4><div class="small">${data.skills.map(s => escapeHtml(s)).join(', ')}</div></div>
+  <div class="resume_Template_1">
+    <aside class="sidebar_Template_1">
+      <div class="photo-wrap_Template_1">${p}</div>
+
+      <div style="margin-top:85px;text-align:center">
+        <div class="name_Template_1">${escapeHtml(data.personal.fullName || '')}</div>
+        <div class="role_Template_1">${escapeHtml(data.personal.title || '')}</div>
       </div>
-      
-    `;
+
+          <section class="section_Template_1 summary">
+        <div class="heading_Template_1">
+          <h2>${ICONS.profile}<span>Profile</span></h2>
+        </div>
+        <p class="about_Template_1">${escapeHtml(data.summary || '')}</p>
+      </section>
+
+      <div class="side-section_Template_1">
+        <div class="section-title_Template_1">
+          ${ICONS.contact} Contact
+        </div>
+        <ul class="contact-list_Template_1">
+          <li>${icon(ICONS.phone)}${escapeHtml(data.personal.phone || '')}</li>
+          <li>${icon(ICONS.email)}${escapeHtml(data.personal.email || '')}</li>
+          <li>${icon(ICONS.location)}${escapeHtml(data.personal.location || '')}</li>
+          <li>${icon(ICONS.website)}${escapeHtml(data.personal.website || '')}</li>
+          <li>${icon(ICONS.linkedin)}${escapeHtml(data.personal.linkedin || '')}</li>
+        </ul>
+      </div>
+
+
+    </aside>
+
+    <main class="content_Template_1">
+      <section class="section_Template_1">
+        <div class="heading_Template_1">
+          <h2>${ICONS.education}<span>Education</span></h2>
+          <div class="rule"></div>
+        </div>
+        ${data.education.map(edu => `
+          <div class="timeline_Template_1">
+            <div class="timeline_Template_1-item">
+              <div class="item-head_Template_1">
+                <h3>${escapeHtml(edu.degree)}</h3>
+              </div>
+              <div class="item-head_Template_1">
+              <div class="item-sub_Template_1">${escapeHtml(edu.school)}</div>
+              <div class="date">${escapeHtml(edu.year || '')}</div>
+              </div>
+              <div class="item-desc_Template_1">${escapeHtml(edu.discription)}</div>
+            </div>
+          </div>
+        `).join('')}
+      </section>
+
+      <section class="section_Template_1">
+        <div class="heading_Template_1">
+          <h2>${ICONS.experience}<span>Experience</span></h2>
+          <div class="rule"></div>
+        </div>
+        ${data.experience.map(exp => `
+          <div class="timeline_Template_1">
+            <div class="timeline_Template_1-item">
+              <div class="item-head_Template_1">
+                <h3>${escapeHtml(exp.role)}</h3>
+                
+
+              </div>
+              <div class="item-head_Template_1">
+              <div class="item-sub_Template_1">${escapeHtml(exp.company)}</div>
+              <div class="date">
+          ${[exp.start, exp.end].some(d => d && d.trim())
+        ? `<div class="date">${[exp.start, exp.end].filter(d => d && d.trim()).join(' – ')}</div>`
+        : ''
+      }
+      </div>
+              </div>
+              <ul class="item-desc_Template_1">
+                ${(exp.bullets || []).map(b => `<li>${escapeHtml(b)}</li>`).join('')}
+              </ul>
+            </div>
+          </div>
+        `).join('')}
+      </section>
+
+      <section class="section_Template_1">
+        <div class="heading_Template_1">
+          <h2>${ICONS.skills}<span>Skills</span></h2>
+          <div class="rule"></div>
+        </div>
+        <ul class="skills-list_Template_1">
+          ${data.skills.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
+        </ul>
+      </section>
+<section class="section_Template_1">
+        <div class="heading_Template_1">
+          <h2>${ICONS.interests}<span>Interests</span></h2>
+          <div class="rule"></div>
+        </div>
+        <ul class="skills-list_Template_1">
+          ${data.interests.map(i => `<li>${escapeHtml(i)}</li>`).join('')}
+        </ul>
+      </section>
+      <section class="section_Template_1">
+        <div class="heading_Template_1">
+          <h2>${ICONS.references}<span>References</span></h2>
+          <div class="rule"></div>
+        </div>
+        ${data.references.map(ref => `
+  <div class="ref-card-wrapper">
+    <div class="ref-card_Template_1">
+
+      ${ref.name ? `<h4>${escapeHtml(ref.name)}</h4>` : ''}
+
+      ${(ref.campany || ref.position) ? `
+        <p class="ref-line">
+          ${ICONS.company}
+          ${[
+            ref.campany
+              ? `<strong>${escapeHtml(ref.campany)}</strong>`
+              : '',
+            ref.position
+              ? escapeHtml(ref.position)
+              : ''
+          ].filter(Boolean).join(' / ')}
+        </p>
+      ` : ''}
+
+      ${ref.phone ? `
+        <p class="ref-line">
+          ${ICONS.phone}
+          ${escapeHtml(ref.phone)}
+        </p>
+      ` : ''}
+
+      ${ref.email ? `
+        <p class="ref-line">
+          ${ICONS.email}
+          ${escapeHtml(ref.email)}
+        </p>
+      ` : ''}
+    </div>
+  </div>
+`).join('')}
+      </section>
+    </main>
+  </div>
+  `;
   }
 
   function renderCreative() {
