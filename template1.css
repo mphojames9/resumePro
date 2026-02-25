@@ -485,3 +485,133 @@ body {
 .timeline_Template_1 {
   break-inside: avoid;
 }
+
+/* EDUCATION CARD - Premium Look */
+.edu-card {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.edu-card:hover {
+  border-color: #22c55e;
+  box-shadow: 0 10px 30px rgba(34, 197, 94, 0.15);
+}
+
+/* HEADER */
+.edu-header {
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: linear-gradient(90deg, #0f172a, #111827);
+}
+
+.edu-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #f8fafc;
+}
+
+.edu-sep {
+  color: #22c55e;
+  margin: 0 6px;
+}
+
+.edu-chevron {
+  transition: transform 0.3s ease;
+}
+
+.edu-card.active .edu-chevron {
+  transform: rotate(180deg);
+}
+
+/* BODY */
+.edu-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.35s ease;
+  padding: 0 22px;
+}
+
+.edu-card.active .edu-body {
+  max-height: 900px;
+  padding: 22px;
+}
+
+/* GRID */
+.edu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+/* FIELD */
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.field input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+  background: #0f172a;
+  color: #f1f5f9;
+  transition: 0.25s;
+}
+
+.field input:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+  outline: none;
+}
+
+/* BUTTON ROW */
+.edu-actions-row {
+  margin-top: 22px;
+  display: flex;
+  gap: 10px;
+}
+
+/* MODERN BUTTONS */
+.btn-modern {
+  background: #1e293b;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: #f8fafc;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn-modern:hover {
+  background: #334155;
+}
+
+.btn-danger {
+  background: #7f1d1d;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}

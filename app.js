@@ -89,6 +89,37 @@ let zoomControl;
     refs.templateSelect.value = data.template || 'modern';
     window.addEventListener('beforeunload', save);
     renderPhotoPreview();
+
+    refs.educationContainer.addEventListener('click', function (e) {
+  const header = e.target.closest('.edu-header');
+  if (!header) return;
+
+  const card = header.closest('.edu-card');
+
+  // Accordion style (only one open)
+  refs.educationContainer
+    .querySelectorAll('.edu-card')
+    .forEach(c => {
+      if (c !== card) c.classList.remove('active');
+    });
+
+  card.classList.toggle('active');
+});
+
+refs.experienceContainer.addEventListener('click', function (e) {
+  const header = e.target.closest('.exp-header');
+  if (!header) return;
+
+  const card = header.closest('.exp-card');
+
+  refs.experienceContainer
+    .querySelectorAll('.exp-card')
+    .forEach(c => {
+      if (c !== card) c.classList.remove('active');
+    });
+
+  card.classList.toggle('active');
+});
   }
 
   // --- Photo handling -----------------------------------------------------
@@ -243,34 +274,93 @@ let zoomControl;
 
   // --- Render lists (experience, education, skills, references) -----------------------
   function renderLists() {
+    
     // Education
     refs.educationContainer.innerHTML = '';
     data.education.forEach((edu) => {
       const node = document.createElement('div');
       node.className = 'item';
-      node.innerHTML = `
-        <div class="row">
-        <div class="small_wrapper">
-          <input class="input_data" data-id="${edu.id}" data-field="degree" value="${escapeHtml(edu.degree)}" placeholder="Degree" />
-          <input class="input_data" data-id="${edu.id}" data-field="school" value="${escapeHtml(edu.school)}" placeholder="School" />
+      node.innerHTML = node.innerHTML = node.innerHTML = `
+  <div class="edu-card" data-edu="${edu.id}">
+
+    <!-- HEADER -->
+    <div class="edu-header">
+      <div class="edu-title">
+        ${escapeHtml(edu.degree || 'New Degree')}
+        <span class="edu-sep">|</span>
+        ${escapeHtml(edu.school || 'Institution')}
+      </div>
+      <div class="edu-actions">
+        <i class="fa-solid fa-chevron-down edu-chevron"></i>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="edu-body">
+
+      <div class="edu-grid">
+
+        <div class="field">
+          <label>Degree</label>
+          <input class="input_data"
+            data-id="${edu.id}"
+            data-field="degree"
+            value="${escapeHtml(edu.degree)}"
+            placeholder="e.g. BSc Computer Science" />
         </div>
+
+        <div class="field">
+          <label>Institution</label>
+          <input class="input_data"
+            data-id="${edu.id}"
+            data-field="school"
+            value="${escapeHtml(edu.school)}"
+            placeholder="e.g. University of Cape Town" />
         </div>
-        <div class="row small">
-        <div class="small_wrapper">
-          <input class="input_data" data-id="${edu.id}" data-field="year" value="${escapeHtml(edu.year || '')}" placeholder="Year Obtained" />
-          <input class="input_data" data-id="${edu.id}" data-field="discription" value="${escapeHtml(edu.discription || '')}" placeholder="Discription" />
+
+        <div class="field">
+          <label>Year Obtained</label>
+          <input class="input_data"
+            data-id="${edu.id}"
+            data-field="year"
+            value="${escapeHtml(edu.year || '')}"
+            placeholder="e.g. 2024" />
         </div>
-          <div class="small_wrapper">
-          <button class="move" class="btn tiny"><svg style="transform: rotate(180deg);" data-action="upedu" data-id="${edu.id}" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg></button>
-          <button class="move" class="btn tiny"><svg data-action="downedu" data-id="${edu.id}" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg></button>
-          <button class="delete" class="btn tiny"><i class="fa-solid fa-trash" data-action="removeedu" data-id="${edu.id}"></i></button>
-          </div>
+
+        <div class="field">
+          <label>Description</label>
+          <input class="input_data"
+            data-id="${edu.id}"
+            data-field="discription"
+            value="${escapeHtml(edu.discription || '')}"
+            placeholder="Achievements, distinctions, major subjects..." />
         </div>
-      `;
+
+      </div>
+
+      <div class="edu-actions-row">
+        <button class="move btn-modern">
+          <i class="fa-solid fa-arrow-up"
+            data-action="upedu"
+            data-id="${edu.id}"></i>
+        </button>
+
+        <button class="move btn-modern">
+          <i class="fa-solid fa-arrow-down"
+            data-action="downedu"
+            data-id="${edu.id}"></i>
+        </button>
+
+        <button class="delete btn-danger">
+          <i class="fa-solid fa-trash"
+            data-action="removeedu"
+            data-id="${edu.id}"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+`;
       refs.educationContainer.appendChild(node);
     });
 
@@ -280,32 +370,120 @@ let zoomControl;
     data.experience.forEach((exp) => {
       const node = document.createElement('div');
       node.className = 'item';
-      node.innerHTML = `
-        <div class="row">
-          <input class="input_data" data-id="${exp.id}" data-field="role" value="${escapeHtml(exp.role)}" placeholder="Role" />
-          <input class="input_data" data-id="${exp.id}" data-field="company" value="${escapeHtml(exp.company)}" placeholder="Company" />
+      node.innerHTML = node.innerHTML = node.innerHTML = `
+  <div class="exp-card" data-exp="${exp.id}">
+    
+    <!-- HEADER -->
+    <div class="exp-header">
+      <div class="exp-title">
+        ${escapeHtml(exp.role || 'New Role')}
+        <span class="exp-sep">|</span>
+        ${escapeHtml(exp.company || 'Company')}
+      </div>
+      <div class="exp-actions">
+        <i class="fa-solid fa-chevron-down exp-chevron"></i>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="exp-body">
+
+      <div class="exp-grid">
+
+        <div class="field">
+          <label>Job Title</label>
+          <input class="input_data"
+            data-id="${exp.id}"
+            data-field="role"
+            value="${escapeHtml(exp.role)}"
+            placeholder="e.g. Frontend Developer" />
         </div>
-        <div class="row small">
-        <div class="small_wrapper">
-        <input class="input_data" data-id="${exp.id}" data-field="start" placeholder="Start" value="${escapeHtml(exp.start || '')}" />
-          <input class="input_data" data-id="${exp.id}" data-field="end" placeholder="End" value="${escapeHtml(exp.end || '')}" />
+
+        <div class="field">
+          <label>Company</label>
+          <input class="input_data"
+            data-id="${exp.id}"
+            data-field="company"
+            value="${escapeHtml(exp.company)}"
+            placeholder="e.g. Google" />
         </div>
+
+        <div class="field">
+          <label>Start Date</label>
+          <input class="input_data"
+            data-id="${exp.id}"
+            data-field="start"
+            value="${escapeHtml(exp.start || '')}"
+            placeholder="e.g. Jan 2023" />
         </div>
-        <div class="row" data-bullets="${exp.id}">
-          ${(exp.bullets || []).map((b, i) => `<div class="row"><input data-id="${exp.id}" data-field="bullet" placeholder="Resposibility / duties" data-idx="${i}" value="${escapeHtml(b)}" style="flex:1"/><button class="delbullet"  class="btn tiny"><i class="fa-solid fa-trash" data-action="delbullet" data-id="${exp.id}" data-idx="${i}"></i></button>
-          <div style="margin-top:6px"><button class="addbullet"><i class="fa-solid fa-plus" data-action="addbullet" data-id="${exp.id}"></i></button></div>
-          </div>`).join('')}
+
+        <div class="field">
+          <label>End Date</label>
+          <input class="input_data"
+            data-id="${exp.id}"
+            data-field="end"
+            value="${escapeHtml(exp.end || '')}"
+            placeholder="e.g. Present" />
         </div>
-        <div class="small_wrapper">
-          <button class="move" class="btn tiny"><svg style="transform: rotate(180deg);" data-action="up" data-id="${exp.id}" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg></button>
-          <button class="move" class="btn tiny"><svg data-action="down" data-id="${exp.id}" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg></button>
-          <button class="delete" class="btn tiny"><i class="fa-solid fa-trash" data-action="remove" data-id="${exp.id}"></i></button>
+
+      </div>
+
+      <!-- RESPONSIBILITIES -->
+      <div class="exp-bullets-section">
+        <label class="section-label">Responsibilities</label>
+
+        <div class="exp-bullets" data-bullets="${exp.id}">
+          ${(exp.bullets || []).map((b, i) => `
+            <div class="bullet-row">
+              <input class="bullet-input"
+                data-id="${exp.id}"
+                data-field="bullet"
+                data-idx="${i}"
+                placeholder="Describe your achievement..."
+                value="${escapeHtml(b)}" />
+              
+              <button class="bullet-delete">
+                <i class="fa-solid fa-trash"
+                   data-action="delbullet"
+                   data-id="${exp.id}"
+                   data-idx="${i}"></i>
+              </button>
+            </div>
+          `).join('')}
         </div>
-      `;
+
+        <button class="addbullet modern-add">
+          <i class="fa-solid fa-plus"
+             data-action="addbullet"
+             data-id="${exp.id}"></i>
+          Add Responsibility
+        </button>
+      </div>
+
+      <!-- ACTIONS -->
+      <div class="exp-actions-row">
+        <button class="btn-modern">
+          <i class="fa-solid fa-arrow-up"
+             data-action="up"
+             data-id="${exp.id}"></i>
+        </button>
+
+        <button class="btn-modern">
+          <i class="fa-solid fa-arrow-down"
+             data-action="down"
+             data-id="${exp.id}"></i>
+        </button>
+
+        <button class="btn-danger">
+          <i class="fa-solid fa-trash"
+             data-action="remove"
+             data-id="${exp.id}"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+`;
       refs.experienceContainer.appendChild(node);
     });
 
@@ -372,6 +550,7 @@ let zoomControl;
     refs.skillsContainer.querySelectorAll('button').forEach(btn => btn.addEventListener('click', skillButtonHandler));
     refs.interestsContainer.querySelectorAll('input').forEach(inp => inp.addEventListener('input', interestInputHandler));
     refs.interestsContainer.querySelectorAll('button').forEach(btn => btn.addEventListener('click', interestButtonHandler));
+
   }
 
   // --- Input handlers ----------------------------------------------------

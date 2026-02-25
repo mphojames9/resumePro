@@ -487,7 +487,7 @@
       transition: transform 0.3s ease;
     }
 
-    .active {
+    .toggle-btn.active {
       transform: rotate(-177deg);
     }
 
@@ -1278,6 +1278,275 @@
       -webkit-text-fill-color: transparent;
       font-size: 15px;
     }
+
+    /* EXPERIENCE CARD */
+.exp-card {
+  background: #111827;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  overflow: hidden;
+  border: 1px solid #1f2937;
+  transition: all 0.3s ease;
+}
+
+.exp-card:hover {
+  border-color: #6366f1;
+  box-shadow: 0 8px 25px rgba(99,102,241,0.15);
+}
+
+/* HEADER */
+.exp-header {
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #1f2937, #111827);
+}
+
+.exp-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #f9fafb;
+}
+
+.exp-sep {
+  color: #6366f1;
+  margin: 0 6px;
+}
+
+.chevron {
+  transition: transform 0.3s ease;
+}
+
+/* COLLAPSIBLE BODY */
+.exp-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.35s ease;
+  padding: 0 20px;
+}
+
+.exp-card.active .exp-body {
+  max-height: 1000px;
+  padding: 20px;
+}
+
+
+/* Modern Add Button */
+.modern-add {
+  margin-top: 12px;
+  background: #6366f1;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  font-size: 13px;
+  transition: 0.25s;
+}
+
+.modern-add:hover {
+  background: #4f46e5;
+}
+
+/* Move buttons */
+.move-group {
+  margin-top: 14px;
+  display: flex;
+  gap: 8px;
+}
+
+/* EDUCATION CARD */
+.edu-card {
+  background: #0f172a;
+  border-radius: 14px;
+  margin-bottom: 18px;
+  overflow: hidden;
+  border: 1px solid #1e293b;
+  transition: all 0.3s ease;
+}
+
+.edu-card:hover {
+  border-color: #22c55e;
+  box-shadow: 0 8px 25px rgba(34,197,94,0.15);
+}
+
+/* HEADER */
+.edu-header {
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #1e293b, #0f172a);
+}
+
+.edu-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #f8fafc;
+}
+
+.edu-sep {
+  color: #22c55e;
+  margin: 0 6px;
+}
+
+.edu-actions {
+  color: #94a3b8;
+}
+
+.edu-chevron {
+  transition: transform 0.3s ease;
+}
+
+/* COLLAPSIBLE */
+.edu-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.35s ease;
+  padding: 0 20px;
+}
+
+.edu-card.active .edu-body {
+  max-height: 800px;
+  padding: 20px;
+}
+
+.edu-card.active .edu-chevron {
+  transform: rotate(180deg);
+}
+
+.edu-move-group {
+  display: flex;
+  gap: 8px;
+}
+
+/* CARD */
+.exp-card {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  margin-bottom: 22px;
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+
+.exp-card:hover {
+  border-color: #3b82f6;
+  box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);
+}
+
+/* HEADER */
+.exp-header {
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: linear-gradient(90deg, #0f172a, #111827);
+}
+
+.exp-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #f8fafc;
+}
+
+.exp-sep {
+  color: #3b82f6;
+  margin: 0 6px;
+}
+
+.exp-chevron {
+  transition: 0.3s ease;
+}
+
+.exp-card.active .exp-chevron {
+  transform: rotate(180deg);
+}
+
+/* BODY */
+.exp-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: 0.35s ease;
+  padding: 0 22px;
+}
+
+.exp-card.active .exp-body {
+  max-height: 1200px;
+  padding: 22px;
+}
+
+/* GRID */
+.exp-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+/* RESPONSIBILITIES */
+.exp-bullets-section {
+  margin-top: 10px;
+}
+
+.section-label {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.bullet-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.bullet-input {
+  flex: 1;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #1e293b;
+  background: #0f172a;
+  color: #f1f5f9;
+}
+
+.bullet-delete {
+  background: #7f1d1d;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: white;
+  cursor: pointer;
+}
+
+/* ADD BUTTON */
+.modern-add {
+  margin-top: 10px;
+  background: #1e293b;
+  border: 1px dashed #334155;
+  padding: 10px 14px;
+  border-radius: 12px;
+  color: #cbd5e1;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.modern-add:hover {
+  background: #334155;
+}
+
+/* ACTION ROW */
+.exp-actions-row {
+  margin-top: 24px;
+  display: flex;
+  gap: 10px;
+}
   </style>
 </head>
 
