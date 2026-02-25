@@ -1,37 +1,91 @@
 document.addEventListener("DOMContentLoaded", () => {
-
   const sections = document.querySelectorAll(".section-block");
 
+  // ==============================
+  // OPEN / CLOSE SECTIONS
+  // ==============================
   sections.forEach(section => {
     const header = section.querySelector(".section-header");
     const btn = section.querySelector(".toggle-btn");
     const content = section.querySelector(".section-content");
 
-    // Safety check (prevents crash)
     if (!header || !btn || !content) return;
 
     header.addEventListener("click", () => {
-      const isOpen = btn.classList.contains("active");
+      const isOpen =
+        content.style.height && content.style.height !== "0px";
 
-      // Close all sections
+      // Close all other sections
       sections.forEach(s => {
-        const b = s.querySelector(".toggle-btn");
         const c = s.querySelector(".section-content");
+        const b = s.querySelector(".toggle-btn");
 
-        if (b && c) {
-          b.classList.remove("active");
-          c.classList.remove("open-section-content")
-          c.classList.add("close-section-content")
-        }
+        if (!c || !b || c === content) return;
+
+        c.style.height = c.scrollHeight + "px";
+        requestAnimationFrame(() => {
+          c.style.height = "0px";
+        });
+
+        b.classList.remove("active");
       });
 
-      // Open clicked one
-      if (!isOpen) {
+      // Toggle current section
+      if (isOpen) {
+        content.style.height = content.scrollHeight + "px";
+        requestAnimationFrame(() => {
+          content.style.height = "0px";
+        });
+        btn.classList.remove("active");
+      } else {
         btn.classList.add("active");
-        content.classList.add("open-section-content");
-        content.classList.remove("close-section-content");
+
+        content.style.height = content.scrollHeight + "px";
+
+        content.addEventListener("transitionend", function handler() {
+          content.style.height = "auto";
+          content.removeEventListener("transitionend", handler);
+        });
       }
     });
   });
 
+  // ==============================
+  // AUTO RESIZE WHEN BULLETS CHANGE
+  // ==============================
+  function animateSectionResize(sectionContent) {
+    if (!sectionContent) return;
+
+    // Only if open
+    if (sectionContent.style.height === "0px") return;
+
+    const startHeight = sectionContent.scrollHeight;
+
+    sectionContent.style.height = startHeight + "px";
+
+    requestAnimationFrame(() => {
+      const newHeight = sectionContent.scrollHeight;
+      sectionContent.style.height = newHeight + "px";
+    });
+
+    sectionContent.addEventListener("transitionend", function handler() {
+      sectionContent.style.height = "auto";
+      sectionContent.removeEventListener("transitionend", handler);
+    });
+  }
+
+  // Listen for bullet add / delete
+  document.addEventListener("click", e => {
+    if (
+      e.target.closest("[data-action='addbullet']") ||
+      e.target.closest("[data-action='delbullet']")
+    ) {
+      const sectionContent = e.target.closest(".section-content");
+
+      // Wait for DOM to update first
+      setTimeout(() => {
+        animateSectionResize(sectionContent);
+      }, 50);
+    }
+  });
 });

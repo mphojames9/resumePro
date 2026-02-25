@@ -1,4 +1,4 @@
-let zoomControl;
+    let zoomControl;
 
 (function () {
   // --- Utilities ------------------------------------------------------------
@@ -261,13 +261,13 @@ let zoomControl;
           <input class="input_data" data-id="${edu.id}" data-field="discription" value="${escapeHtml(edu.discription || '')}" placeholder="Discription" />
         </div>
           <div class="small_wrapper">
-          <button class="move" class="btn tiny"><svg style="transform: rotate(180deg);" data-action="upedu" data-id="${edu.id}" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+          <button class="move" data-action="upedu" data-id="${edu.id}" class="btn tiny"><svg style="transform: rotate(180deg);" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg></button>
-          <button class="move" class="btn tiny"><svg data-action="downedu" data-id="${edu.id}" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+          <button class="move" data-action="downedu" data-id="${edu.id}" class="btn tiny"><svg viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg></button>
-          <button class="delete" class="btn tiny"><i class="fa-solid fa-trash" data-action="removeedu" data-id="${edu.id}"></i></button>
+          <button class="delete" data-action="removeedu" data-id="${edu.id}" class="btn tiny"><i class="fa-solid fa-trash"></i></button>
           </div>
         </div>
       `;
@@ -292,18 +292,18 @@ let zoomControl;
         </div>
         </div>
         <div class="row" data-bullets="${exp.id}">
-          ${(exp.bullets || []).map((b, i) => `<div class="row"><input data-id="${exp.id}" data-field="bullet" placeholder="Resposibility / duties" data-idx="${i}" value="${escapeHtml(b)}" style="flex:1"/><button class="delbullet"  class="btn tiny"><i class="fa-solid fa-trash" data-action="delbullet" data-id="${exp.id}" data-idx="${i}"></i></button>
-          <div style="margin-top:6px"><button class="addbullet"><i class="fa-solid fa-plus" data-action="addbullet" data-id="${exp.id}"></i></button></div>
+          ${(exp.bullets || []).map((b, i) => `<div class="row"><input data-id="${exp.id}" data-field="bullet" placeholder="Resposibility / duties" data-idx="${i}" value="${escapeHtml(b)}" style="flex:1"/><button class="delbullet" data-action="delbullet" data-id="${exp.id}" data-idx="${i}" class="btn tiny"><i class="fa-solid fa-trash"></i></button>
+          <div style="margin-top:6px"><button data-action="addbullet" data-id="${exp.id}" class="addbullet"><i class="fa-solid fa-plus"></i></button></div>
           </div>`).join('')}
         </div>
         <div class="small_wrapper">
-          <button class="move" class="btn tiny"><svg style="transform: rotate(180deg);" data-action="up" data-id="${exp.id}" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+          <button class="move" data-action="up" data-id="${exp.id}" class="btn tiny"><svg style="transform: rotate(180deg);" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg></button>
-          <button class="move" class="btn tiny"><svg data-action="down" data-id="${exp.id}" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+          <button class="move" data-action="down" data-id="${exp.id}" class="btn tiny"><svg viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg></button>
-          <button class="delete" class="btn tiny"><i class="fa-solid fa-trash" data-action="remove" data-id="${exp.id}"></i></button>
+          <button class="delete" data-action="remove" data-id="${exp.id}" class="btn tiny"><i class="fa-solid fa-trash"></i></button>
         </div>
       `;
       refs.experienceContainer.appendChild(node);
@@ -330,13 +330,13 @@ let zoomControl;
           <input class="input_data" data-id="${ref.id}" data-field="email" value="${escapeHtml(ref.email || '')}" placeholder="email" />
         </div>
         <div class="small_wrapper">
-          <button class="move" class="btn tiny"><svg data-action="upref" data-id="${ref.id}" style="transform: rotate(180deg);" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+          <button class="move" data-action="upref" data-id="${ref.id}" class="btn tiny"><svg style="transform: rotate(180deg);" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg></button>
-          <button class="move" class="btn tiny"><svg data-action="downref" data-id="${ref.id}" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+          <button class="move" data-action="downref" data-id="${ref.id}" class="btn tiny"><svg viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
               <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
             </svg></button>
-          <button class="delete" class="btn tiny"><i class="fa-solid fa-trash" data-action="removeref" data-id="${ref.id}"></i></button>
+          <button class="delete" data-action="removeref" data-id="${ref.id}" class="btn tiny"><i class="fa-solid fa-trash"></i></button>
         </div>
         </div>
       `;
@@ -347,8 +347,8 @@ let zoomControl;
     refs.skillsContainer.innerHTML = '';
     data.skills.forEach((sk, idx) => {
       const node = document.createElement('div');
-      node.className = 'item-row-skill-hobby';
-      node.innerHTML = `<div class="row-skill-hobby"><input class="delete-raw" data-idx="${idx}" data-field="skill" placeholder="New Skill" value="${escapeHtml(sk)}" /><button class="btn tiny" id="delete"> <i class="fa-solid fa-trash" data-action="removeskill" data-idx="${idx}"></i> </button></div>`;
+      node.className = 'item';
+      node.innerHTML = `<div class="row"><input class="delete-raw" data-idx="${idx}" data-field="skill" placeholder="New Skill" value="${escapeHtml(sk)}" /><button data-action="removeskill" data-idx="${idx}" class="btn tiny" id="delete"> <i class="fa-solid fa-trash"></i> </button></div>`;
       refs.skillsContainer.appendChild(node);
     });
 
@@ -356,8 +356,8 @@ let zoomControl;
     refs.interestsContainer.innerHTML = '';
     data.interests.forEach((its, idx) => {
       const node = document.createElement('div');
-      node.className = 'item-row-skill-hobby';
-      node.innerHTML = `<div class="row-skill-hobby"><input class="delete-raw" data-idx="${idx}" data-field="interest" placeholder="New interest" value="${escapeHtml(its)}" /><button class="btn tiny" id="delete"> <i class="fa-solid fa-trash" data-action="removeinterest" data-idx="${idx}" ></i> </button></div>`;
+      node.className = 'item';
+      node.innerHTML = `<div class="row"><input class="delete-raw" data-idx="${idx}" data-field="interest" placeholder="New interest" value="${escapeHtml(its)}" /><button data-action="removeinterest" data-idx="${idx}" class="btn tiny" id="delete"> <i class="fa-solid fa-trash"></i> </button></div>`;
       refs.interestsContainer.appendChild(node);
     });
 
@@ -616,170 +616,46 @@ let zoomControl;
     // ✅ FIRST PAGE WITH SIDEBAR
     let page = createPageWithSidebar(sidebar);
 
-    [...main.children].forEach(section => {
+[...main.children].forEach(section => {
 
-      const clone = section.cloneNode(true);
-      page.main.appendChild(clone);
+  let sectionClone = section.cloneNode(true);
+  page.main.appendChild(sectionClone);
 
-      // fits normally
-      if (page.page.scrollHeight <= PAGE_HEIGHT) return;
+  // If section fits → done
+  if (page.page.scrollHeight <= PAGE_HEIGHT) return;
 
-      // remove — we will split
-      page.main.removeChild(clone);
+  // ❗ Section overflowed → remove and rebuild progressively
+  page.main.removeChild(sectionClone);
 
-      // 🔥 check for reference cards
-const cards = clone.querySelectorAll('.ref-card_Template_1');
+  const rebuiltSection = buildSectionShell(section);
+  page.main.appendChild(rebuiltSection);
 
-if (!cards.length) {
+  const sourceItems = getSectionItems(section);
+  const targetContainer = getSectionItems(rebuiltSection);
 
-  // 🔥 TRY SPLIT BY DESCRIPTION LISTS FIRST
-  const descLists = clone.querySelectorAll('.item-desc_Template_1');
+  sourceItems.forEach(item => {
 
-  if (descLists.length) {
+    const itemClone = item.cloneNode(true);
+    targetContainer.appendChild(itemClone);
 
-    let fittedSection = clone.cloneNode(true);
-    let overflowSection = clone.cloneNode(true);
+    if (page.page.scrollHeight > PAGE_HEIGHT) {
 
-    const fittedLists = fittedSection.querySelectorAll('.item-desc_Template_1');
-    const overflowLists = overflowSection.querySelectorAll('.item-desc_Template_1');
+      // remove overflowing item
+      targetContainer.removeChild(itemClone);
 
-    let hasOverflow = false;
+      // new page
+      page = createPageWithoutSidebar();
 
-    for (let i = 0; i < descLists.length; i++) {
+      const newSection = buildSectionShell(section);
+      page.main.appendChild(newSection);
 
-      const originalList = descLists[i];
-      const children = Array.from(originalList.children);
-
-      let fittedChildren = [];
-      let overflowChildren = [];
-
-      let testList = originalList.cloneNode(false);
-
-      children.forEach(child => {
-
-        testList.appendChild(child.cloneNode(true));
-
-        const testSection = clone.cloneNode(true);
-        const target = testSection.querySelectorAll('.item-desc_Template_1')[i];
-
-        target.innerHTML = '';
-        target.appendChild(testList.cloneNode(true));
-
-        page.main.appendChild(testSection);
-
-        const isOverflow = page.page.scrollHeight > PAGE_HEIGHT;
-
-        page.main.removeChild(testSection);
-
-        if (isOverflow) {
-          testList.removeChild(testList.lastChild);
-          overflowChildren.push(child.cloneNode(true));
-          hasOverflow = true;
-        } else {
-          fittedChildren.push(child.cloneNode(true));
-        }
-
-      });
-
-      // apply fitted
-      const fittedTarget = fittedLists[i];
-      fittedTarget.innerHTML = '';
-      fittedChildren.forEach(n => fittedTarget.appendChild(n));
-
-      // apply overflow
-      const overflowTarget = overflowLists[i];
-      overflowTarget.innerHTML = '';
-      overflowChildren.forEach(n => overflowTarget.appendChild(n));
-    }
-
-    // ---------- PAGE 1 ----------
-    page.main.appendChild(fittedSection);
-
-    // ---------- PAGE 2 ----------
-    // ---------- PAGE 2 ----------
-if (hasOverflow) {
-
-  // 🔥 REMOVE DUPLICATED HEADER / META FROM OVERFLOW
-  overflowSection.querySelectorAll(
-    '.heading_Template_1, .rule, .item-head_Template_1, .date, .item-sub_Template_1, .timeline_Template_1::before'
-  ).forEach(el => el.remove());
-
-  overflowSection.querySelectorAll('.timeline_Template_1')
-  .forEach(el => el.classList.add('no-timeline'));
-
-  page = createPageWithoutSidebar();
-  page.main.appendChild(overflowSection);
-}
-
-    return;
-  }
-
-  // 🔥 NO SPLIT POSSIBLE → MOVE WHOLE SECTION
-  page = createPageWithoutSidebar();
-  page.main.appendChild(clone);
-  return;
-}
-
-// process each card separately
-cards.forEach(originalCard => {
-
-  const children = Array.from(originalCard.children);
-
-  let fittedChildren = [];
-  let overflowChildren = [];
-
-  // test container
-  let testCard = originalCard.cloneNode(false);
-
-  children.forEach(child => {
-
-    testCard.appendChild(child.cloneNode(true));
-
-    // create test section
-    const testSection = clone.cloneNode(true);
-    const target = testSection.querySelector('.ref-card_Template_1');
-
-    target.innerHTML = '';
-    target.appendChild(testCard.cloneNode(true));
-
-    page.main.appendChild(testSection);
-
-    const isOverflow = page.page.scrollHeight > PAGE_HEIGHT;
-
-    page.main.removeChild(testSection);
-
-    if (isOverflow) {
-      testCard.removeChild(testCard.lastChild);
-      overflowChildren.push(child.cloneNode(true));
-    } else {
-      fittedChildren.push(child.cloneNode(true));
+      const newContainer = getSectionItems(newSection);
+      newContainer.appendChild(itemClone);
     }
 
   });
 
-
-  // ---------- PAGE 2 ----------
-  if (overflowChildren.length) {
-
-    page = createPageWithoutSidebar();
-
-    const sectionOverflow = clone.cloneNode(true);
-    const target = sectionOverflow.querySelector('.ref-card_Template_1');
-
-    const overflowCard = originalCard.cloneNode(false);
-    overflowChildren.forEach(n => overflowCard.appendChild(n));
-
-    target.innerHTML = '';
-    target.appendChild(overflowCard);
-
-    page.main.appendChild(sectionOverflow);
-  }
-
 });
-    
-    
-
-    });
 
     document.body.removeChild(temp);
 
@@ -789,12 +665,20 @@ cards.forEach(originalCard => {
     );
   }
 
+  
+function getItemsContainer(section) {
+
+  return section.querySelector(
+    '.ref-card-wrapper, \
+     .timeline_Template_1, \
+     .skills-list_Template_1, \
+     .item-desc_Template_1'
+  );
+}
 
   function createPageWithSidebar(sidebarNode) {
-    console.log("with")
     const page = document.createElement('div');
     page.className = 'resume-page resume professional';
-    page.style.minHeight = '1122px';
 
     const wrapper = document.createElement('div');
     wrapper.className = 'resume_Template_1';
@@ -813,12 +697,12 @@ cards.forEach(originalCard => {
   }
 
   function createPageWithoutSidebar() {
-    console.log("WITHOUT")
     const page = document.createElement('div');
     page.className = 'resume-page resume professional';
 
     const main = document.createElement('main');
     main.className = 'content_Template_1';
+    main.style.paddingLeft = '20px';
     main.style.width = '100%';
 
     page.appendChild(main);
@@ -826,7 +710,6 @@ cards.forEach(originalCard => {
 
     return { page, main };
   }
-
 
   // --- Template renderers -----------------------------------------------
   function photoHtml() {
@@ -882,7 +765,7 @@ cards.forEach(originalCard => {
 
 
       interests: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
         <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2
         4 4 0 0 1 7 2c0 5.6-7 10-7 10z"
         stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
@@ -941,13 +824,6 @@ cards.forEach(originalCard => {
         <div class="role_Template_1">${escapeHtml(data.personal.title || '')}</div>
       </div>
 
-          <section class="section_Template_1 summary">
-        <div class="heading_Template_1">
-          <h2>${ICONS.profile}<span>Profile</span></h2>
-        </div>
-        <p class="about_Template_1">${escapeHtml(data.summary || '')}</p>
-      </section>
-
       <div class="side-section_Template_1">
         <div class="section-title_Template_1">
           ${ICONS.contact} Contact
@@ -961,10 +837,35 @@ cards.forEach(originalCard => {
         </ul>
       </div>
 
+      <div class="side-section_Template_1">
+        <div class="section-title_Template_1">
+          ${ICONS.skills} Skills
+        </div>
+        <ul class="skills-list_Template_1">
+          ${data.skills.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
+        </ul>
+      </div>
 
+      <div class="side-section_Template_1">
+        <div class="section-title_Template_1">
+          ${ICONS.interests} Interests
+        </div>
+        <ul class="skills-list_Template_1">
+          ${data.interests.map(i => `<li>${escapeHtml(i)}</li>`).join('')}
+        </ul>
+      </div>
     </aside>
 
     <main class="content_Template_1">
+
+      <section class="section_Template_1">
+        <div class="heading_Template_1">
+          <h2>${ICONS.profile}<span>Profile</span></h2>
+          <div class="rule"></div>
+        </div>
+        <p class="about_Template_1">${escapeHtml(data.summary || '')}</p>
+      </section>
+
       <section class="section_Template_1">
         <div class="heading_Template_1">
           <h2>${ICONS.education}<span>Education</span></h2>
@@ -1006,7 +907,8 @@ cards.forEach(originalCard => {
         ? `<div class="date">${[exp.start, exp.end].filter(d => d && d.trim()).join(' – ')}</div>`
         : ''
       }
-      </div>
+
+</div>
               </div>
               <ul class="item-desc_Template_1">
                 ${(exp.bullets || []).map(b => `<li>${escapeHtml(b)}</li>`).join('')}
@@ -1016,24 +918,6 @@ cards.forEach(originalCard => {
         `).join('')}
       </section>
 
-      <section class="section_Template_1">
-        <div class="heading_Template_1">
-          <h2>${ICONS.skills}<span>Skills</span></h2>
-          <div class="rule"></div>
-        </div>
-        <ul class="skills-list_Template_1">
-          ${data.skills.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
-        </ul>
-      </section>
-<section class="section_Template_1">
-        <div class="heading_Template_1">
-          <h2>${ICONS.interests}<span>Interests</span></h2>
-          <div class="rule"></div>
-        </div>
-        <ul class="skills-list_Template_1">
-          ${data.interests.map(i => `<li>${escapeHtml(i)}</li>`).join('')}
-        </ul>
-      </section>
       <section class="section_Template_1">
         <div class="heading_Template_1">
           <h2>${ICONS.references}<span>References</span></h2>
@@ -1072,10 +956,16 @@ cards.forEach(originalCard => {
           ${escapeHtml(ref.email)}
         </p>
       ` : ''}
+
     </div>
   </div>
 `).join('')}
+
+
+
+        
       </section>
+
     </main>
   </div>
   `;
@@ -1390,8 +1280,6 @@ previewBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     // show overlay
     previewOverlay.classList.add('open');
-    document.querySelector('.download-btn-premium').classList.add('open');
-    document.querySelector('.closeBtn').classList.add('open');
     setTimeout(() => {
       previewOverlay.classList.add('opacity');
     }, 450); // MUST match CSS transition
@@ -1408,20 +1296,18 @@ editResumeBtn.addEventListener('click', () => {
   previewOverlay.classList.remove('opacity');
   setTimeout(() => {
     previewOverlay.classList.remove('open');
-    document.querySelector('.closeBtn').classList.remove('open');
-    document.querySelector('.download-btn-premium').classList.remove('open');
-    zoomControl = false;
-    scalePreview()
+        document.querySelector('.closeBtn').classList.remove('open');
+        zoomControl = false;
+        scalePreview()
   }, 450); // MUST match CSS transition
 });
 
 
-const previewContent = previewOverlay.querySelector("#resumePreview");
+const previewContent = previewOverlay.querySelector("#resumePreview"); 
 // or use ".preview-content" if that's your wrapper
 
 function closePreview() {
   previewOverlay.classList.remove("opacity");
-  document.querySelector('.download-btn-premium').classList.remove('open');
 
   setTimeout(() => {
     previewOverlay.classList.remove("open");
@@ -1499,8 +1385,8 @@ function scalePreview() {
     previewOverlay.classList.add('opacity');
   }
 
-  if (window.innerWidth >= 901 && zoomControl === true) {
-    BASE_WIDTH = 794;      // real resume width
+  if (window.innerWidth >=901 && zoomControl === true){
+        BASE_WIDTH = 794;      // real resume width
     START_POINT = 510;     // where scale = 0.63
     START_SCALE = 0.63;
     previewOverlay.classList.add('hidden');
@@ -1528,18 +1414,17 @@ window.addEventListener('resize', scalePreview);
 scalePreview();
 
 const resumePreview = document.querySelector('#resumePreview');
-resumePreview.addEventListener('click', () => {
+resumePreview.addEventListener('click',()=>{
   document.querySelector('.preview-wrap').classList.add('open');
-  document.querySelector('.download-btn-premium').classList.add('open');
   document.querySelector('.closeBtn').classList.add('open');
   zoomControl = true;
   scalePreview();
 })
 
-function setTemplateCss() {
-  const ATSheader = document.querySelector('.ATS-header');
-  const proSummary = document.querySelector('.proSummary')
-  const proSummaryMargin = ATSheader.scrollHeight
-  proSummary.style.marginTop = `${proSummaryMargin - 30}px`
-}
-
+    function setTemplateCss(){
+    const ATSheader = document.querySelector('.ATS-header');
+    const proSummary = document.querySelector('.proSummary')
+    const proSummaryMargin = ATSheader.scrollHeight
+     proSummary.style.marginTop = `${proSummaryMargin - 30}px`
+    }
+  

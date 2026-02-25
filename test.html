@@ -152,6 +152,122 @@
     input.addEventListener('input', function () {
       preview.textContent = input.value;
     });
+
+     function paginateResume(html) {
+    const container = refs.resumePreview;
+    container.innerHTML = '';
+
+    const PAGE_HEIGHT = 1122;
+
+    const temp = document.createElement('div');
+    temp.style.position = 'absolute';
+    temp.style.visibility = 'hidden';
+    temp.style.width = '794px';
+    temp.innerHTML = html;
+    document.body.appendChild(temp);
+
+    const root = temp.firstElementChild;
+    const sidebar = root.querySelector('aside');
+    const main = root.querySelector('main');
+
+    if (!sidebar || !main) {
+      console.error('Pagination failed: sidebar or main missing');
+      container.innerHTML = html;
+      document.body.removeChild(temp);
+      return;
+    }
+
+    // ✅ FIRST PAGE WITH SIDEBAR
+    let page = createPageWithSidebar(sidebar);
+
+    [...main.children].forEach(section => {
+
+  const clone = section.cloneNode(true);
+  page.main.appendChild(clone);
+
+  // fits normally
+  if (page.page.scrollHeight <= PAGE_HEIGHT) return;
+
+  // remove — we will split
+  page.main.removeChild(clone);
+
+  // 🔥 check for reference cards
+  const cards = clone.querySelectorAll('.ref-card_Template_1');
+
+  if (!cards.length) {
+    page = createPageWithoutSidebar();
+    page.main.appendChild(clone);
+    return;
+  }
+
+  // section wrapper where cards live
+  const wrapper = clone;
+
+  // process cards one by one
+  cards.forEach(card => {
+
+    const children = Array.from(card.children);
+
+    const firstCard = card.cloneNode(false);
+    const overflowCard = card.cloneNode(false);
+
+    children.forEach(child => {
+
+      firstCard.appendChild(child.cloneNode(true));
+
+      // test height
+      card.replaceWith(firstCard);
+      page.main.appendChild(clone);
+
+      if (page.page.scrollHeight > PAGE_HEIGHT) {
+
+        // move last child to overflow
+        firstCard.removeChild(firstCard.lastChild);
+        overflowCard.appendChild(child.cloneNode(true));
+
+      }
+
+      page.main.removeChild(clone);
+
+    });
+
+    // append first part to current page
+    if (firstCard.children.length) {
+
+      const sectionFirst = clone.cloneNode(true);
+      const cardTarget = sectionFirst.querySelector('.ref-card_Template_1');
+
+      cardTarget.innerHTML = '';
+      cardTarget.append(...firstCard.children);
+
+      page.main.appendChild(sectionFirst);
+    }
+
+    // create new page for overflow
+    if (overflowCard.children.length) {
+
+      page = createPageWithoutSidebar();
+
+      const sectionOverflow = clone.cloneNode(true);
+      const cardTarget = sectionOverflow.querySelector('.ref-card_Template_1');
+
+      cardTarget.innerHTML = '';
+      cardTarget.append(...overflowCard.children);
+
+      page.main.appendChild(sectionOverflow);
+    }
+
+  });
+
+});
+
+    document.body.removeChild(temp);
+
+    console.log(
+      'Pages rendered:',
+      container.querySelectorAll('.resume-page').length
+    );
+  }
   </script>
 
 </body>
