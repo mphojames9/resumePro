@@ -117,9 +117,26 @@ refs.experienceContainer.addEventListener('click', function (e) {
     .forEach(c => {
       if (c !== card) c.classList.remove('active');
     });
+    
+  card.classList.toggle('active');
+});
+
+
+refs.referencesContainer.addEventListener('click', function (e) {
+  const header = e.target.closest('.ref-header');
+  if (!header) return;
+
+  const card = header.closest('.ref-card');
+
+  refs.referencesContainer
+    .querySelectorAll('.ref-card')
+    .forEach(c => {
+      if (c !== card) c.classList.remove('active');
+    });
 
   card.classList.toggle('active');
 });
+
   }
 
   // --- Photo handling -----------------------------------------------------
@@ -493,31 +510,96 @@ refs.experienceContainer.addEventListener('click', function (e) {
       const node = document.createElement('div');
       node.className = 'item';
       node.innerHTML = `
-        <div class="row">
-        <div class="small_wrapper">
-          <input class="input_data" data-id="${ref.id}" data-field="name" value="${escapeHtml(ref.name)}" placeholder="Contact Person" />
-          <input class="input_data" data-id="${ref.id}" data-field="campany" value="${escapeHtml(ref.campany)}" placeholder="Campany" />
+  <div class="ref-card" data-ref="${ref.id}">
+
+    <!-- HEADER -->
+    <div class="ref-header">
+      <div class="ref-title">
+        ${escapeHtml(ref.name || 'Contact Person')}
+        <span class="ref-sep">|</span>
+        ${escapeHtml(ref.company || 'Company')}
+      </div>
+      <div class="ref-actions">
+        <i class="fa-solid fa-chevron-down ref-chevron"></i>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="ref-body">
+
+      <div class="ref-grid">
+
+        <div class="field">
+          <label>Contact Person</label>
+          <input class="input_data"
+            data-id="${ref.id}"
+            data-field="name"
+            value="${escapeHtml(ref.name)}"
+            placeholder="e.g. John Smith" />
         </div>
-        </div><div class="row small">
-        <div class="small_wrapper">
-          <input class="input_data positionHeld" data-id="${ref.id}" data-field="position" value="${escapeHtml(ref.position || '')}" placeholder="Position Held" />
+
+        <div class="field">
+          <label>Company</label>
+          <input class="input_data"
+            data-id="${ref.id}"
+            data-field="company"
+            value="${escapeHtml(ref.company)}"
+            placeholder="e.g. ABC Corporation" />
         </div>
-        <div class="row small">
-        <div class="small_wrapper">
-          <input class="input_data" data-id="${ref.id}" data-field="phone" value="${escapeHtml(ref.phone || '')}" placeholder="Phone Number" />
-          <input class="input_data" data-id="${ref.id}" data-field="email" value="${escapeHtml(ref.email || '')}" placeholder="email" />
+
+        <div class="field">
+          <label>Position Held</label>
+          <input class="input_data"
+            data-id="${ref.id}"
+            data-field="position"
+            value="${escapeHtml(ref.position || '')}"
+            placeholder="e.g. Senior Manager" />
         </div>
-        <div class="small_wrapper">
-          <button class="move" class="btn tiny"><svg data-action="upref" data-id="${ref.id}" style="transform: rotate(180deg);" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg></button>
-          <button class="move" class="btn tiny"><svg data-action="downref" data-id="${ref.id}" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg></button>
-          <button class="delete" class="btn tiny"><i class="fa-solid fa-trash" data-action="removeref" data-id="${ref.id}"></i></button>
+
+        <div class="field">
+          <label>Phone Number</label>
+          <input class="input_data"
+            data-id="${ref.id}"
+            data-field="phone"
+            value="${escapeHtml(ref.phone || '')}"
+            placeholder="e.g. +27 82 123 4567" />
         </div>
+
+        <div class="field">
+          <label>Email Address</label>
+          <input class="input_data"
+            data-id="${ref.id}"
+            data-field="email"
+            value="${escapeHtml(ref.email || '')}"
+            placeholder="e.g. john@email.com" />
         </div>
-      `;
+
+      </div>
+
+      <!-- ACTION BUTTONS -->
+      <div class="ref-actions-row">
+        <button class="btn-modern">
+          <i class="fa-solid fa-arrow-up"
+             data-action="upref"
+             data-id="${ref.id}"></i>
+        </button>
+
+        <button class="btn-modern">
+          <i class="fa-solid fa-arrow-down"
+             data-action="downref"
+             data-id="${ref.id}"></i>
+        </button>
+
+        <button class="btn-danger">
+          <i class="fa-solid fa-trash"
+             data-action="removeref"
+             data-id="${ref.id}"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+`;
       refs.referencesContainer.appendChild(node);
     });
 

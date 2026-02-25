@@ -1547,6 +1547,78 @@
   display: flex;
   gap: 10px;
 }
+
+/* CARD */
+.ref-card {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid #1e293b;
+  border-radius: 16px;
+  margin-bottom: 22px;
+  overflow: hidden;
+  transition: 0.3s ease;
+}
+
+.ref-card:hover {
+  border-color: #a855f7;
+  box-shadow: 0 10px 30px rgba(168, 85, 247, 0.15);
+}
+
+/* HEADER */
+.ref-header {
+  padding: 18px 22px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  background: linear-gradient(90deg, #0f172a, #111827);
+}
+
+.ref-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #f8fafc;
+}
+
+.ref-sep {
+  color: #a855f7;
+  margin: 0 6px;
+}
+
+.ref-chevron {
+  transition: 0.3s ease;
+}
+
+.ref-card.active .ref-chevron {
+  transform: rotate(180deg);
+}
+
+/* BODY */
+.ref-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: 0.35s ease;
+  padding: 0 22px;
+}
+
+.ref-card.active .ref-body {
+  max-height: 900px;
+  padding: 22px;
+}
+
+/* GRID */
+.ref-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+/* ACTION ROW */
+.ref-actions-row {
+  margin-top: 24px;
+  display: flex;
+  gap: 10px;
+}
   </style>
 </head>
 
