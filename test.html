@@ -123,35 +123,167 @@
 
   </div>
 
-        <div class="section-block profile-section" style="display: none;">
-        <h4>Profile Photo</h4>
+  <div class="section-block profile-section" style="display: none;">
+    <h4>Profile Photo</h4>
 
-        <div class="photo-upload">
-          <label for="profilePicInput" class="upload-btn">
-            <span>Upload Photo</span>
-            <input type="file" id="profilePicInput" accept="image/*" hidden>
-          </label>
+    <div class="photo-upload">
+      <label for="profilePicInput" class="upload-btn">
+        <span>Upload Photo</span>
+        <input type="file" id="profilePicInput" accept="image/*" hidden>
+      </label>
 
-          <button class="remove-btn" id="removePhotoBtn">
-            Remove
-          </button>
-        </div>
+      <button class="remove-btn" id="removePhotoBtn">
+        Remove
+      </button>
+    </div>
 
-        <div id="photoPreviewContainer" class="photo-preview">
-          <img id="profilePreview" src="your-image.jpg" alt="Profile Preview">
-        </div>
+    <div id="photoPreviewContainer" class="photo-preview">
+      <img id="profilePreview" src="your-image.jpg" alt="Profile Preview">
+    </div>
+  </div>
+
+
+
+
+
+  <button class="move"><svg data-action="upref" data-id="pzow499" style="transform: rotate(180deg);" viewBox="0 0 24 24"
+      fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      </path>
+    </svg></button>
+  <button class="move"><svg data-action="downref" data-id="pzow499" viewBox="0 0 24 24" fill="none" width="18"
+      height="18" xmlns="http://www.w3.org/2000/svg">
+      <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      </path>
+    </svg></button>
+
+
+
+
+
+
+
+
+
+
+Nice work I love it, now lets move forward!!!! If this is the fistpage *condition1
+<div class="timeline_Template_1">
+  <div class="timeline_Template_1-item">
+    <div class="item-head_Template_1">
+      <h3>FrondEnd Dev</h3>
+    </div>
+    <div class="item-head_Template_1">
+      <div class="item-sub_Template_1">Goodle</div>
+      <div class="date">
+        <div class="date">Jan 2023 – Feb 2024</div>
       </div>
+    </div>
+    <ul class="item-desc_Template_1">
+      <li>Everything is built to respond instantl..</li>
+      <li>Everything is built to respond instantl..</li>
+      <li>Everything is built to respond instantl..</li>
+      <li>Everything is built to respond instantl..</li>
+    </ul>
+  </div>
+</div>
+
+And These is the second Page *condition2
+<div class="timeline_Template_1">
+  <div class="timeline_Template_1-item">
+    <div class="item-head_Template_1">
+      <h3>FrondEnd Dev</h3>
+    </div>
+    <div class="item-head_Template_1">
+      <div class="item-sub_Template_1">Goodle</div>
+      <div class="date">
+        <div class="date">Jan 2023 – Feb 2024</div>
+      </div>
+    </div>
+    <ul class="item-desc_Template_1">
+      <li>Everything is built to respond instantl..</li>Overflow
+      <li>Everything is built to respond instantl..</li>Overflow
+      <li>Everything is built to respond instantl..</li>Overflow
+      <li>Everything is built to respond instantl..</li>Overflow
+    </ul>
+  </div>
+</div>
+hide <div class="item-head_Template_1">
+      <h3>FrondEnd Dev</h3>
+    </div>, <div class="item-sub_Template_1">Goodle</div> and because the fist page already has it.
+
+
+
+ 
 
 
 
 
 
-      <button class="move"><svg data-action="upref" data-id="pzow499" style="transform: rotate(180deg);" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg></button>
-      <button class="move"><svg data-action="downref" data-id="pzow499" viewBox="0 0 24 24" fill="none" width="18" height="18" xmlns="http://www.w3.org/2000/svg">
-              <path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-            </svg></button>
+
+
+
+
+
+
+
+We are not exactly like word yet now but getting there, continue fixing
+
+*condition1
+Page 1:
+Frontend Dev
+Goodle
+Jan 2023 – Feb 2024
+• bullet
+• bullet
+Page 2:
+• bullet
+• bullet
+• bullet
+Im happy with condition1
+
+Now the problem 
+*condition2
+Frontend Dev
+Goodle
+Jan 2023 – Feb 2024
+
+Page 2:
+• bullet
+• bullet
+• bullet
+• bullet
+• bullet
+
+if all the bullets are moved to page 2 *condition2, I'm only  Frontend Dev
+Goodle
+Jan 2023 – Feb 2024 to page 2 as well
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   <script>
@@ -162,121 +294,121 @@
       preview.textContent = input.value;
     });
 
-     function paginateResume(html) {
-    const container = refs.resumePreview;
-    container.innerHTML = '';
+    function paginateResume(html) {
+      const container = refs.resumePreview;
+      container.innerHTML = '';
 
-    const PAGE_HEIGHT = 1122;
+      const PAGE_HEIGHT = 1122;
 
-    const temp = document.createElement('div');
-    temp.style.position = 'absolute';
-    temp.style.visibility = 'hidden';
-    temp.style.width = '794px';
-    temp.innerHTML = html;
-    document.body.appendChild(temp);
+      const temp = document.createElement('div');
+      temp.style.position = 'absolute';
+      temp.style.visibility = 'hidden';
+      temp.style.width = '794px';
+      temp.innerHTML = html;
+      document.body.appendChild(temp);
 
-    const root = temp.firstElementChild;
-    const sidebar = root.querySelector('aside');
-    const main = root.querySelector('main');
+      const root = temp.firstElementChild;
+      const sidebar = root.querySelector('aside');
+      const main = root.querySelector('main');
 
-    if (!sidebar || !main) {
-      console.error('Pagination failed: sidebar or main missing');
-      container.innerHTML = html;
-      document.body.removeChild(temp);
-      return;
-    }
-
-    // ✅ FIRST PAGE WITH SIDEBAR
-    let page = createPageWithSidebar(sidebar);
-
-    [...main.children].forEach(section => {
-
-  const clone = section.cloneNode(true);
-  page.main.appendChild(clone);
-
-  // fits normally
-  if (page.page.scrollHeight <= PAGE_HEIGHT) return;
-
-  // remove — we will split
-  page.main.removeChild(clone);
-
-  // 🔥 check for reference cards
-  const cards = clone.querySelectorAll('.ref-card_Template_1');
-
-  if (!cards.length) {
-    page = createPageWithoutSidebar();
-    page.main.appendChild(clone);
-    return;
-  }
-
-  // section wrapper where cards live
-  const wrapper = clone;
-
-  // process cards one by one
-  cards.forEach(card => {
-
-    const children = Array.from(card.children);
-
-    const firstCard = card.cloneNode(false);
-    const overflowCard = card.cloneNode(false);
-
-    children.forEach(child => {
-
-      firstCard.appendChild(child.cloneNode(true));
-
-      // test height
-      card.replaceWith(firstCard);
-      page.main.appendChild(clone);
-
-      if (page.page.scrollHeight > PAGE_HEIGHT) {
-
-        // move last child to overflow
-        firstCard.removeChild(firstCard.lastChild);
-        overflowCard.appendChild(child.cloneNode(true));
-
+      if (!sidebar || !main) {
+        console.error('Pagination failed: sidebar or main missing');
+        container.innerHTML = html;
+        document.body.removeChild(temp);
+        return;
       }
 
-      page.main.removeChild(clone);
+      // ✅ FIRST PAGE WITH SIDEBAR
+      let page = createPageWithSidebar(sidebar);
 
-    });
+      [...main.children].forEach(section => {
 
-    // append first part to current page
-    if (firstCard.children.length) {
+        const clone = section.cloneNode(true);
+        page.main.appendChild(clone);
 
-      const sectionFirst = clone.cloneNode(true);
-      const cardTarget = sectionFirst.querySelector('.ref-card_Template_1');
+        // fits normally
+        if (page.page.scrollHeight <= PAGE_HEIGHT) return;
 
-      cardTarget.innerHTML = '';
-      cardTarget.append(...firstCard.children);
+        // remove — we will split
+        page.main.removeChild(clone);
 
-      page.main.appendChild(sectionFirst);
+        // 🔥 check for reference cards
+        const cards = clone.querySelectorAll('.ref-card_Template_1');
+
+        if (!cards.length) {
+          page = createPageWithoutSidebar();
+          page.main.appendChild(clone);
+          return;
+        }
+
+        // section wrapper where cards live
+        const wrapper = clone;
+
+        // process cards one by one
+        cards.forEach(card => {
+
+          const children = Array.from(card.children);
+
+          const firstCard = card.cloneNode(false);
+          const overflowCard = card.cloneNode(false);
+
+          children.forEach(child => {
+
+            firstCard.appendChild(child.cloneNode(true));
+
+            // test height
+            card.replaceWith(firstCard);
+            page.main.appendChild(clone);
+
+            if (page.page.scrollHeight > PAGE_HEIGHT) {
+
+              // move last child to overflow
+              firstCard.removeChild(firstCard.lastChild);
+              overflowCard.appendChild(child.cloneNode(true));
+
+            }
+
+            page.main.removeChild(clone);
+
+          });
+
+          // append first part to current page
+          if (firstCard.children.length) {
+
+            const sectionFirst = clone.cloneNode(true);
+            const cardTarget = sectionFirst.querySelector('.ref-card_Template_1');
+
+            cardTarget.innerHTML = '';
+            cardTarget.append(...firstCard.children);
+
+            page.main.appendChild(sectionFirst);
+          }
+
+          // create new page for overflow
+          if (overflowCard.children.length) {
+
+            page = createPageWithoutSidebar();
+
+            const sectionOverflow = clone.cloneNode(true);
+            const cardTarget = sectionOverflow.querySelector('.ref-card_Template_1');
+
+            cardTarget.innerHTML = '';
+            cardTarget.append(...overflowCard.children);
+
+            page.main.appendChild(sectionOverflow);
+          }
+
+        });
+
+      });
+
+      document.body.removeChild(temp);
+
+      console.log(
+        'Pages rendered:',
+        container.querySelectorAll('.resume-page').length
+      );
     }
-
-    // create new page for overflow
-    if (overflowCard.children.length) {
-
-      page = createPageWithoutSidebar();
-
-      const sectionOverflow = clone.cloneNode(true);
-      const cardTarget = sectionOverflow.querySelector('.ref-card_Template_1');
-
-      cardTarget.innerHTML = '';
-      cardTarget.append(...overflowCard.children);
-
-      page.main.appendChild(sectionOverflow);
-    }
-
-  });
-
-});
-
-    document.body.removeChild(temp);
-
-    console.log(
-      'Pages rendered:',
-      container.querySelectorAll('.resume-page').length
-    );
-  }
   </script>
 
 </body>

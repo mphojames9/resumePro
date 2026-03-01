@@ -89,3 +89,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
+
+const toggle = document.getElementById("menuToggle");
+const panel = document.getElementById("mobilePanel");
+const backdrop = document.querySelector('.backdrop')
+
+toggle.addEventListener("click", () => {
+  toggle.classList.toggle("active");
+  panel.classList.toggle("active");
+  backdrop.classList.toggle("open");
+  backdrop.classList.toggle("opacity");
+});

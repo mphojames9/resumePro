@@ -5,6 +5,7 @@ let zoomControl;
   function id() { return Math.random().toString(36).slice(2, 9); }
   function $(s) { return document.querySelector(s); }
   function $id(s) { return document.getElementById(s); }
+  function $all(s) { return Array.from(document.querySelectorAll(s)); }
 
   // Basic stopwords set (simple)
   const STOPWORDS = new Set(("a about above after again against all am an and any are as at be because been before being below between both but by could did do does doing down during each few for from further had has have having he her here hers herself him himself his how i if in into is it its itself just me more most my yourself yourselves no nor not of off on once only or other our ours ourselves out over own same she should so some such than that the their theirs them themselves then there these they this those through to too under until up very was were what when where which while who whom why with would you your yours").split(" "));
@@ -45,7 +46,9 @@ let zoomControl;
     templateSelect: $id('templateSelect'),
     profilePicInput: $id('profilePicInput'),
     photoPreviewContainer: $id('photoPreviewContainer'),
+    photoPreviewContainers: $all('#photoPreviewContainer, .photoPreviewContainer, .photo-preview'),
     removePhotoBtn: $id('removePhotoBtn')
+
   };
 
 
@@ -91,53 +94,74 @@ let zoomControl;
     renderPhotoPreview();
 
     refs.educationContainer.addEventListener('click', function (e) {
-  const header = e.target.closest('.edu-header');
-  if (!header) return;
+      const header = e.target.closest('.edu-header');
+      if (!header) return;
 
-  const card = header.closest('.edu-card');
+      const card = header.closest('.edu-card');
+      const eduId = card.dataset.edu;
 
-  // Accordion style (only one open)
-  refs.educationContainer
-    .querySelectorAll('.edu-card')
-    .forEach(c => {
-      if (c !== card) c.classList.remove('active');
+      const isActive = card.classList.contains('active');
+
+      // Close all
+      refs.educationContainer
+        .querySelectorAll('.edu-card')
+        .forEach(c => c.classList.remove('active'));
+
+      if (!isActive) {
+        card.classList.add('active');
+        localStorage.setItem('lastOpenEdu', eduId);
+      } else {
+        localStorage.removeItem('lastOpenEdu');
+      }
     });
 
-  card.classList.toggle('active');
-});
+    refs.experienceContainer.addEventListener('click', function (e) {
+      const header = e.target.closest('.exp-header');
+      if (!header) return;
 
-refs.experienceContainer.addEventListener('click', function (e) {
-  const header = e.target.closest('.exp-header');
+      const card = header.closest('.exp-card');
+      const expId = card.dataset.exp;
 
-  // If NOT clicking the header, do nothing
-  if (!header) return;
+      const isActive = card.classList.contains('active');
 
-  const card = header.closest('.exp-card');
+      // Close all
+      refs.experienceContainer
+        .querySelectorAll('.exp-card')
+        .forEach(c => c.classList.remove('active'));
 
-  refs.experienceContainer
-    .querySelectorAll('.exp-card')
-    .forEach(c => {
-      if (c !== card) c.classList.remove('active');
+      if (!isActive) {
+        card.classList.add('active');
+
+        // 🔥 remember last opened
+        localStorage.setItem('lastOpenExp', expId);
+      } else {
+        // 🔥 if clicking same header → close it and clear memory
+        localStorage.removeItem('lastOpenExp');
+      }
     });
 
-  card.classList.toggle('active');
-});
 
+    refs.referencesContainer.addEventListener('click', function (e) {
+      const header = e.target.closest('.ref-header');
+      if (!header) return;
 
-refs.referencesContainer.addEventListener('click', function (e) {
-  const header = e.target.closest('.ref-header');
-  if (!header) return;
+      const card = header.closest('.ref-card');
+      const refId = card.dataset.ref;
 
-  const card = header.closest('.ref-card');
+      const isActive = card.classList.contains('active');
 
-  refs.referencesContainer
-    .querySelectorAll('.ref-card')
-    .forEach(c => {
-      if (c !== card) c.classList.remove('active');
+      // Close all
+      refs.referencesContainer
+        .querySelectorAll('.ref-card')
+        .forEach(c => c.classList.remove('active'));
+
+      if (!isActive) {
+        card.classList.add('active');
+        localStorage.setItem('lastOpenRef', refId);
+      } else {
+        localStorage.removeItem('lastOpenRef');
+      }
     });
-
-  card.classList.toggle('active');
-});
 
   }
 
@@ -211,22 +235,51 @@ refs.referencesContainer.addEventListener('click', function (e) {
     renderPreview();
   }
 
+  const photoScale = document.getElementById('photoScale');
+
+  photoScale.addEventListener('input', () => {
+    const scale = photoScale.value / 100;
+
+    // all preview containers (your previous ones)
+    const containers = document.querySelectorAll(
+      '#photoPreviewContainer, .photoPreviewContainer, .photo-wrap_Template_1'
+    );
+
+    containers.forEach(container => {
+      const img = container.querySelector('img');
+      if (!img) return;
+
+      img.style.transform = `scale(${scale})`;
+      img.style.transformOrigin = 'center';
+    });
+  });
+
+
   function renderPhotoPreview() {
-    const container = refs.photoPreviewContainer;
-    container.innerHTML = '';
+    const containers =
+      refs.photoPreviewContainers?.length
+        ? refs.photoPreviewContainers
+        : [refs.photoPreviewContainer];
+
     const photo = getPhotoSrc();
-    if (photo) {
-      const img = document.createElement('img');
-      img.src = photo;
-      img.alt = 'Profile photo';
-      container.appendChild(img);
-    } else {
-      // show initials placeholder
-      const span = document.createElement('div');
-      span.className = 'initials';
-      span.textContent = getInitials(data.personal.fullName || '');
-      container.appendChild(span);
-    }
+
+    containers.forEach(container => {
+      if (!container) return;
+
+      container.innerHTML = '';
+
+      if (photo) {
+        const img = document.createElement('img');
+        img.src = photo;
+        img.alt = 'Profile photo';
+        container.appendChild(img);
+      } else {
+        const span = document.createElement('div');
+        span.className = 'initials';
+        span.textContent = getInitials(data.personal.fullName || '');
+        container.appendChild(span);
+      }
+    });
   }
 
   function getPhotoSrc() {
@@ -293,7 +346,7 @@ refs.referencesContainer.addEventListener('click', function (e) {
 
   // --- Render lists (experience, education, skills, references) -----------------------
   function renderLists() {
-    
+
     // Education
     refs.educationContainer.innerHTML = '';
     data.education.forEach((edu) => {
@@ -370,7 +423,7 @@ refs.referencesContainer.addEventListener('click', function (e) {
             data-id="${edu.id}"></i>
         </button>
 
-        <button class="delete btn-danger">
+        <button class="btn-danger">
           <i class="fa-solid fa-trash"
             data-action="removeedu"
             data-id="${edu.id}"></i>
@@ -381,6 +434,16 @@ refs.referencesContainer.addEventListener('click', function (e) {
   </div>
 `;
       refs.educationContainer.appendChild(node);
+      // 🔥 Restore last opened education
+      const lastOpenEdu = localStorage.getItem('lastOpenEdu');
+      if (lastOpenEdu) {
+        const card = refs.educationContainer.querySelector(
+          `.edu-card[data-edu="${lastOpenEdu}"]`
+        );
+        if (card) {
+          card.classList.add('active');
+        }
+      }
     });
 
 
@@ -504,6 +567,16 @@ refs.referencesContainer.addEventListener('click', function (e) {
   </div>
 `;
       refs.experienceContainer.appendChild(node);
+      // 🔥 Restore last opened experience
+      const lastOpenExp = localStorage.getItem('lastOpenExp');
+      if (lastOpenExp) {
+        const card = refs.experienceContainer.querySelector(
+          `.exp-card[data-exp="${lastOpenExp}"]`
+        );
+        if (card) {
+          card.classList.add('active');
+        }
+      }
     });
 
 
@@ -603,6 +676,16 @@ refs.referencesContainer.addEventListener('click', function (e) {
   </div>
 `;
       refs.referencesContainer.appendChild(node);
+      // 🔥 Restore last opened reference
+      const lastOpenRef = localStorage.getItem('lastOpenRef');
+      if (lastOpenRef) {
+        const card = refs.referencesContainer.querySelector(
+          `.ref-card[data-ref="${lastOpenRef}"]`
+        );
+        if (card) {
+          card.classList.add('active');
+        }
+      }
     });
 
     // Skills
@@ -651,31 +734,31 @@ refs.referencesContainer.addEventListener('click', function (e) {
     }
     renderPreview(); save();
   }
- 
+
 
   function expButtonHandler(e) {
-  const action = e.target.dataset.action;
-  const idVal = e.target.dataset.id;
-  const idx = Number(e.target.dataset.idx);
+    const action = e.target.dataset.action;
+    const idVal = e.target.dataset.id;
+    const idx = Number(e.target.dataset.idx);
 
-  if (action === 'addbullet') {
-    const exp = data.experience.find(x => x.id === idVal);
-    exp.bullets.push('');
-  } else if (action === 'delbullet') {
-    const exp = data.experience.find(x => x.id === idVal);
-    exp.bullets.splice(idx, 1);
-  } else if (action === 'remove') {
-    data.experience = data.experience.filter(x => x.id !== idVal);
-  } else if (action === 'up') {
-    moveItem(data.experience, idVal, -1);
-  } else if (action === 'down') {
-    moveItem(data.experience, idVal, 1);
+    if (action === 'addbullet') {
+      const exp = data.experience.find(x => x.id === idVal);
+      exp.bullets.push('');
+    } else if (action === 'delbullet') {
+      const exp = data.experience.find(x => x.id === idVal);
+      exp.bullets.splice(idx, 1);
+    } else if (action === 'remove') {
+      data.experience = data.experience.filter(x => x.id !== idVal);
+    } else if (action === 'up') {
+      moveItem(data.experience, idVal, -1);
+    } else if (action === 'down') {
+      moveItem(data.experience, idVal, 1);
+    }
+
+    renderLists();
+    renderPreview();
+    save();
   }
-
-  renderLists(); 
-  renderPreview(); 
-  save();
-}
 
   function eduInputHandler(e) {
     const idVal = e.target.dataset.id;
@@ -797,24 +880,67 @@ refs.referencesContainer.addEventListener('click', function (e) {
   }
 
 
-  // --- PDF generation (html2pdf) -----------------------------------------
   function downloadPDF(atsMode) {
+
     const preview = refs.resumePreview;
     const templateClass = atsMode ? 'ats' : (data.template || 'professional');
+
     preview.className = 'resume ' + templateClass;
-    const filename = (data.personal.fullName || 'resume').replace(/\s+/g, '_') + (atsMode ? '_ATS' : '') + '_resume.pdf';
+
+    const filename =
+      (data.personal.fullName || 'resume')
+        .replace(/\s+/g, '_') +
+      (atsMode ? '_ATS' : '') +
+      '_resume.pdf';
+
+    if (typeof html2pdf === 'undefined') {
+      alert('PDF library not loaded.');
+      return;
+    }
+
+    // 🔥 get ALL resume pages
+    const pages = preview.querySelectorAll('.resume-page');
+
+    // temp wrapper
+    const wrapper = document.createElement('div');
+    wrapper.style.background = '#fff';
+
+    pages.forEach((page, i) => {
+      const clone = page.cloneNode(true);
+
+      // force page break except last
+      if (i !== pages.length - 1) {
+        clone.style.pageBreakAfter = 'always';
+      }
+
+      wrapper.appendChild(clone);
+    });
+
+    document.body.appendChild(wrapper);
+
     const opt = {
       margin: 0,
       filename: filename,
       image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true, logging: false },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+      html2canvas: {
+        scale: 2,
+        useCORS: true,
+        logging: false
+      },
+      jsPDF: {
+        unit: 'mm',
+        format: 'a4',
+        orientation: 'portrait'
+      }
     };
-    if (typeof html2pdf === 'undefined') {
-      alert('PDF library not loaded. Check internet connection or bundled script.');
-      return;
-    }
-    html2pdf().set(opt).from(preview).save();
+
+    html2pdf()
+      .set(opt)
+      .from(wrapper)
+      .save()
+      .then(() => {
+        wrapper.remove(); // cleanup
+      });
   }
 
   // --- Rendering preview -------------------------------------------------
@@ -857,9 +983,8 @@ refs.referencesContainer.addEventListener('click', function (e) {
 
   rendoerPersonalDetails()
 
-
-
   function paginateResume(html) {
+
     const container = refs.resumePreview;
     container.innerHTML = '';
 
@@ -877,178 +1002,21 @@ refs.referencesContainer.addEventListener('click', function (e) {
     const main = root.querySelector('main');
 
     if (!sidebar || !main) {
-      console.error('Pagination failed: sidebar or main missing');
       container.innerHTML = html;
       document.body.removeChild(temp);
       return;
     }
 
-    // ✅ FIRST PAGE WITH SIDEBAR
-    let page = createPageWithSidebar(sidebar);
+    let currentPage = createPageWithSidebar(sidebar);
 
     [...main.children].forEach(section => {
 
       const clone = section.cloneNode(true);
-      page.main.appendChild(clone);
+      currentPage.main.appendChild(clone);
 
-      // fits normally
-      if (page.page.scrollHeight <= PAGE_HEIGHT) return;
+      if (currentPage.page.scrollHeight <= PAGE_HEIGHT) return;
 
-      // remove — we will split
-      page.main.removeChild(clone);
-
-      // 🔥 check for reference cards
-const cards = clone.querySelectorAll('.ref-card_Template_1');
-
-if (!cards.length) {
-
-  // 🔥 TRY SPLIT BY DESCRIPTION LISTS FIRST
-  const descLists = clone.querySelectorAll('.item-desc_Template_1');
-
-  if (descLists.length) {
-
-    let fittedSection = clone.cloneNode(true);
-    let overflowSection = clone.cloneNode(true);
-
-    const fittedLists = fittedSection.querySelectorAll('.item-desc_Template_1');
-    const overflowLists = overflowSection.querySelectorAll('.item-desc_Template_1');
-
-    let hasOverflow = false;
-
-    for (let i = 0; i < descLists.length; i++) {
-
-      const originalList = descLists[i];
-      const children = Array.from(originalList.children);
-
-      let fittedChildren = [];
-      let overflowChildren = [];
-
-      let testList = originalList.cloneNode(false);
-
-      children.forEach(child => {
-
-        testList.appendChild(child.cloneNode(true));
-
-        const testSection = clone.cloneNode(true);
-        const target = testSection.querySelectorAll('.item-desc_Template_1')[i];
-
-        target.innerHTML = '';
-        target.appendChild(testList.cloneNode(true));
-
-        page.main.appendChild(testSection);
-
-        const isOverflow = page.page.scrollHeight > PAGE_HEIGHT;
-
-        page.main.removeChild(testSection);
-
-        if (isOverflow) {
-          testList.removeChild(testList.lastChild);
-          overflowChildren.push(child.cloneNode(true));
-          hasOverflow = true;
-        } else {
-          fittedChildren.push(child.cloneNode(true));
-        }
-
-      });
-
-      // apply fitted
-      const fittedTarget = fittedLists[i];
-      fittedTarget.innerHTML = '';
-      fittedChildren.forEach(n => fittedTarget.appendChild(n));
-
-      // apply overflow
-      const overflowTarget = overflowLists[i];
-      overflowTarget.innerHTML = '';
-      overflowChildren.forEach(n => overflowTarget.appendChild(n));
-    }
-
-    // ---------- PAGE 1 ----------
-    page.main.appendChild(fittedSection);
-
-    // ---------- PAGE 2 ----------
-    // ---------- PAGE 2 ----------
-if (hasOverflow) {
-
-  // 🔥 REMOVE DUPLICATED HEADER / META FROM OVERFLOW
-  overflowSection.querySelectorAll(
-    '.heading_Template_1, .rule, .item-head_Template_1, .date, .item-sub_Template_1, .timeline_Template_1::before'
-  ).forEach(el => el.remove());
-
-  overflowSection.querySelectorAll('.timeline_Template_1')
-  .forEach(el => el.classList.add('no-timeline'));
-
-  page = createPageWithoutSidebar();
-  page.main.appendChild(overflowSection);
-}
-
-    return;
-  }
-
-  // 🔥 NO SPLIT POSSIBLE → MOVE WHOLE SECTION
-  page = createPageWithoutSidebar();
-  page.main.appendChild(clone);
-  return;
-}
-
-// process each card separately
-cards.forEach(originalCard => {
-
-  const children = Array.from(originalCard.children);
-
-  let fittedChildren = [];
-  let overflowChildren = [];
-
-  // test container
-  let testCard = originalCard.cloneNode(false);
-
-  children.forEach(child => {
-
-    testCard.appendChild(child.cloneNode(true));
-
-    // create test section
-    const testSection = clone.cloneNode(true);
-    const target = testSection.querySelector('.ref-card_Template_1');
-
-    target.innerHTML = '';
-    target.appendChild(testCard.cloneNode(true));
-
-    page.main.appendChild(testSection);
-
-    const isOverflow = page.page.scrollHeight > PAGE_HEIGHT;
-
-    page.main.removeChild(testSection);
-
-    if (isOverflow) {
-      testCard.removeChild(testCard.lastChild);
-      overflowChildren.push(child.cloneNode(true));
-    } else {
-      fittedChildren.push(child.cloneNode(true));
-    }
-
-  });
-
-
-  // ---------- PAGE 2 ----------
-  if (overflowChildren.length) {
-
-    page = createPageWithoutSidebar();
-
-    const sectionOverflow = clone.cloneNode(true);
-    const target = sectionOverflow.querySelector('.ref-card_Template_1');
-
-    const overflowCard = originalCard.cloneNode(false);
-    overflowChildren.forEach(n => overflowCard.appendChild(n));
-
-    target.innerHTML = '';
-    target.appendChild(overflowCard);
-
-    page.main.appendChild(sectionOverflow);
-  }
-
-});
-    
-    
-
+      currentPage = microSplitOverflow(currentPage, PAGE_HEIGHT);
     });
 
     document.body.removeChild(temp);
@@ -1058,6 +1026,121 @@ cards.forEach(originalCard => {
       container.querySelectorAll('.resume-page').length
     );
   }
+
+
+  function microSplitOverflow(pageObj, PAGE_HEIGHT) {
+
+    let currentPage = pageObj;
+    let nextPage = createPageWithoutSidebar();
+
+    while (currentPage.page.scrollHeight > PAGE_HEIGHT) {
+
+      const items = currentPage.main.querySelectorAll('.timeline_Template_1-item');
+      if (!items.length) break;
+
+      const lastItem = items[items.length - 1];
+
+      // 🔥 IMPORTANT: get the wrapper
+      const timelineWrapper = lastItem.closest('.timeline_Template_1');
+
+      const lists = lastItem.querySelectorAll('.item-desc_Template_1');
+
+      let movedSomething = false;
+
+      for (let i = lists.length - 1; i >= 0; i--) {
+
+        const list = lists[i];
+        const bullets = list.querySelectorAll('li');
+
+        if (!bullets.length) continue;
+
+        const lastBullet = bullets[bullets.length - 1];
+
+        // ---------- FIND OR CREATE WRAPPER ON NEXT PAGE ----------
+        let nextWrapper = nextPage.main.querySelector('.timeline_Template_1');
+
+        if (!nextWrapper) {
+          nextWrapper = timelineWrapper.cloneNode(false); // clone wrapper ONLY
+          nextPage.main.insertBefore(nextWrapper, nextPage.main.firstChild);
+        }
+
+        // ---------- FIND OR CREATE ITEM ----------
+        let overflowItem = nextWrapper.querySelector('.timeline_Template_1-item');
+
+        if (!overflowItem) {
+
+          overflowItem = lastItem.cloneNode(true);
+
+          // remove all bullets from clone
+          overflowItem.querySelectorAll('.item-desc_Template_1')
+            .forEach(l => l.innerHTML = '');
+
+          // 🔥 Hide headers for continuation page
+          overflowItem.querySelectorAll('.item-head_Template_1')
+            .forEach(head => head.style.display = 'none');
+
+          nextWrapper.appendChild(overflowItem);
+        }
+
+        const overflowLists = overflowItem.querySelectorAll('.item-desc_Template_1');
+        const targetList = overflowLists[i];
+
+        targetList.insertBefore(lastBullet, targetList.firstChild);
+
+        movedSomething = true;
+        break;
+      }
+
+      // If no bullets → move entire wrapper safely
+      if (!movedSomething) {
+
+        nextPage.main.insertBefore(
+          timelineWrapper,
+          nextPage.main.firstChild
+        );
+      }
+
+      // Clean empty lists
+      lastItem.querySelectorAll('.item-desc_Template_1').forEach(list => {
+        if (!list.children.length) list.remove();
+      });
+
+      // 🔥 If original item has no bullets left
+      if (!lastItem.querySelector('li')) {
+
+        // Remove empty item from current page
+        lastItem.remove();
+
+        // If wrapper is empty, remove it
+        if (timelineWrapper && !timelineWrapper.querySelector('.timeline_Template_1-item')) {
+          timelineWrapper.remove();
+        }
+
+        // 🔥 Now fix next page:
+        const nextWrapper = nextPage.main.querySelector('.timeline_Template_1');
+        const overflowItem = nextWrapper?.querySelector('.timeline_Template_1-item');
+
+        if (overflowItem) {
+
+          // This is NOT a continuation anymore
+          // Restore headers
+          overflowItem.querySelectorAll('.item-head_Template_1')
+            .forEach(head => head.style.display = '');
+
+        }
+
+        break; // stop splitting
+      }
+
+      // Remove wrapper if empty
+      if (timelineWrapper && !timelineWrapper.querySelector('.timeline_Template_1-item')) {
+        timelineWrapper.remove();
+      }
+    }
+
+    return nextPage;
+  }
+
 
 
   function createPageWithSidebar(sidebarNode) {
@@ -1202,11 +1285,11 @@ cards.forEach(originalCard => {
     };
 
     // Inject ATS + Template CSS once
-if (!document.getElementById('modern-template-style')) {
-  const style = document.createElement('style');
-  style.id = 'modern-template-style';
+    if (!document.getElementById('modern-template-style')) {
+      const style = document.createElement('style');
+      style.id = 'modern-template-style';
 
-  style.textContent = `
+      style.textContent = `
     :root {
       --fa-primary: #68687a;
       --fa-accent: #9cc7d1;
@@ -1451,14 +1534,6 @@ body {
   overflow-y: hidden;
 }
 
-.sidebar_Template_1::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at top right, rgba(111,147,193,0.2), transparent 60%);
-  pointer-events: none;
-}
-
 .photo-wrap_Template_1 {
   width: 140px;
   height: 140px;
@@ -1601,7 +1676,7 @@ body {
   position: relative;
 }
 
-.timeline_Template_1::before {
+.item-head_Template_1::before {
   content: "";
   position: absolute;
   left: -6px;
@@ -1695,36 +1770,9 @@ body {
   break-inside: avoid;
 }
 
-/* EDUCATION CARD - Premium Look */
-.edu-card {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid #1e293b;
-  border-radius: 16px;
-  margin-bottom: 20px;
-  overflow: hidden;
-  transition: all 0.3s ease;
-}
-
 .edu-card:hover {
   border-color: #22c55e;
   box-shadow: 0 10px 30px rgba(34, 197, 94, 0.15);
-}
-
-/* HEADER */
-.edu-header {
-  padding: 18px 22px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  background: linear-gradient(90deg, #0f172a, #111827);
-}
-
-.edu-title {
-  font-weight: 600;
-  font-size: 15px;
-  color: #f8fafc;
 }
 
 .edu-sep {
@@ -1777,9 +1825,7 @@ body {
 .field input {
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid #1e293b;
-  background: #0f172a;
-  color: #f1f5f9;
+  border: 1px solid var(--border);
   transition: 0.25s;
 }
 
@@ -1798,11 +1844,6 @@ body {
 
 /* MODERN BUTTONS */
 .btn-modern {
-  background: #1e293b;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 10px;
-  color: #f8fafc;
   cursor: pointer;
   transition: 0.25s;
 }
@@ -1810,24 +1851,10 @@ body {
 .btn-modern:hover {
   background: #334155;
 }
-
-.btn-danger {
-  background: #7f1d1d;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 10px;
-  color: white;
-  cursor: pointer;
-  transition: 0.25s;
-}
-
-.btn-danger:hover {
-  background: #b91c1c;
-}
 `;
 
-  document.head.appendChild(style);
-}
+      document.head.appendChild(style);
+    }
 
     return `
   <div class="resume_Template_1">
@@ -2070,7 +2097,7 @@ body {
       stroke="#6f93c1" stroke-width="1.5"/>
   </svg>`
     };
-    
+
 
     return `
   <div class="resume_Template_1">

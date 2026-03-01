@@ -5,7 +5,8 @@
   <meta charset="UTF-8" />
   <title>Resume Builder</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="/template1.css">
+  <link rel="stylesheet" href="./template1.css">
+  <link rel="stylesheet" href="./slider.css">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -33,6 +34,8 @@
       font-family: Inter, sans-serif;
       margin: 0;
       padding: 0;
+      -webkit-tap-highlight-color: transparent;
+
     }
 
     body {
@@ -271,6 +274,12 @@
     .remove-btn:hover {
       background: #fee2e2;
       color: #dc2626;
+    }
+
+    .photoMain {
+      width: 80px;
+      height: 80px;
+      overflow: hidden;
     }
 
     /* Preview Container */
@@ -696,7 +705,6 @@
     }
 
     .item:hover {
-      border: var(--border2);
       transform: translateY(-2px);
     }
 
@@ -923,18 +931,37 @@
       background: white;
       overflow: hidden;
       position: relative;
+      border-radius: 50%;
+      border: #22c55e 2px solid;
     }
 
-    .ProfileImageContainer {
-      width: 250px;
-      height: 250px;
+    .ProfileImageContainer img {
+      width:100%;
+      height: 100%;
+      border-radius: 50%;
     }
 
     .backdrop {
-      position: absolute;
-      background: rgba(0, 0, 0, 0.096);
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.719);
       inset: 0;
+      z-index: 100;
+      display: none;
+      opacity: 0;
     }
+
+    .backdrop.open {
+      display: flex;
+    }
+
+    .backdrop.opacity {
+      opacity: 1;
+    }
+    
 
     .row3 {
       display: grid;
@@ -1257,6 +1284,7 @@
 
     .row-skill-hobby input {
       margin-bottom: 5px;
+      border: 1px solid var(--border)
     }
 
     .row-skill-hobby {
@@ -1281,33 +1309,17 @@
 
     /* EXPERIENCE CARD */
 .exp-card {
-  background: #111827;
+  background: #f8f9fc;
   border-radius: 14px;
   margin-bottom: 18px;
   overflow: hidden;
-  border: 1px solid #1f2937;
+  border: 1px solid var(--border);
   transition: all 0.3s ease;
 }
 
 .exp-card:hover {
   border-color: #6366f1;
   box-shadow: 0 8px 25px rgba(99,102,241,0.15);
-}
-
-/* HEADER */
-.exp-header {
-  padding: 16px 20px;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: linear-gradient(90deg, #1f2937, #111827);
-}
-
-.exp-title {
-  font-weight: 600;
-  font-size: 15px;
-  color: #f9fafb;
 }
 
 .exp-sep {
@@ -1332,20 +1344,6 @@
   padding: 20px;
 }
 
-
-/* Modern Add Button */
-.modern-add {
-  margin-top: 12px;
-  background: #6366f1;
-  border: none;
-  padding: 8px 14px;
-  border-radius: 8px;
-  color: white;
-  cursor: pointer;
-  font-size: 13px;
-  transition: 0.25s;
-}
-
 .modern-add:hover {
   background: #4f46e5;
 }
@@ -1359,11 +1357,11 @@
 
 /* EDUCATION CARD */
 .edu-card {
-  background: #0f172a;
+  background: #f8f9fc;
   border-radius: 14px;
   margin-bottom: 18px;
   overflow: hidden;
-  border: 1px solid #1e293b;
+  border: 1px solid var(--border);
   transition: all 0.3s ease;
 }
 
@@ -1379,13 +1377,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: linear-gradient(90deg, #1e293b, #0f172a);
 }
 
 .edu-title {
   font-weight: 600;
   font-size: 15px;
-  color: #f8fafc;
 }
 
 .edu-sep {
@@ -1423,17 +1419,6 @@
   gap: 8px;
 }
 
-/* CARD */
-.exp-card {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid #1e293b;
-  border-radius: 16px;
-  margin-bottom: 22px;
-  overflow: hidden;
-  transition: 0.3s ease;
-}
-
 .exp-card:hover {
   border-color: #3b82f6;
   box-shadow: 0 10px 30px rgba(59, 130, 246, 0.15);
@@ -1446,13 +1431,11 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  background: linear-gradient(90deg, #0f172a, #111827);
 }
 
 .exp-title {
   font-weight: 600;
   font-size: 15px;
-  color: #f8fafc;
 }
 
 .exp-sep {
@@ -1511,28 +1494,44 @@
   flex: 1;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid #1e293b;
-  background: #0f172a;
-  color: #f1f5f9;
+  border: 1px solid var(--border);
 }
 
 .bullet-delete {
-  background: #7f1d1d;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 10px;
-  color: white;
-  cursor: pointer;
+  background: linear-gradient(135deg, var(--accent), var(--primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent
+}
+
+.bullet-delete .fa-solid {
+      margin-right: 0;
+      margin-top: -25px;
+}
+
+.btn-danger {
+    border: none;
+    padding: 8px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s;
+    background: transparent;
+}
+
+.btn-danger .fa-solid {
+      margin-right: 0;
+      background: linear-gradient(135deg, rgb(117, 1, 1), rgb(216, 49, 49), rgb(201, 182, 182));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 /* ADD BUTTON */
 .modern-add {
   margin-top: 10px;
-  background: #1e293b;
-  border: 1px dashed #334155;
+  background: #f8f9fc;
+  border: 1px solid var(--border);
   padding: 10px 14px;
   border-radius: 12px;
-  color: #cbd5e1;
+  color: #2b3e55;
   cursor: pointer;
   transition: 0.25s;
 }
@@ -1550,9 +1549,9 @@
 
 /* CARD */
 .ref-card {
-  background: rgba(15, 23, 42, 0.85);
+  background-color: #f8f9fc;
   backdrop-filter: blur(10px);
-  border: 1px solid #1e293b;
+  border: 1px solid var(--border);
   border-radius: 16px;
   margin-bottom: 22px;
   overflow: hidden;
@@ -1571,13 +1570,11 @@
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
-  background: linear-gradient(90deg, #0f172a, #111827);
 }
 
 .ref-title {
   font-weight: 600;
   font-size: 15px;
-  color: #f8fafc;
 }
 
 .ref-sep {
@@ -1619,6 +1616,26 @@
   display: flex;
   gap: 10px;
 }
+
+#photoPreviewContainer,
+.photoPreviewContainer {
+  overflow: hidden;
+}
+
+#photoPreviewContainer img,
+.photoPreviewContainer img {
+  object-fit: cover;
+  transition: transform 0.2s ease;
+}
+
+.resume-page {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.resume-page:not(:last-child) {
+  page-break-after: always;
+}
   </style>
 </head>
 
@@ -1628,20 +1645,46 @@
     <div class="logo">
       <img src="./assets/logo.png" alt="logo" class="mainLogo">
     </div>
-    <div class="header-right">
-      <select id="templateSelect">
-        <option value="modern">Modern</option>
-        <option value="minimal">Minimal</option>
-        <option value="creative">Creative</option>
-        <option value="recruiter">Recruiter</option>
-        <option value="ats">ATS</option>
-      </select>
-      <button id="pdfBtn" class="btn-premium">
-        <i class="fa-solid fa-file-arrow-down"></i>
-        Download
-      </button>
-    </div>
+      <div class="header-right">
+    <select id="templateSelect">
+      <option value="modern">Modern</option>
+      <option value="minimal">Minimal</option>
+      <option value="creative">Creative</option>
+      <option value="recruiter">Recruiter</option>
+      <option value="ats">ATS</option>
+    </select>
+
+    <button id="pdfBtn" class="btn-premium">
+      <i class="fa-solid fa-file-arrow-down"></i>
+      Download
+    </button>
+  </div>
+
+      <!-- Toggle Button -->
+  <div class="menu-toggle" id="menuToggle">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
   </header>
+
+  <!-- Mobile Slide Panel -->
+<div class="mobile-panel" id="mobilePanel">
+  <select id="templateSelectMobile">
+    <option value="modern">Modern</option>
+    <option value="minimal">Minimal</option>
+    <option value="creative">Creative</option>
+    <option value="recruiter">Recruiter</option>
+    <option value="ats">ATS</option>
+  </select>
+
+  <button class="btn-premium">
+    <i class="fa-solid fa-file-arrow-down"></i>
+    Download PDF
+  </button>
+</div>
+
+<div class="backdrop"></div>
 
   <main class="layout">
 
@@ -1685,9 +1728,11 @@
 
         </div>
         <div class="right">
-          <div id="photoPreviewContainer" class="photo-preview">
+          <div class="photoMain">
+            <div id="photoPreviewContainer" class="photo-preview"></div>
+            <div class="backdropBtn"></div>
           </div>
-          <div class="backdropBtn"></div>
+          </div>
         </div>
       </div>
 
@@ -1847,6 +1892,8 @@
 
     <button class="closeBtn"><i class="fa-solid fa-multiply" id="editResume"></i></button>
 
+              
+
     <!-- RIGHT PREVIEW -->
     <section class="preview-wrap">
       <div id="resumePreview"></div>
@@ -1870,12 +1917,12 @@
       <h3>Image Uploader</h3>
       <div class="row2">
         <div class="ProfileImageContainer" id="photoPreviewContainer">
-          <img src="./assets/profile.png" alt="">
+          
           <div id="photoPreviewContainer" class="photo-preview">
-            <img src="./assets/profile.png" alt="">
+            
           </div>
         </div>
-        <div class="backdrop"></div>
+        
       </div>
       
 
@@ -1883,7 +1930,7 @@
         <div class="right">
           <div class="resizer">
             <i class="fa-solid fa-image" style="font-size: 15px;"></i>
-            <input type="range" min="100" max="200" value="100">
+            <input id="photoScale" type="range" min="100" max="200" value="100">
             <i class="fa-solid fa-image"></i>
           </div>
 
@@ -1902,8 +1949,6 @@
           </label>
         </div>
       </div>
-
-
     </div>
     <!-- html2pdf for PDF export -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
