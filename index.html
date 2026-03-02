@@ -277,10 +277,12 @@
     }
 
     .photoMain {
-      width: 80px;
-      height: 80px;
-      overflow: hidden;
-    }
+  width: 80px;
+  height: 80px;
+  overflow: hidden;          /* ✅ CLIPS EVERYTHING */
+  position: relative;
+  border-radius: 50%;
+}
 
     /* Preview Container */
     .photo-preview {

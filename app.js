@@ -1,6 +1,67 @@
 let zoomControl;
 
 (function () {
+  let previewRAF = null;
+
+  function updatePreviewLive() {
+    if (previewRAF) return;
+
+    previewRAF = requestAnimationFrame(() => {
+      renderPreview();
+      previewRAF = null;
+    });
+  }
+
+  function updateExpHeader(expId) {
+    const card = document.querySelector(`.exp-card[data-exp="${expId}"]`);
+    if (!card) return;
+
+    const titleEl = card.querySelector('.exp-title');
+    if (!titleEl) return;
+
+    const exp = data.experience.find(x => x.id === expId);
+    if (!exp) return;
+
+    titleEl.innerHTML = `
+    ${escapeHtml(exp.role || 'New Role')}
+    <span class="exp-sep">|</span>
+    ${escapeHtml(exp.campany || 'campany')}
+  `;
+  }
+
+  function updateEduHeader(eduId) {
+    const card = document.querySelector(`.edu-card[data-edu="${eduId}"]`);
+    if (!card) return;
+
+    const titleEl = card.querySelector('.edu-title');
+    if (!titleEl) return;
+
+    const edu = data.education.find(x => x.id === eduId);
+    if (!edu) return;
+
+    titleEl.innerHTML = `
+    ${escapeHtml(edu.degree || 'New Degree')}
+    <span class="edu-sep">|</span>
+    ${escapeHtml(edu.school || 'Institution')}
+  `;
+  }
+
+  function updateRefHeader(refId) {
+    const card = document.querySelector(`.ref-card[data-ref="${refId}"]`);
+    if (!card) return;
+
+    const titleEl = card.querySelector('.ref-title');
+    if (!titleEl) return;
+
+    const ref = data.references.find(x => x.id === refId);
+    if (!ref) return;
+
+    titleEl.innerHTML = `
+    ${escapeHtml(ref.name || 'Contact Person')}
+    <span class="ref-sep">|</span>
+    ${escapeHtml(ref.campany || 'campany')}
+  `;
+  }
   // --- Utilities ------------------------------------------------------------
   function id() { return Math.random().toString(36).slice(2, 9); }
   function $(s) { return document.querySelector(s); }
@@ -38,7 +99,7 @@ let zoomControl;
     importJsonInput: $id('importJsonInput'),
     jobDesc: $id('jobDesc'),
     keywordPanel: $id('keywordPanel'),
-    coverCompany: $id('coverCompany'),
+    covercampany: $id('covercampany'),
     coverRole: $id('coverRole'),
     generateCoverBtn: $id('generateCoverBtn'),
     coverPreview: $id('coverPreview'),
@@ -66,8 +127,8 @@ let zoomControl;
     },
     summary: "People-first engineering leader with a track record of scaling teams and shipping reliable distributed systems.",
     experience: [
-      { id: id(), role: "Engineering Manager", company: "Fintech Co", start: "Mar 2021", end: "Present", bullets: ["Grew backend team from 4 to 12 engineers while maintaining velocity.", "Introduced SRE practices reducing incidents by 40%."] },
-      { id: id(), role: "Senior Software Engineer", company: "Platform Labs", start: "2018", end: "2021", bullets: ["Built APIs used by 10M+ monthly active users.", "Mentored junior engineers."] }
+      { id: id(), role: "Engineering Manager", campany: "Fintech Co", start: "Mar 2021", end: "Present", bullets: ["Grew backend team from 4 to 12 engineers while maintaining velocity.", "Introduced SRE practices reducing incidents by 40%."] },
+      { id: id(), role: "Senior Software Engineer", campany: "Platform Labs", start: "2018", end: "2021", bullets: ["Built APIs used by 10M+ monthly active users.", "Mentored junior engineers."] }
     ],
     education: [
       { id: id(), school: "University of Cape Town", degree: "BSc Computer Science", discription: "school discribtion here", year: "2015" }
@@ -92,6 +153,20 @@ let zoomControl;
     refs.templateSelect.value = data.template || 'modern';
     window.addEventListener('beforeunload', save);
     renderPhotoPreview();
+
+    const savedScale = Number(localStorage.getItem(PHOTO_SCALE_KEY)) || 100;
+    photoScale.value = savedScale;
+
+    const scale = savedScale / 100;
+    document.querySelectorAll(
+      '#photoPreviewContainer, .photoPreviewContainer, .photo-wrap_Template_1'
+    ).forEach(container => {
+      const img = container.querySelector('img');
+      if (img) {
+        img.style.transform = `scale(${scale})`;
+        img.style.transformOrigin = 'center';
+      }
+    });
 
     refs.educationContainer.addEventListener('click', function (e) {
       const header = e.target.closest('.edu-header');
@@ -169,7 +244,7 @@ let zoomControl;
   // Max file size ~2MB
   const MAX_FILE_BYTES = 2 * 1024 * 1024;
   const OUTPUT_PIXEL = 400; // square output size (pixels) — decent for print and PDF
-
+const PHOTO_SCALE_KEY = 'photoScale';
   function handleProfilePicFile(file) {
     if (!file) return;
     if (!file.type.match(/^image\/(png|jpeg|jpg)$/)) { alert('Only PNG or JPEG allowed.'); return; }
@@ -183,6 +258,18 @@ let zoomControl;
         save();
         renderPhotoPreview();
         renderPreview();
+        const savedScale = Number(localStorage.getItem(PHOTO_SCALE_KEY)) || 100;
+const scale = savedScale / 100;
+
+document.querySelectorAll(
+  '#photoPreviewContainer, .photoPreviewContainer, .photo-wrap_Template_1, .photo-wrap_Template_1',
+).forEach(container => {
+  const img = container.querySelector('img');
+  if (img) {
+    img.style.transform = `scale(${scale})`;
+    img.style.transformOrigin = 'center';
+  }
+});
       };
       img.onerror = function () { alert('Failed to read image. Try a different file.'); };
       img.src = ev.target.result;
@@ -238,9 +325,12 @@ let zoomControl;
   const photoScale = document.getElementById('photoScale');
 
   photoScale.addEventListener('input', () => {
-    const scale = photoScale.value / 100;
+    const scaleValue = Number(photoScale.value);
+    const scale = scaleValue / 100;
 
-    // all preview containers (your previous ones)
+    // 🔥 save to localStorage
+    localStorage.setItem(PHOTO_SCALE_KEY, scaleValue);
+
     const containers = document.querySelectorAll(
       '#photoPreviewContainer, .photoPreviewContainer, .photo-wrap_Template_1'
     );
@@ -460,7 +550,7 @@ let zoomControl;
       <div class="exp-title">
         ${escapeHtml(exp.role || 'New Role')}
         <span class="exp-sep">|</span>
-        ${escapeHtml(exp.company || 'Company')}
+        ${escapeHtml(exp.campany || 'campany')}
       </div>
       <div class="exp-actions">
         <i class="fa-solid fa-chevron-down exp-chevron"></i>
@@ -482,11 +572,11 @@ let zoomControl;
         </div>
 
         <div class="field">
-          <label>Company</label>
+          <label>campany</label>
           <input class="input_data"
             data-id="${exp.id}"
-            data-field="company"
-            value="${escapeHtml(exp.company)}"
+            data-field="campany"
+            value="${escapeHtml(exp.campany)}"
             placeholder="e.g. Google" />
         </div>
 
@@ -592,7 +682,7 @@ let zoomControl;
       <div class="ref-title">
         ${escapeHtml(ref.name || 'Contact Person')}
         <span class="ref-sep">|</span>
-        ${escapeHtml(ref.company || 'Company')}
+        ${escapeHtml(ref.campany || 'campany')}
       </div>
       <div class="ref-actions">
         <i class="fa-solid fa-chevron-down ref-chevron"></i>
@@ -614,11 +704,11 @@ let zoomControl;
         </div>
 
         <div class="field">
-          <label>Company</label>
+          <label>campany</label>
           <input class="input_data"
             data-id="${ref.id}"
-            data-field="company"
-            value="${escapeHtml(ref.company)}"
+            data-field="campany"
+            value="${escapeHtml(ref.campany)}"
             placeholder="e.g. ABC Corporation" />
         </div>
 
@@ -725,16 +815,24 @@ let zoomControl;
     const idVal = e.target.dataset.id;
     const field = e.target.dataset.field;
     const idx = e.target.dataset.idx;
+
     const exp = data.experience.find(x => x.id === idVal);
     if (!exp) return;
+
     if (field === 'bullet') {
       exp.bullets[idx] = e.target.value;
     } else {
       exp[field] = e.target.value;
-    }
-    renderPreview(); save();
-  }
 
+      // 🔥 LIVE update editor header
+      if (field === 'role' || field === 'campany') {
+        updateExpHeader(idVal);
+      }
+    }
+
+    updatePreviewLive();
+    save();
+  }
 
   function expButtonHandler(e) {
     const action = e.target.dataset.action;
@@ -761,20 +859,39 @@ let zoomControl;
   }
 
   function eduInputHandler(e) {
-    const idVal = e.target.dataset.id;
+    const eduId = e.target.dataset.id;
     const field = e.target.dataset.field;
-    const edu = data.education.find(x => x.id === idVal);
+
+    const edu = data.education.find(x => x.id === eduId);
     if (!edu) return;
+
     edu[field] = e.target.value;
-    renderPreview(); save();
+
+    // 🔥 LIVE editor header update
+    if (field === 'degree' || field === 'school') {
+      updateEduHeader(eduId);
+    }
+
+    updatePreviewLive();
+    save();
   }
+
   function refInputHandler(e) {
-    const idVal = e.target.dataset.id;
+    const refId = e.target.dataset.id;
     const field = e.target.dataset.field;
-    const ref = data.references.find(x => x.id === idVal);
+
+    const ref = data.references.find(x => x.id === refId);
     if (!ref) return;
+
     ref[field] = e.target.value;
-    renderPreview(); save();
+
+    // 🔥 LIVE editor header update
+    if (field === 'name' || field === 'campany') {
+      updateRefHeader(refId);
+    }
+
+    updatePreviewLive();
+    save();
   }
   function eduButtonHandler(e) {
     const action = e.target.dataset.action;
@@ -845,7 +962,7 @@ let zoomControl;
       data.experience.unshift({
         id: id(),
         role: "",
-        company: "",
+        campany: "",
         start: "",
         end: "",
         bullets: [""]
@@ -998,6 +1115,7 @@ let zoomControl;
     document.body.appendChild(temp);
 
     const root = temp.firstElementChild;
+    cleanAllSections(root);
     const sidebar = root.querySelector('aside');
     const main = root.querySelector('main');
 
@@ -1276,7 +1394,7 @@ let zoomControl;
         stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
     </svg>`,
 
-      company: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+      campany: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none">
     <rect x="3" y="7" width="18" height="13" rx="2"
       stroke="#6f93c1" stroke-width="1.5"/>
     <path d="M9 7V5h6v2"
@@ -1471,21 +1589,6 @@ let zoomControl;
       font-size: 12px;
       color: var(--gray);
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /* ================================
    BASE
@@ -1866,25 +1969,53 @@ body {
         <div class="role_Template_1">${escapeHtml(data.personal.title || '')}</div>
       </div>
 
-          <section class="section_Template_1 summary">
-        <div class="heading_Template_1">
-          <h2>${ICONS.profile}<span>Profile</span></h2>
-        </div>
-        <p class="about_Template_1">${escapeHtml(data.summary || '')}</p>
-      </section>
+      ${data.summary && data.summary.trim()
+        ? `
+<section class="section_Template_1 summary">
+  <div class="heading_Template_1">
+    <h2>${ICONS.profile}<span>Profile</span></h2>
+  </div>
+  <p class="about_Template_1">${escapeHtml(data.summary)}</p>
+</section>
+`
+        : ''}
 
-      <div class="side-section_Template_1">
-        <div class="section-title_Template_1">
-          ${ICONS.contact} Contact
-        </div>
-        <ul class="contact-list_Template_1">
-          <li>${icon(ICONS.phone)}${escapeHtml(data.personal.phone || '')}</li>
-          <li>${icon(ICONS.email)}${escapeHtml(data.personal.email || '')}</li>
-          <li>${icon(ICONS.location)}${escapeHtml(data.personal.location || '')}</li>
-          <li>${icon(ICONS.website)}${escapeHtml(data.personal.website || '')}</li>
-          <li>${icon(ICONS.linkedin)}${escapeHtml(data.personal.linkedin || '')}</li>
-        </ul>
-      </div>
+${(
+        data.personal.phone ||
+        data.personal.email ||
+        data.personal.location ||
+        data.personal.website ||
+        data.personal.linkedin
+      ) ? `
+<div class="side-section_Template_1">
+  <div class="section-title_Template_1">
+    ${ICONS.contact} Contact
+  </div>
+  <ul class="contact-list_Template_1">
+
+    ${data.personal.phone
+        ? `<li>${icon(ICONS.phone)}${escapeHtml(data.personal.phone)}</li>`
+        : ''}
+
+    ${data.personal.email
+        ? `<li>${icon(ICONS.email)}${escapeHtml(data.personal.email)}</li>`
+        : ''}
+
+    ${data.personal.location
+        ? `<li>${icon(ICONS.location)}${escapeHtml(data.personal.location)}</li>`
+        : ''}
+
+    ${data.personal.website
+        ? `<li>${icon(ICONS.website)}${escapeHtml(data.personal.website)}</li>`
+        : ''}
+
+    ${data.personal.linkedin
+        ? `<li>${icon(ICONS.linkedin)}${escapeHtml(data.personal.linkedin)}</li>`
+        : ''}
+
+  </ul>
+</div>
+` : ''}
 
 
     </aside>
@@ -1925,12 +2056,12 @@ body {
 
               </div>
               <div class="item-head_Template_1">
-              <div class="item-sub_Template_1">${escapeHtml(exp.company)}</div>
+              <div class="item-sub_Template_1">${escapeHtml(exp.campany)}</div>
               <div class="date">
           ${[exp.start, exp.end].some(d => d && d.trim())
-        ? `<div class="date">${[exp.start, exp.end].filter(d => d && d.trim()).join(' – ')}</div>`
-        : ''
-      }
+            ? `<div class="date">${[exp.start, exp.end].filter(d => d && d.trim()).join(' – ')}</div>`
+            : ''
+          }
       </div>
               </div>
               <ul class="item-desc_Template_1">
@@ -1972,15 +2103,15 @@ body {
 
       ${(ref.campany || ref.position) ? `
         <p class="ref-line">
-          ${ICONS.company}
+          ${ICONS.campany}
           ${[
-            ref.campany
-              ? `<strong>${escapeHtml(ref.campany)}</strong>`
-              : '',
-            ref.position
-              ? escapeHtml(ref.position)
-              : ''
-          ].filter(Boolean).join(' / ')}
+                ref.campany
+                  ? `<strong>${escapeHtml(ref.campany)}</strong>`
+                  : '',
+                ref.position
+                  ? escapeHtml(ref.position)
+                  : ''
+              ].filter(Boolean).join(' / ')}
         </p>
       ` : ''}
 
@@ -2090,7 +2221,7 @@ body {
         stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
     </svg>`,
 
-      company: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+      campany: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none">
     <rect x="3" y="7" width="18" height="13" rx="2"
       stroke="#6f93c1" stroke-width="1.5"/>
     <path d="M9 7V5h6v2"
@@ -2168,7 +2299,7 @@ body {
 
               </div>
               <div class="item-head_Template_1">
-              <div class="item-sub_Template_1">${escapeHtml(exp.company)}</div>
+              <div class="item-sub_Template_1">${escapeHtml(exp.campany)}</div>
               <div class="date">
           ${[exp.start, exp.end].some(d => d && d.trim())
         ? `<div class="date">${[exp.start, exp.end].filter(d => d && d.trim()).join(' – ')}</div>`
@@ -2215,7 +2346,7 @@ body {
 
       ${(ref.campany || ref.position) ? `
         <p class="ref-line">
-          ${ICONS.company}
+          ${ICONS.campany}
           ${[
             ref.campany
               ? `<strong>${escapeHtml(ref.campany)}</strong>`
@@ -2254,7 +2385,7 @@ body {
     return `
       <div class="r-top">
         <div class="r-left">${p}<div style="margin-top:12px"><div class="name">${escapeHtml(data.personal.fullName || '')}</div><div class="title">${escapeHtml(data.personal.title || '')}</div><div class="contact small">${escapeHtml(data.personal.location || '')}</div><div style="margin-top:12px"><h4>Skills</h4><div class="small">${data.skills.map(s => escapeHtml(s)).join(', ')}</div></div></div></div>
-        <div class="r-right"><div class="section"><h4>About</h4><div class="small">${escapeHtml(data.summary || '')}</div></div><div class="section"><h4>Experience</h4>${data.experience.map(exp => `<div class="job"><strong>${escapeHtml(exp.role)}</strong> — ${escapeHtml(exp.company)} <div class="meta small">${escapeHtml(exp.start || '')} — ${escapeHtml(exp.end || '')}</div><ul class="bullets">${(exp.bullets || []).map(b => `<li>${escapeHtml(b)}</li>`).join('')}</ul></div>`).join('')}</div><div class="section"><h4>Education</h4>${data.education.map(edu => `<div class="job"><strong>${escapeHtml(edu.school)}</strong> — ${escapeHtml(edu.degree)} <div class="meta small">${escapeHtml(edu.year || '')}</div></div>`).join('')}</div></div>
+        <div class="r-right"><div class="section"><h4>About</h4><div class="small">${escapeHtml(data.summary || '')}</div></div><div class="section"><h4>Experience</h4>${data.experience.map(exp => `<div class="job"><strong>${escapeHtml(exp.role)}</strong> — ${escapeHtml(exp.campany)} <div class="meta small">${escapeHtml(exp.start || '')} — ${escapeHtml(exp.end || '')}</div><ul class="bullets">${(exp.bullets || []).map(b => `<li>${escapeHtml(b)}</li>`).join('')}</ul></div>`).join('')}</div><div class="section"><h4>Education</h4>${data.education.map(edu => `<div class="job"><strong>${escapeHtml(edu.school)}</strong> — ${escapeHtml(edu.degree)} <div class="meta small">${escapeHtml(edu.year || '')}</div></div>`).join('')}</div></div>
       </div>
     `;
   }
@@ -2264,7 +2395,7 @@ body {
     return `
       <div class="r-top">
         <div class="r-left">${p}<div style="margin-top:10px"><div class="name">${escapeHtml(data.personal.fullName || '')}</div><div class="title">${escapeHtml(data.personal.title || '')}</div><div class="contact small">${escapeHtml(data.personal.email || '')} • ${escapeHtml(data.personal.phone || '')}</div></div></div>
-        <div class="r-right"><div class="section"><h4>TL;DR</h4><div class="small">${escapeHtml(data.summary || '')}</div></div><div class="section"><h4>Key wins</h4><ul class="bullets">${data.experience.slice(0, 3).map(exp => `<li><strong>${escapeHtml(exp.role)}</strong> at ${escapeHtml(exp.company)} — ${(exp.bullets || [])[0] || ''}</li>`).join('')}</ul></div><div class="section"><h4>Experience (full)</h4>${data.experience.map(exp => `<div class="job"><strong>${escapeHtml(exp.role)}</strong> — ${escapeHtml(exp.company)} <div class="meta small">${escapeHtml(exp.start || '')} — ${escapeHtml(exp.end || '')}</div><ul class="bullets">${(exp.bullets || []).map(b => `<li>${escapeHtml(b)}</li>`).join('')}</ul></div>`).join('')}</div></div>
+        <div class="r-right"><div class="section"><h4>TL;DR</h4><div class="small">${escapeHtml(data.summary || '')}</div></div><div class="section"><h4>Key wins</h4><ul class="bullets">${data.experience.slice(0, 3).map(exp => `<li><strong>${escapeHtml(exp.role)}</strong> at ${escapeHtml(exp.campany)} — ${(exp.bullets || [])[0] || ''}</li>`).join('')}</ul></div><div class="section"><h4>Experience (full)</h4>${data.experience.map(exp => `<div class="job"><strong>${escapeHtml(exp.role)}</strong> — ${escapeHtml(exp.campany)} <div class="meta small">${escapeHtml(exp.start || '')} — ${escapeHtml(exp.end || '')}</div><ul class="bullets">${(exp.bullets || []).map(b => `<li>${escapeHtml(b)}</li>`).join('')}</ul></div>`).join('')}</div></div>
       </div>
     `;
   }
@@ -2625,6 +2756,13 @@ closeProfilePhotoUpload.addEventListener('click', () => {
   }, 450);
 })
 
+document.querySelector('.saveImage').addEventListener('click', () => {
+  profilePhotoUpload.classList.remove('opacity')
+  setTimeout(() => {
+    profilePhotoUpload.classList.add('hidden')
+  }, 450);
+})
+
 console.log(profilePicPreview)
 
 function scalePreview() {
@@ -2693,3 +2831,109 @@ function setTemplateCss() {
   proSummary.style.marginTop = `${proSummaryMargin - 30}px`
 }
 
+function cleanAllSections(root) {
+
+  const main = root.querySelector('.content_Template_1');
+  if (!main) return;
+
+  const sections = main.querySelectorAll('.section_Template_1');
+
+  sections.forEach(section => {
+
+    /* =========================
+       1️⃣ CLEAN TIMELINE ITEMS
+    ========================== */
+
+    section.querySelectorAll('.timeline_Template_1-item').forEach(item => {
+
+      const title = item.querySelector('h3')?.textContent.trim();
+      const sub = item.querySelector('.item-sub_Template_1')?.textContent.trim();
+      const date = item.querySelector('.date')?.textContent.trim();
+
+      const bullets = Array.from(
+        item.querySelectorAll('.item-desc_Template_1 li')
+      ).filter(li => li.textContent.trim() !== '');
+
+      // Remove empty bullets
+      item.querySelectorAll('.item-desc_Template_1 li').forEach(li => {
+        if (!li.textContent.trim()) li.remove();
+      });
+
+      const hasContent =
+        title ||
+        sub ||
+        date ||
+        bullets.length;
+
+      if (!hasContent) {
+        item.remove();
+      }
+    });
+
+    /* =========================
+       2️⃣ REMOVE EMPTY TIMELINES
+    ========================== */
+
+    section.querySelectorAll('.timeline_Template_1').forEach(timeline => {
+      if (!timeline.querySelector('.timeline_Template_1-item')) {
+        timeline.remove();
+      }
+    });
+
+    /* =========================
+       3️⃣ CLEAN SKILLS / INTERESTS
+    ========================== */
+
+    section.querySelectorAll('.skills-list_Template_1').forEach(list => {
+
+      list.querySelectorAll('li').forEach(li => {
+        if (!li.textContent.trim()) li.remove();
+      });
+
+      if (!list.querySelector('li')) {
+        list.remove();
+      }
+    });
+
+    /* =========================
+       4️⃣ CLEAN REFERENCES
+    ========================== */
+
+    section.querySelectorAll('.ref-card_Template_1').forEach(card => {
+
+      const name = card.querySelector('h4')?.textContent.trim();
+
+      const lines = Array.from(
+        card.querySelectorAll('.ref-line')
+      ).filter(p => p.textContent.trim() !== '');
+
+      // Remove empty lines
+      card.querySelectorAll('.ref-line').forEach(p => {
+        if (!p.textContent.trim()) p.remove();
+      });
+
+      if (!name && !lines.length) {
+        card.remove();
+      }
+    });
+
+    // Remove empty ref wrappers
+    section.querySelectorAll('.ref-card-wrapper').forEach(wrapper => {
+      if (!wrapper.querySelector('.ref-card_Template_1')) {
+        wrapper.remove();
+      }
+    });
+
+    /* =========================
+       5️⃣ FINAL SECTION CHECK
+    ========================== */
+
+    const hasTimeline = section.querySelector('.timeline_Template_1');
+    const hasSkills = section.querySelector('.skills-list_Template_1');
+    const hasRefs = section.querySelector('.ref-card_Template_1');
+
+    if (!hasTimeline && !hasSkills && !hasRefs) {
+      section.remove();
+    }
+  });
+}
