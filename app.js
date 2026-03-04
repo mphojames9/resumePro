@@ -879,7 +879,7 @@ let zoomControl;
 
   /* ADD SKILL */
   refs.addSkillBtn.addEventListener('click', () => {
-    data.skills.push({ name: '', level: 'basic' });
+    data.skills.unshift({ name: '', level: 'basic' });
     save();
     renderLists();
     renderPreview();
@@ -1093,18 +1093,18 @@ let zoomControl;
   const addLanguageBtn = document.getElementById('addLanguageBtn');
 
 
-function renderLanguagesPreview() {
-  if (!data.languages || !data.languages.length) return '';
+  function renderLanguagesPreview() {
+    if (!data.languages || !data.languages.length) return '';
 
-  const ICONS = {
-    language: `
+    const ICONS = {
+      language: `
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
         <path d="M4 5h16M4 12h10M4 19h16"
           stroke="rgb(117,125,129)" stroke-width="1.5"></path>
       </svg>`
-  };
+    };
 
-  return `
+    return `
     <section class="section_Template_1 overflow">
       <div class="heading_Template_1">
         <h2>
@@ -1126,20 +1126,20 @@ function renderLanguagesPreview() {
       </ul>
     </section>
   `;
-}
+  }
 
   function renderSkillsPreview() {
-  if (!data.skills || !data.skills.length) return '';
+    if (!data.skills || !data.skills.length) return '';
 
-  const ICONS = {
-    skill: `
+    const ICONS = {
+      skill: `
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
         <path d="M12 2l2.5 5 5.5.8-4 4 .9 5.7-4.9-2.6-4.9 2.6.9-5.7-4-4 5.5-.8L12 2z"
           stroke="rgb(117,125,129)" stroke-width="1.5"></path>
       </svg>`
-  };
+    };
 
-  return `
+    return `
     <section class="section_Template_1 overflow">
       <div class="heading_Template_1">
         <h2>
@@ -1158,7 +1158,7 @@ function renderLanguagesPreview() {
       </ul>
     </section>
   `;
-}
+  }
 
   function renderLanguagesEditor() {
     languagesContainer.innerHTML = data.languages
@@ -1238,10 +1238,7 @@ function renderLanguagesPreview() {
     });
 
 
-    refs.addSkillBtn.addEventListener('click', () => {
-      data.skills.unshift("");
-      renderLists(); renderPreview(); save();
-    });
+
     refs.addinterestBtn.addEventListener('click', () => {
       data.interests.unshift("");
       renderLists(); renderPreview(); save();
@@ -1250,6 +1247,20 @@ function renderLanguagesPreview() {
     refs.pdfAtsBtn && refs.pdfAtsBtn.addEventListener('click', () => downloadPDF(true));
   }
 
+  document.querySelectorAll('.input_data').forEach(input => {
+    const li = input.closest('.li');
+
+    function updateHoverState() {
+      if (!input.value.trim()) {
+        li.classList.add('no-hover');
+      } else {
+        li.classList.remove('no-hover');
+      }
+    }
+
+    updateHoverState();
+    input.addEventListener('input', updateHoverState);
+  });
 
   function downloadPDF(atsMode) {
 
@@ -1314,33 +1325,26 @@ function renderLanguagesPreview() {
       });
   }
 
-  // --- Rendering preview -------------------------------------------------
-  function renderPreview(highlightKeywords) {
-    rendoerPersonalDetails();
-    refs.resumePreview.className = (data.template || 'professional');
+function renderPreview(highlightKeywords) {
+  rendoerPersonalDetails();
+  refs.resumePreview.className = (data.template || 'professional');
+
+  const html = (() => {
     switch (data.template) {
-      case 'minimal': refs.resumePreview.innerHTML = renderMinimal(); break;
-      case 'creative': refs.resumePreview.innerHTML = renderCreative(); break;
-      case 'recruiter': refs.resumePreview.innerHTML = renderRecruiter(); break;
-      case 'ats': refs.resumePreview.innerHTML = renderATS(); break;
-      default: const html = (() => {
-        switch (data.template) {
-          case 'minimal': return renderMinimal();
-          case 'creative': return renderCreative();
-          case 'recruiter': return renderRecruiter();
-          case 'ats': return renderATS();
-          default: return renderModern();
-        }
-      })();
-          paginateResume(html);
-        break;
+      case 'minimal': return renderMinimal();
+      case 'creative': return renderCreative();
+      case 'recruiter': return renderRecruiter();
+      case 'ats': return renderATS();
+      default: return renderModern();
     }
-    if (highlightKeywords && highlightKeywords.length) {
-      highlightKeywordsInPreview(highlightKeywords);
+  })();
 
+  paginateResume(html);   // 🔥 ALWAYS paginate
 
-    }
+  if (highlightKeywords && highlightKeywords.length) {
+    highlightKeywordsInPreview(highlightKeywords);
   }
+}
 
   function rendoerPersonalDetails() {
     document.querySelector('.name').textContent = data.personal.fullName || '';
@@ -1397,32 +1401,32 @@ function renderLanguagesPreview() {
     );
   }
 
-function microSplitOverflow(pageObj, PAGE_HEIGHT) {
-  let currentPage = pageObj;
+  function microSplitOverflow(pageObj, PAGE_HEIGHT) {
+    let currentPage = pageObj;
 
-  while (currentPage.page.scrollHeight > PAGE_HEIGHT) {
+    while (currentPage.page.scrollHeight > PAGE_HEIGHT) {
 
-    const main = currentPage.main;
-    const overflowEls = Array.from(main.querySelectorAll('.overflow'));
+      const main = currentPage.main;
+      const overflowEls = Array.from(main.querySelectorAll('.overflow'));
 
-    // ❌ Nothing to move
-    if (overflowEls.length === 0) break;
+      // ❌ Nothing to move
+      if (overflowEls.length === 0) break;
 
-    // 🔥 ALWAYS move the LAST element (Word behavior)
-    const elementToMove = overflowEls[overflowEls.length - 1];
+      // 🔥 ALWAYS move the LAST element (Word behavior)
+      const elementToMove = overflowEls[overflowEls.length - 1];
 
-    // Create next page
-    const nextPage = createPageWithoutSidebar();
+      // Create next page
+      const nextPage = createPageWithoutSidebar();
 
-    // Move element
-    nextPage.main.prepend(elementToMove);
+      // Move element
+      nextPage.main.prepend(elementToMove);
 
-    // Continue checking overflow on the NEXT page
-    currentPage = nextPage;
+      // Continue checking overflow on the NEXT page
+      currentPage = nextPage;
+    }
+
+    return currentPage;
   }
-
-  return currentPage;
-}
   function createPageWithSidebar(sidebarNode) {
     console.log("with")
     const page = document.createElement('div');
@@ -1445,7 +1449,7 @@ function microSplitOverflow(pageObj, PAGE_HEIGHT) {
     return { page, main };
   }
 
-  
+
   function createPageWithoutSidebar() {
     console.log("WITHOUT")
     const page = document.createElement('div');
@@ -2062,34 +2066,34 @@ ${data.experience.map(exp => `
   <!-- EXPERIENCE ITEM -->
   <div class="overflow" style="margin-top:1rem;font-weight:bold; display:flex; justify-content:space-between;">
     <p style="font-weight:800">${escapeHtml(exp.campany)}</p>
-    ${
-      [exp.start, exp.end].some(d => d && d.trim())
-        ? `<i style="font-weight:400;font-size:13px;">${[exp.start, exp.end]
-            .filter(d => d && d.trim())
-            .join(' – ')}</i>`
-        : ''
-    }
+    ${[exp.start, exp.end].some(d => d && d.trim())
+            ? `<i style="font-weight:400;font-size:13px;">${[exp.start, exp.end]
+              .filter(d => d && d.trim())
+              .join(' – ')}</i>`
+            : ''
+          }
   </div>
 
   <p class="overflow" style="margin:0;font-weight:600;color:rgb(59,57,57); margin-bottom: 5px;">
     ${escapeHtml(exp.role)}
   </p>
 
-  ${
-    exp.bullets && exp.bullets.length
-      ? `
- ${exp.bullets.map(b => `
-            <li class="overflow li">${escapeHtml(b)}</li>
+  ${exp.bullets && exp.bullets.length
+            ? `
+    ${exp.bullets.map(b => `
+     <li class="overflow ${b?.trim() ? 'li' : ''}">
+    ${escapeHtml(b)}
+        </li>
           `).join('')}
       `
-      : ''
-  }
+            : ''
+          }
 `).join('')}
 
 
 
         <!-- EDUCATION HEADING -->
-        <div class="heading_Template_1 overflow overflow" style="margin-bottom:5px;">
+        <div class="heading_Template_1 overflow overflow" id="h2-edu" style="margin-bottom:5px;">
           <h2>
             ${ICONS.education}<span>EDUCATION</span>
           </h2>
@@ -2106,9 +2110,9 @@ ${data.experience.map(exp => `
               <li class="overflow" style="display:flex;white-space:pre-wrap;">
               </li>
 
-              <li class="overflow li">
-                ${escapeHtml(edu.discription)}
-              </li>
+              <li class="overflow ${edu.discription?.trim() ? 'li' : ''}">
+             ${escapeHtml(edu.discription)}
+             </li>
               `).join('')}
 
               ${renderSkillsPreview()}
@@ -2172,8 +2176,7 @@ ${data.experience.map(exp => `
   `;
   }
 
-
-  function renderMinimal() {
+    function renderMinimal() {
     const p = photoHtml();
 
     const icon = (svg) =>
@@ -2182,6 +2185,7 @@ ${data.experience.map(exp => `
     </span>`;
 
     const ICONS = {
+
       profile: `
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
         <circle cx="12" cy="8" r="4" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
@@ -2261,9 +2265,388 @@ ${data.experience.map(exp => `
       stroke="#6f93c1" stroke-width="1.5"/>
     <path d="M9 7V5h6v2"
       stroke="#6f93c1" stroke-width="1.5"/>
-  </svg>`
-    };
+  </svg>`,
 
+      calendar: `
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+  <rect x="3" y="4" width="18" height="17" rx="2"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <path d="M8 2v4M16 2v4M3 10h18"
+    stroke="#6f93c1" stroke-width="1.5"/>
+</svg>`,
+
+      heart: `
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+  <path d="M12 21s-7-4.5-7-10.5a4 4 0 0 1 7-2.5
+           4 4 0 0 1 7 2.5c0 6-7 10.5-7 10.5z"
+    stroke="#6f93c1" stroke-width="1.5"/>
+</svg>`,
+
+      user: `
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+  <circle cx="12" cy="7.5" r="3.5"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <path d="M4.5 20a7.5 7.5 0 0 1 15 0"
+    stroke="#6f93c1" stroke-width="1.5"/>
+</svg>`,
+
+      faith: `
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+  <path d="M12 2.5v19M5.5 9.5h13"
+    stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round"/>
+</svg>`,
+
+      group: `
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+  <circle cx="7.5" cy="9" r="3"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <circle cx="16.5" cy="9" r="3"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <path d="M2.5 20a6 6 0 0 1 10 0M11.5 20a6 6 0 0 1 10 0"
+    stroke="#6f93c1" stroke-width="1.5"/>
+</svg>`,
+
+      car: `
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+  <rect x="3" y="9" width="18" height="7" rx="2"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <path d="M6 9l2-4h8l2 4"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <circle cx="7.5" cy="17" r="1.5"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <circle cx="16.5" cy="17" r="1.5"
+    stroke="#6f93c1" stroke-width="1.5"/>
+</svg>`,
+
+      language: `
+<svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+  <path d="M4 5h16M4 12h10M4 19h16"
+    stroke="rgb(117,125,129)" stroke-width="1.5"/>
+</svg>`,
+
+    }
+
+
+    // Inject ATS + Template CSS once
+    if (!document.getElementById('modern-template-style')) {
+      const style = document.createElement('style');
+      style.id = 'modern-template-style';
+
+      style.textContent = `
+    :root {
+      --fa-primary: #68687a;
+      --fa-accent: #9cc7d1;
+      --dark: #191c24;
+      --gray: #64748b;
+      --light: #f8fafc;
+      --border: #e2e8f0;
+    }
+    .skill {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* ATS-skills */
+    .ATS-skills {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      gap: 15px;
+    }
+    
+.resume {
+    width: 794px;
+    min-width: 794px;
+    min-height: 1122px;
+    max-height: 1122px;
+    margin-bottom: 30px;
+    background: #ffffff;
+}
+
+.resume_Template_1 {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #ffffff;
+      width: 794px;
+    min-width: 794px;
+    min-height: 1122px;
+}
+
+/* ================================
+   SIDEBAR – GLASS + GRADIENT
+================================ */
+.sidebar_Template_1 {
+  width: 34%;
+  padding: 50px 30px;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  color: #e2e8f0;
+  position: relative;
+  max-height: 1122px;
+  overflow-y: hidden;
+}
+
+.photo-wrap_Template_1 {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 25px;
+  border: 4px solid rgba(255,255,255,0.15);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.photo-wrap_Template_1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.section-title_Template_1 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #cbd5e1;
+}
+
+.name_Template_1 {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.role_Template_1 {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 6px;
+  color: #94a3b8;
+}
+
+.side-section_Template_1 {
+  margin-top: 40px;
+}
+
+
+
+.contact-list_Template_1,
+.skills-list_Template_1 {
+  list-style: none;
+ 
+}
+
+.summary {
+  margin-top: 1rem;
+}
+
+.summary .heading_Template_1 h2 {
+  font-size: 13px;
+  color:#e2e8f0 ;
+  margin-top: 2rem;
+  margin-bottom: -0.5rem;
+}
+
+.skills-list_Template_1 {
+ border-left: 2px solid #e2e8f0;
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+}
+
+
+.language-row {
+  display: grid;
+  grid-template-columns: 1fr 140px auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.language-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lang-level {
+  display: flex;
+  gap: 4px;
+}
+
+.lang-level .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid #2878e0;
+}
+
+.lang-level .dot.filled {
+  background: #2878e0;
+}
+.contact-list_Template_1 li {
+  font-size: 13px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #e2e8f0;
+  line-height: 1.5;
+}
+
+.skills-list_Template_1 li {
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #0f172a;
+  line-height: 1.5;
+  padding-left: 20px;
+  font-weight: 600;
+}
+
+.timeline_Template_1 {
+    margin-bottom: 25px;
+    padding-left: 20px;
+    border-left: 2px solid #e2e8f0;
+    position: relative;
+}
+
+/* ================================
+   MAIN CONTENT – CLEAN + AIRY
+================================ */
+.content_Template_1 {
+  width: 66%;
+  padding: 50px 50px;
+  background: #ffffff;
+}
+
+.heading_Template_1 {
+  margin: 45px 0 15px 0;
+}
+
+.heading_Template_1 h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+.rule {
+  height: 2px;
+  width: 50px;
+  background: linear-gradient(to right, #6f93c1, #4f46e5);
+  margin-top: 8px;
+  border-radius: 2px;
+}
+
+.about_Template_1 {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #e2e8f0;
+}
+
+/* ============================
+   SKILLS EDITOR (with level)
+============================ */
+
+.skill-row {
+  display: grid;
+  grid-template-columns: 1fr 140px auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.skill-row .input_data {
+  width: 100%;
+}
+
+.skill-row .language-level {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  font-size: 13px;
+}
+
+
+
+/* ================================
+   REFERENCES – CARD STYLE
+================================ */
+.ref-card-wrapper {
+  margin-bottom: 15px;
+}
+
+.ref-card_Template_1 {
+  background: #f8fafc;
+  padding: 18px 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.ref-card_Template_1:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 25px rgba(15,23,42,0.05);
+}
+
+.ref-card_Template_1 h4 {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.ref-line {
+  font-size: 13px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #0f172a;
+}
+
+
+
+.section_Template_1,
+.ref-card_Template_1 {
+  break-inside: avoid;
+}
+
+li {
+    list-style-type: none;-
+}
+
+.li {
+  position: relative; /* REQUIRED */
+  list-style: none;   /* Remove default bullet */
+  margin-left: 40px;
+}
+
+.li::before {
+  content: "";
+  position: absolute;
+  left: -20px;
+  top: 0.6em;         /* aligns bullet with text */
+  width: 5px;
+  height: 5px;
+  background: #6f93c1;
+  border-radius: 50%;
+}
+`;
+
+      document.head.appendChild(style);
+    }
 
     return `
   <div class="resume_Template_1">
@@ -2275,121 +2658,184 @@ ${data.experience.map(exp => `
         <div class="role_Template_1">${escapeHtml(data.personal.title || '')}</div>
       </div>
 
-          <section class="section_Template_1 summary">
-        <div class="heading_Template_1">
-          <h2>${ICONS.profile}<span>Profile</span></h2>
-        </div>
-        <p class="about_Template_1">${escapeHtml(data.summary || '')}</p>
-      </section>
+      ${data.summary && data.summary.trim()
+        ? `
+<section class="section_Template_1 summary">
+  <div  class="heading_Template_1">
+    <h2>${ICONS.profile}<span>Profile</span></h2>
+  </div>
+  <p class="about_Template_1">${escapeHtml(data.summary)}</p>
+</section>
+`
+        : ''}
 
-      <div class="side-section_Template_1">
-        <div class="section-title_Template_1">
-          ${ICONS.contact} Contact
-        </div>
-        <ul class="contact-list_Template_1">
-          <li>${icon(ICONS.phone)}${escapeHtml(data.personal.phone || '')}</li>
-          <li>${icon(ICONS.email)}${escapeHtml(data.personal.email || '')}</li>
-          <li>${icon(ICONS.location)}${escapeHtml(data.personal.location || '')}</li>
-          <li>${icon(ICONS.website)}${escapeHtml(data.personal.website || '')}</li>
-          <li>${icon(ICONS.linkedin)}${escapeHtml(data.personal.linkedin || '')}</li>
-        </ul>
-      </div>
+${(
+        data.personal.phone ||
+        data.personal.email ||
+        data.personal.location ||
+        data.personal.website ||
+        data.personal.linkedin
+      ) ? `
+<div class="side-section_Template_1">
+  <div class="section-title_Template_1">
+    ${ICONS.contact} Contact
+  </div>
+  <ul class="contact-list_Template_1">
+
+    ${data.personal.phone
+        ? `<li>${icon(ICONS.phone)}${escapeHtml(data.personal.phone)}</li>`
+        : ''}
+
+    ${data.personal.email
+        ? `<li>${icon(ICONS.email)}${escapeHtml(data.personal.email)}</li>`
+        : ''}
+
+    ${data.personal.location
+        ? `<li>${icon(ICONS.location)}${escapeHtml(data.personal.location)}</li>`
+        : ''}
+
+    ${data.personal.website
+        ? `<li>${icon(ICONS.website)}${escapeHtml(data.personal.website)}</li>`
+        : ''}
+
+    ${data.personal.linkedin
+        ? `<li>${icon(ICONS.linkedin)}${escapeHtml(data.personal.linkedin)}</li>`
+        : ''}
+
+    ${data.personal.dob
+        ? `<li>${icon(ICONS.calendar)}${escapeHtml(data.personal.dob)}</li>`
+        : ''}
+    ${data.personal.gender
+        ? `<li>${icon(ICONS.user)}${escapeHtml(data.personal.gender)}</li>`
+        : ''}
+
+${data.personal.race
+        ? `<li>${icon(ICONS.group)}${escapeHtml(data.personal.race)}</li>`
+        : ''}
+
+${data.personal.religion
+        ? `<li>${icon(ICONS.faith)}${escapeHtml(data.personal.religion)}</li>`
+        : ''}
+
+${data.personal.maritalStatus
+        ? `<li>${icon(ICONS.heart)}${escapeHtml(data.personal.maritalStatus)}</li>`
+        : ''}
+
+${data.personal.driversLicence
+        ? `<li>${icon(ICONS.car)}${escapeHtml(data.personal.driversLicence)}</li>`
+        : ''}
+
+  </ul>
+</div>
+` : ''}
 
 
     </aside>
+<main class="content_Template_1" style="
+  display:flex;
+  flex-direction:column;
+  flex-grow:1;
+  background:#fff;
+  color:#0f172a;
+  font-size:10.5pt;
+  line-height:17px;
+">
 
-    <main class="content_Template_1">
-      <section class="section_Template_1">
-        <div class="heading_Template_1">
-          <h2>${ICONS.education}<span>Education</span></h2>
+<!-- PROFESSIONAL EXPERIENCE HEADING -->
+<div class="heading_Template_1 overflow" style="margin-bottom: 5px; margin-top: 5px;">
+  <h2>${ICONS.experience}<span>Professional Experience</span></h2>
+  <div class="rule"></div>
+</div>
+
+${data.experience.map(exp => `
+  <!-- EXPERIENCE ITEM -->
+  <div class="overflow" style="margin-top:1rem;font-weight:bold; display:flex; justify-content:space-between;">
+    <p style="font-weight:800">${escapeHtml(exp.campany)}</p>
+    ${[exp.start, exp.end].some(d => d && d.trim())
+            ? `<i style="font-weight:400;font-size:13px;">${[exp.start, exp.end]
+              .filter(d => d && d.trim())
+              .join(' – ')}</i>`
+            : ''
+          }
+  </div>
+
+  <p class="overflow" style="margin:0;font-weight:600;color:rgb(59,57,57); margin-bottom: 5px;">
+    ${escapeHtml(exp.role)}
+  </p>
+
+  ${exp.bullets && exp.bullets.length
+            ? `
+    ${exp.bullets.map(b => `
+     <li class="overflow ${b?.trim() ? 'li' : ''}">
+    ${escapeHtml(b)}
+        </li>
+          `).join('')}
+      `
+            : ''
+          }
+`).join('')}
+
+
+
+        <!-- EDUCATION HEADING -->
+        <div class="heading_Template_1 overflow overflow" id="h2-edu" style="margin-bottom:5px;">
+          <h2>
+            ${ICONS.education}<span>EDUCATION</span>
+          </h2>
           <div class="rule"></div>
         </div>
+
+        <!-- EDUCATION ITEM -->
         ${data.education.map(edu => `
-          <div class="timeline_Template_1">
-            <div class="timeline_Template_1-item">
-              <div class="item-head_Template_1">
-                <h3>${escapeHtml(edu.degree)}</h3>
-              </div>
-              <div class="item-head_Template_1">
-              <div class="item-sub_Template_1">${escapeHtml(edu.school)}</div>
-              <div class="date">${escapeHtml(edu.year || '')}</div>
-              </div>
-              <div class="item-desc_Template_1">${escapeHtml(edu.discription)}</div>
+              <div class="overflow" style="margin-top:1rem;;font-weight:bold; display: flex; justify-content: space-between;">
+              <p style="font-weight: 800">${escapeHtml(edu.degree)}</p>
+              <i style="margin:0; float: right; font-weight:400; font-size: 13px; list-style-type: none;">${escapeHtml(edu.year || '')}</i>
             </div>
-          </div>
-        `).join('')}
-      </section>
+            <p class="overflow" style="margin:0; font-weight: 600; margin-bottom:5px; color: rgb(59, 57, 57);">${escapeHtml(edu.school)}</p>
+              <li class="overflow" style="display:flex;white-space:pre-wrap;">
+              </li>
 
-      <section class="section_Template_1">
-        <div class="heading_Template_1">
-          <h2>${ICONS.experience}<span>Experience</span></h2>
-          <div class="rule"></div>
-        </div>
-        ${data.experience.map(exp => `
-          <div class="timeline_Template_1">
-            <div class="timeline_Template_1-item">
-              <div class="item-head_Template_1">
-                <h3>${escapeHtml(exp.role)}</h3>
-                
+              <li class="overflow ${edu.discription?.trim() ? 'li' : ''}">
+             ${escapeHtml(edu.discription)}
+             </li>
+              `).join('')}
 
+              ${renderSkillsPreview()}
+              ${renderLanguagesPreview()}
+
+            <section class="section_Template_1 overflow">
+              <div class="heading_Template_1">
+                <h2>${ICONS.interests}<span>Interests</span>
+                </h2>
+                <div class="rule"></div>
               </div>
-              <div class="item-head_Template_1">
-              <div class="item-sub_Template_1">${escapeHtml(exp.campany)}</div>
-              <div class="date">
-          ${[exp.start, exp.end].some(d => d && d.trim())
-        ? `<div class="date">${[exp.start, exp.end].filter(d => d && d.trim()).join(' – ')}</div>`
-        : ''
-      }
-      </div>
-              </div>
-              <ul class="item-desc_Template_1">
-                ${(exp.bullets || []).map(b => `<li>${escapeHtml(b)}</li>`).join('')}
+              <ul class="skills-list_Template_1">
+                <li>${data.interests.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</li>
               </ul>
-            </div>
-          </div>
-        `).join('')}
-      </section>
+            </section>
 
-      <section class="section_Template_1">
-        <div class="heading_Template_1">
-          <h2>${ICONS.skills}<span>Skills</span></h2>
-          <div class="rule"></div>
-        </div>
-        <ul class="skills-list_Template_1">
-          ${data.skills.map(s => `<li>${escapeHtml(s)}</li>`).join('')}
-        </ul>
-      </section>
-<section class="section_Template_1">
-        <div class="heading_Template_1">
-          <h2>${ICONS.interests}<span>Interests</span></h2>
-          <div class="rule"></div>
-        </div>
-        <ul class="skills-list_Template_1">
-          ${data.interests.map(i => `<li>${escapeHtml(i)}</li>`).join('')}
-        </ul>
-      </section>
-      <section class="section_Template_1">
-        <div class="heading_Template_1">
+            <section class="section_Template_1 overflow">
+          <div class="heading_Template_1">
           <h2>${ICONS.references}<span>References</span></h2>
           <div class="rule"></div>
-        </div>
-        ${data.references.map(ref => `
-  <div class="ref-card-wrapper">
-    <div class="ref-card_Template_1">
+          </div>
+          ${data.references.map(ref => `
+         <div class="ref-card-wrapper">
+          <div class="ref-card_Template_1">
 
-      ${ref.name ? `<h4>${escapeHtml(ref.name)}</h4>` : ''}
+        ${ref.name ? `<h4>${escapeHtml(ref.name)}</h4>` : ''}
 
-      ${(ref.campany || ref.position) ? `
-        <p class="ref-line">
+         ${(ref.campany || ref.position) ? `
+         <p class="ref-line">
           ${ICONS.campany}
           ${[
-            ref.campany
-              ? `<strong>${escapeHtml(ref.campany)}</strong>`
-              : '',
-            ref.position
-              ? escapeHtml(ref.position)
-              : ''
-          ].filter(Boolean).join(' / ')}
+                ref.campany
+                  ? `<strong>${escapeHtml(ref.campany)}</strong>`
+                  : '',
+                ref.position
+                  ? escapeHtml(ref.position)
+                  : ''
+              ].filter(Boolean).join(' / ')}
         </p>
       ` : ''}
 
@@ -2406,11 +2852,11 @@ ${data.experience.map(exp => `
           ${escapeHtml(ref.email)}
         </p>
       ` : ''}
-    </div>
-  </div>
-`).join('')}
+          </div>
+        </div>
+        `).join('')}
       </section>
-    </main>
+        </main>
   </div>
   `;
   }
