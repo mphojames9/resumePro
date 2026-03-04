@@ -118,3 +118,33 @@
 .item-head_Template_1 {
   break-after: avoid;
 }
+
+
+.language-row {
+  display: grid;
+  grid-template-columns: 1fr 140px auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.language-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lang-level {
+  display: flex;
+  gap: 4px;
+}
+
+.lang-level .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  border: 1px solid #6f93c1;
+}
+
+.lang-level .dot.filled {
+  background: #6f93c1;
+}

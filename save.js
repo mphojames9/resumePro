@@ -1093,28 +1093,24 @@ let zoomControl;
   const addLanguageBtn = document.getElementById('addLanguageBtn');
 
 
-function renderLanguagesPreview() {
-  if (!data.languages || !data.languages.length) return '';
-
-  const ICONS = {
-    language: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <path d="M4 5h16M4 12h10M4 19h16"
-          stroke="rgb(117,125,129)" stroke-width="1.5"></path>
-      </svg>`
-  };
-
-  return `
-    <section class="section_Template_1 overflow">
+  function renderLanguagesPreview() {
+    if (!data.languages || !data.languages.length) return '';
+    const ICONS = {
+      language: `
+<svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+  <path d="M4 5h16M4 12h10M4 19h16"
+    stroke="rgb(117,125,129)" stroke-width="1.5"/>
+</svg>`,
+    }
+    return `
+    <section class="section_Template_1">
       <div class="heading_Template_1">
-        <h2>
-          ${ICONS.language}
-          <span>Languages</span>
-        </h2>
+        <h2>${ICONS.language}
+        <span>Languages</span></h2>
         <div class="rule"></div>
       </div>
 
-      <ul class="skills-list_Template_1 languages-list_Template_1 overflow">
+      <ul class="skills-list_Template_1 languages-list_Template_1">
         ${data.languages.map(lang => `
           <li class="language-item_Template_1">
             <span class="language-name_Template_1">
@@ -1126,25 +1122,23 @@ function renderLanguagesPreview() {
       </ul>
     </section>
   `;
-}
+  }
 
   function renderSkillsPreview() {
-  if (!data.skills || !data.skills.length) return '';
+    if (!data.skills || !data.skills.length) return '';
 
-  const ICONS = {
-    skill: `
+    const ICONS = {
+      skill: `
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
         <path d="M12 2l2.5 5 5.5.8-4 4 .9 5.7-4.9-2.6-4.9 2.6.9-5.7-4-4 5.5-.8L12 2z"
-          stroke="rgb(117,125,129)" stroke-width="1.5"></path>
+          stroke="rgb(117,125,129)" stroke-width="1.5"/>
       </svg>`
-  };
+    };
 
-  return `
-    <section class="section_Template_1 overflow">
+    return `
+    <section class="section_Template_1">
       <div class="heading_Template_1">
-        <h2>
-          ${ICONS.skill}<span>Skills</span>
-        </h2>
+        <h2>${ICONS.skill}<span>Skills</span></h2>
         <div class="rule"></div>
       </div>
 
@@ -1158,7 +1152,7 @@ function renderLanguagesPreview() {
       </ul>
     </section>
   `;
-}
+  }
 
   function renderLanguagesEditor() {
     languagesContainer.innerHTML = data.languages
@@ -1397,32 +1391,74 @@ function renderLanguagesPreview() {
     );
   }
 
-function microSplitOverflow(pageObj, PAGE_HEIGHT) {
+  function microSplitOverflow(pageObj, PAGE_HEIGHT) {
   let currentPage = pageObj;
+  let nextPage = createPageWithoutSidebar();
+
+  const main = currentPage.main;
 
   while (currentPage.page.scrollHeight > PAGE_HEIGHT) {
 
-    const main = currentPage.main;
-    const overflowEls = Array.from(main.querySelectorAll('.overflow'));
+    /* =====================================================
+       1️⃣ MOVE WHOLE SECTIONS FIRST
+    ===================================================== */
+    const sections = main.querySelectorAll('.section_Template_1');
+    const lastSection = sections[sections.length - 1];
 
-    // ❌ Nothing to move
-    if (overflowEls.length === 0) break;
+    if (lastSection) {
+      nextPage.main.prepend(lastSection);
 
-    // 🔥 ALWAYS move the LAST element (Word behavior)
-    const elementToMove = overflowEls[overflowEls.length - 1];
+      if (currentPage.page.scrollHeight <= PAGE_HEIGHT) {
+        break;
+      }
+    }
 
-    // Create next page
-    const nextPage = createPageWithoutSidebar();
+    /* =====================================================
+       2️⃣ SPLIT TIMELINES (Education / Experience)
+    ===================================================== */
+    const timelines = main.querySelectorAll('.timeline_Template_1');
 
-    // Move element
-    nextPage.main.prepend(elementToMove);
+    for (let i = timelines.length - 1; i >= 0; i--) {
+      const items = timelines[i].querySelectorAll('.timeline_Template_1-item');
 
-    // Continue checking overflow on the NEXT page
-    currentPage = nextPage;
+      if (items.length > 1) {
+        nextPage.main.prepend(items[items.length - 1]);
+        break;
+      }
+    }
+
+    if (currentPage.page.scrollHeight <= PAGE_HEIGHT) {
+      break;
+    }
+
+    /* =====================================================
+       3️⃣ SPLIT SKILLS / LANGUAGES LIST ITEMS
+    ===================================================== */
+    const lists = main.querySelectorAll('.skills-list_Template_1');
+
+    for (let i = lists.length - 1; i >= 0; i--) {
+      const items = lists[i].querySelectorAll('li');
+
+      if (items.length > 1) {
+        nextPage.main.prepend(items[items.length - 1]);
+        break;
+      }
+    }
+
+    /* =====================================================
+       SAFETY BREAK
+    ===================================================== */
+    if (currentPage.page.scrollHeight > PAGE_HEIGHT) {
+      console.warn('Unresolvable overflow detected');
+      break;
+    }
   }
 
-  return currentPage;
+  return nextPage;
 }
+
+
+
   function createPageWithSidebar(sidebarNode) {
     console.log("with")
     const page = document.createElement('div');
@@ -1652,6 +1688,147 @@ function microSplitOverflow(pageObj, PAGE_HEIGHT) {
       --light: #f8fafc;
       --border: #e2e8f0;
     }
+    .ATS-resume {
+      position: relative;
+      margin: auto;
+      padding: 60px;
+    }
+
+    /* ATS-header */
+    .ATS-header {
+      margin-bottom: 40px;
+      position: absolute;
+      background-color: rgba(11, 35, 44, 0.705);
+      color: white;
+      left: 0;
+      right: 0;
+      top: 0;
+      min-width: fit-content;
+      padding: 30px 60px 30px 60px;
+      display: flex;
+      gap: 20px;
+    }
+
+    .ATS-header .right img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+    }
+
+    .ATS-header h1 {
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .ATS-header h2 {
+      font-size: 18px;
+      font-weight: 500;
+      color: rgb(199, 192, 192);
+    }
+
+    /* ATS-contact */
+    .ATS-contact {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 5px;
+      margin-top: 10px;
+      font-size: 14px;
+      color: white;
+    }
+
+    .ATS-contact span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ATS-contact .fa-solid {
+        color: white;
+    }
+
+    .ATS-contact i {
+      background: linear-gradient(135deg, white, gray);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* ATS-section s */
+    .ATS-section  {
+      margin-top: 35px;
+    }
+
+    .ATS-section  h3 {
+      font-size: 15px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 18px;
+      padding-left: 20px;
+      position: relative;
+      background-color: rgba(11, 35, 44, 0.5);
+      color: white;
+      padding: 5px;
+      text-align: center;
+    }
+
+    /* .ATS-section  h3::before{
+  content:"";
+  width:3px;
+  height:100%;
+  background:linear-gradient(to bottom,var(--accent),var(--primary));
+  position:absolute;
+  left:0;
+  top:0;
+  border-radius:3px;
+}
+
+.ATS-section  h3::after{
+  content:"";
+  width:3px;
+  height:100%;
+  background:linear-gradient(to bottom,var(--accent),var(--primary));
+  position:absolute;
+  right:0;
+  top:0;
+  border-radius:3px;
+} */
+
+    .ATS-section  p {
+      font-size: 15px;
+      line-height: 1.7;
+      color: var(--gray);
+    }
+
+    /* Experience */
+    .job {
+      margin-bottom: 25px;
+    }
+
+    .job-ATS-header {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .job-ATS-header h4 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .job-ATS-header span {
+      font-size: 13px;
+      color: var(--gray);
+    }
+
+    .job ul {
+      margin-top: 8px;
+      padding-left: 18px;
+      color: var(--gray);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
     .skill {
       display: flex;
       flex-direction: column;
@@ -1664,7 +1841,41 @@ function microSplitOverflow(pageObj, PAGE_HEIGHT) {
       grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
       gap: 15px;
     }
-    
+
+    .bar {
+      height: 5px;
+      background: rgb(48, 40, 40);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bar span {
+      display: block;
+      height: 100%;
+      background: linear-gradient(to right, var(--fa-accent), var(--fa-primary));
+    }
+
+    /* Footer */
+    .footer {
+      margin-top: 50px;
+      font-size: 12px;
+      color: var(--gray);
+    }
+
+    /* ================================
+   BASE
+================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #eef2f9;
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
 .resume {
     width: 794px;
     min-width: 794px;
@@ -1789,14 +2000,14 @@ function microSplitOverflow(pageObj, PAGE_HEIGHT) {
 }
 
 .lang-level .dot {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  border: 1px solid #2878e0;
+  border: 1px solid #6f93c1;
 }
 
 .lang-level .dot.filled {
-  background: #2878e0;
+  background: #6f93c1;
 }
 .contact-list_Template_1 li {
   font-size: 13px;
@@ -1809,22 +2020,14 @@ function microSplitOverflow(pageObj, PAGE_HEIGHT) {
 }
 
 .skills-list_Template_1 li {
-  font-size: 14px;
+  font-size: 13px;
   margin-bottom: 10px;
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #0f172a;
+  color: #475569;
   line-height: 1.5;
   padding-left: 20px;
-  font-weight: 600;
-}
-
-.timeline_Template_1 {
-    margin-bottom: 25px;
-    padding-left: 20px;
-    border-left: 2px solid #e2e8f0;
-    position: relative;
 }
 
 /* ================================
@@ -1832,12 +2035,16 @@ function microSplitOverflow(pageObj, PAGE_HEIGHT) {
 ================================ */
 .content_Template_1 {
   width: 66%;
-  padding: 50px 50px;
+  padding: 70px 60px;
   background: #ffffff;
 }
 
+.section_Template_1 {
+  margin-bottom: 55px;
+}
+
 .heading_Template_1 {
-  margin: 45px 0 15px 0;
+  margin-bottom: 20px;
 }
 
 .heading_Template_1 h2 {
@@ -1863,6 +2070,66 @@ function microSplitOverflow(pageObj, PAGE_HEIGHT) {
   font-size: 14px;
   line-height: 1.8;
   color: #e2e8f0;
+}
+
+/* ================================
+   TIMELINE – MODERN
+================================ */
+.timeline_Template_1 {
+  margin-bottom: 25px;
+  padding-left: 20px;
+  border-left: 2px solid #e2e8f0;
+  position: relative;
+}
+
+.item-head_Template_1::before {
+  content: "";
+  position: absolute;
+  left: -6px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  background: #6f93c1;
+  border-radius: 50%;
+}
+
+.no-timeline::before {
+  display: none !important;
+}
+
+.item-head_Template_1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.item-head_Template_1 h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.item-sub_Template_1 {
+  font-size: 13px;
+  color: #64748b;
+}
+
+.date {
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+.item-desc_Template_1 {
+  margin-top: 10px;
+  font-size: 13px;
+  line-height: 1.7;
+  color: #475569;
+}
+
+.item-desc_Template_1 li {
+  margin-left: 18px;
+  margin-bottom: 6px;
 }
 
 /* ============================
@@ -1924,35 +2191,97 @@ function microSplitOverflow(pageObj, PAGE_HEIGHT) {
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #0f172a;
+  color: #475569;
 }
 
 
 
 .section_Template_1,
-.ref-card_Template_1 {
+.ref-card_Template_1,
+.timeline_Template_1 {
   break-inside: avoid;
 }
 
-li {
-    list-style-type: none;-
+.edu-card:hover {
+  border-color: #22c55e;
+  box-shadow: 0 10px 30px rgba(34, 197, 94, 0.15);
 }
 
-.li {
-  position: relative; /* REQUIRED */
-  list-style: none;   /* Remove default bullet */
-  margin-left: 40px;
+.edu-sep {
+  color: #22c55e;
+  margin: 0 6px;
 }
 
-.li::before {
-  content: "";
-  position: absolute;
-  left: -20px;
-  top: 0.6em;         /* aligns bullet with text */
-  width: 5px;
-  height: 5px;
-  background: #6f93c1;
-  border-radius: 50%;
+.edu-chevron {
+  transition: transform 0.3s ease;
+}
+
+.edu-card.active .edu-chevron {
+  transform: rotate(180deg);
+}
+
+/* BODY */
+.edu-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.35s ease;
+  padding: 0 22px;
+}
+
+.edu-card.active .edu-body {
+  max-height: 900px;
+  padding: 22px;
+}
+
+/* GRID */
+.edu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+/* FIELD */
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+}
+
+.field input {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  transition: 0.25s;
+}
+
+.field input:focus {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+  outline: none;
+}
+
+/* BUTTON ROW */
+.edu-actions-row {
+  margin-top: 22px;
+  display: flex;
+  gap: 10px;
+}
+
+/* MODERN BUTTONS */
+.btn-modern {
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.btn-modern:hover {
+  background: #334155;
 }
 `;
 
@@ -1972,7 +2301,7 @@ li {
       ${data.summary && data.summary.trim()
         ? `
 <section class="section_Template_1 summary">
-  <div  class="heading_Template_1">
+  <div class="heading_Template_1">
     <h2>${ICONS.profile}<span>Profile</span></h2>
   </div>
   <p class="about_Template_1">${escapeHtml(data.summary)}</p>
@@ -2042,102 +2371,86 @@ ${data.personal.driversLicence
 
 
     </aside>
-<main class="content_Template_1" style="
-  display:flex;
-  flex-direction:column;
-  flex-grow:1;
-  background:#fff;
-  color:#0f172a;
-  font-size:10.5pt;
-  line-height:17px;
-">
 
-<!-- PROFESSIONAL EXPERIENCE HEADING -->
-<div class="heading_Template_1 overflow" style="margin-bottom: 5px; margin-top: 5px;">
-  <h2>${ICONS.experience}<span>Professional Experience</span></h2>
-  <div class="rule"></div>
-</div>
-
-${data.experience.map(exp => `
-  <!-- EXPERIENCE ITEM -->
-  <div class="overflow" style="margin-top:1rem;font-weight:bold; display:flex; justify-content:space-between;">
-    <p style="font-weight:800">${escapeHtml(exp.campany)}</p>
-    ${
-      [exp.start, exp.end].some(d => d && d.trim())
-        ? `<i style="font-weight:400;font-size:13px;">${[exp.start, exp.end]
-            .filter(d => d && d.trim())
-            .join(' – ')}</i>`
-        : ''
-    }
-  </div>
-
-  <p class="overflow" style="margin:0;font-weight:600;color:rgb(59,57,57); margin-bottom: 5px;">
-    ${escapeHtml(exp.role)}
-  </p>
-
-  ${
-    exp.bullets && exp.bullets.length
-      ? `
- ${exp.bullets.map(b => `
-            <li class="overflow li">${escapeHtml(b)}</li>
-          `).join('')}
-      `
-      : ''
-  }
-`).join('')}
-
-
-
-        <!-- EDUCATION HEADING -->
-        <div class="heading_Template_1 overflow overflow" style="margin-bottom:5px;">
-          <h2>
-            ${ICONS.education}<span>EDUCATION</span>
-          </h2>
+    <main class="content_Template_1">
+      <section class="section_Template_1">
+        <div class="heading_Template_1">
+          <h2>${ICONS.education}<span>Education</span></h2>
           <div class="rule"></div>
         </div>
-
-        <!-- EDUCATION ITEM -->
         ${data.education.map(edu => `
-              <div class="overflow" style="margin-top:1rem;;font-weight:bold; display: flex; justify-content: space-between;">
-              <p style="font-weight: 800">${escapeHtml(edu.degree)}</p>
-              <i style="margin:0; float: right; font-weight:400; font-size: 13px; list-style-type: none;">${escapeHtml(edu.year || '')}</i>
-            </div>
-            <p class="overflow" style="margin:0; font-weight: 600; margin-bottom:5px; color: rgb(59, 57, 57);">${escapeHtml(edu.school)}</p>
-              <li class="overflow" style="display:flex;white-space:pre-wrap;">
-              </li>
-
-              <li class="overflow li">
-                ${escapeHtml(edu.discription)}
-              </li>
-              `).join('')}
-
-              ${renderSkillsPreview()}
-              ${renderLanguagesPreview()}
-
-            <section class="section_Template_1 overflow">
-              <div class="heading_Template_1">
-                <h2>${ICONS.interests}<span>Interests</span>
-                </h2>
-                <div class="rule"></div>
+          <div class="timeline_Template_1">
+            <div class="timeline_Template_1-item">
+              <div class="item-head_Template_1">
+                <h3>${escapeHtml(edu.degree)}</h3>
               </div>
-              <ul class="skills-list_Template_1">
-                <li>${data.interests.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</li>
-              </ul>
-            </section>
+              <div class="item-head_Template_1">
+              <div class="item-sub_Template_1">${escapeHtml(edu.school)}</div>
+              <div class="date">${escapeHtml(edu.year || '')}</div>
+              </div>
+              <div class="item-desc_Template_1">${escapeHtml(edu.discription)}</div>
+            </div>
+          </div>
+        `).join('')}
+      </section>
 
-            <section class="section_Template_1 overflow">
-          <div class="heading_Template_1">
+      <section class="section_Template_1">
+        <div class="heading_Template_1">
+          <h2>${ICONS.experience}<span>Experience</span></h2>
+          <div class="rule"></div>
+        </div>
+        ${data.experience.map(exp => `
+          <div class="timeline_Template_1">
+            <div class="timeline_Template_1-item">
+              <div class="item-head_Template_1">
+                <h3>${escapeHtml(exp.role)}</h3>
+                
+
+              </div>
+              <div class="item-head_Template_1">
+              <div class="item-sub_Template_1">${escapeHtml(exp.campany)}</div>
+              <div class="date">
+          ${[exp.start, exp.end].some(d => d && d.trim())
+            ? `<div class="date">${[exp.start, exp.end].filter(d => d && d.trim()).join(' – ')}</div>`
+            : ''
+          }
+      </div>
+              </div>
+              <ul class="item-desc_Template_1">
+                ${(exp.bullets || []).map(b => `<li>${escapeHtml(b)}</li>`).join('')}
+              </ul>
+            </div>
+          </div>
+        `).join('')}
+      </section>
+
+
+    ${renderSkillsPreview()}
+    ${renderLanguagesPreview()}
+
+
+<section class="section_Template_1">
+        <div class="heading_Template_1">
+          <h2>${ICONS.interests}<span>Interests</span></h2>
+          <div class="rule"></div>
+        </div>
+        <ul class="skills-list_Template_1">
+          ${data.interests.map(i => `<li>${escapeHtml(i)}</li>`).join('')}
+        </ul>
+      </section>
+      <section class="section_Template_1">
+        <div class="heading_Template_1">
           <h2>${ICONS.references}<span>References</span></h2>
           <div class="rule"></div>
-          </div>
-          ${data.references.map(ref => `
-         <div class="ref-card-wrapper">
-          <div class="ref-card_Template_1">
+        </div>
+        ${data.references.map(ref => `
+  <div class="ref-card-wrapper">
+    <div class="ref-card_Template_1">
 
-        ${ref.name ? `<h4>${escapeHtml(ref.name)}</h4>` : ''}
+      ${ref.name ? `<h4>${escapeHtml(ref.name)}</h4>` : ''}
 
-         ${(ref.campany || ref.position) ? `
-         <p class="ref-line">
+      ${(ref.campany || ref.position) ? `
+        <p class="ref-line">
           ${ICONS.campany}
           ${[
                 ref.campany
@@ -2163,11 +2476,11 @@ ${data.experience.map(exp => `
           ${escapeHtml(ref.email)}
         </p>
       ` : ''}
-          </div>
-        </div>
-        `).join('')}
+    </div>
+  </div>
+`).join('')}
       </section>
-        </main>
+    </main>
   </div>
   `;
   }

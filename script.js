@@ -100,3 +100,13 @@ toggle.addEventListener("click", () => {
   backdrop.classList.toggle("open");
   backdrop.classList.toggle("opacity");
 });
+
+document.addEventListener('click', e => {
+  const toggle = e.target.closest('.extra-toggle');
+  if (!toggle) return;
+
+  const section = toggle.closest('.extra-section');
+  const isOpen = section.classList.toggle('open');
+
+  toggle.setAttribute('aria-expanded', isOpen);
+});
