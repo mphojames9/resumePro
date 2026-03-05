@@ -119,6 +119,17 @@
   break-after: avoid;
 }
 
+.section_Template_2,
+.timeline_Template_2,
+.ref-card_Template_2 {
+  break-inside: avoid;
+}
+
+.item-head_Template_2 {
+  break-after: avoid;
+}
+
+
 
 .language-row {
   display: grid;
