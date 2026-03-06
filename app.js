@@ -1388,7 +1388,7 @@ function downloadPDF(atsMode) {
 }
 
 function renderPreview(highlightKeywords) {
-  rendoerPersonalDetails();
+  renderPersonalDetails();
   validateExperienceAdd();
   validateEducationAdd();
   validateInterestAdd()
@@ -1413,7 +1413,7 @@ function renderPreview(highlightKeywords) {
   }
 }
 
-function rendoerPersonalDetails() {
+function renderPersonalDetails() {
   document.querySelector('.name').textContent = data.personal.fullName || '';
   document.querySelector('.tittle').textContent = data.personal.title || '';
   document.querySelector('.emailAd').textContent = data.personal.email || '';
@@ -1421,7 +1421,7 @@ function rendoerPersonalDetails() {
   document.querySelector('.locationAd').textContent = data.personal.location || '';
 }
 
-rendoerPersonalDetails()
+renderPersonalDetails()
 
 function paginateResume(html) {
 
