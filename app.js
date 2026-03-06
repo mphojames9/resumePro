@@ -499,6 +499,7 @@ function bindProfileInputs() {
 function renderLists() {
 validateReferenceAdd();
 validateSkillAdd();
+validateLanguageAdd();
   // Education
   refs.educationContainer.innerHTML = '';
   data.education.forEach((edu) => {
@@ -923,6 +924,7 @@ refs.skillsContainer.addEventListener('click', e => {
 
   save();
   renderLists();
+  validateSkillAdd();
   renderPreview();
 });
 
@@ -1054,6 +1056,7 @@ function skillButtonHandler(e) {
 function interestInputHandler(e) {
   const idx = Number(e.target.dataset.idx);
   data.interests[idx] = e.target.value;
+  validateInterestAdd()
   renderPreview(); save();
 }
 function interestButtonHandler(e) {
@@ -1062,6 +1065,7 @@ function interestButtonHandler(e) {
     const idx = Number(e.target.dataset.idx);
     data.interests.splice(idx, 1);
   }
+  validateInterestAdd()
   renderLists(); renderPreview(); save();
 }
 
@@ -1221,10 +1225,11 @@ function renderLanguagesEditor() {
 
 /* ADD */
 addLanguageBtn.addEventListener('click', () => {
-  data.languages.push({ name: '', level: 'basic' });
+  data.languages.unshift({ name: '', level: 'basic' });
   save();
   renderLanguagesEditor();
   renderPreview();
+  validateLanguageAdd()
 });
 
 /* UPDATE */
@@ -1238,6 +1243,7 @@ languagesContainer.addEventListener('input', e => {
   data.languages[index][field] = e.target.value;
   save();
   renderPreview();
+  validateLanguageAdd();
 });
 
 /* REMOVE */
@@ -1249,6 +1255,7 @@ languagesContainer.addEventListener('click', e => {
   save();
   renderLanguagesEditor();
   renderPreview();
+  validateLanguageAdd();
 });
 
 // --- Helpers ------------------------------------------------------------
@@ -1384,6 +1391,7 @@ function renderPreview(highlightKeywords) {
   rendoerPersonalDetails();
   validateExperienceAdd();
   validateEducationAdd();
+  validateInterestAdd()
 
   refs.resumePreview.className =
     'resume ' + (data.template || 'midnight');
@@ -1453,11 +1461,6 @@ function paginateResume(html) {
   });
 
   document.body.removeChild(temp);
-
-  console.log(
-    'Pages rendered:',
-    container.querySelectorAll('.resume-page').length
-  );
 }
 
 function microSplitOverflow(pageObj, PAGE_HEIGHT) {
@@ -1487,7 +1490,6 @@ function microSplitOverflow(pageObj, PAGE_HEIGHT) {
   return currentPage;
 }
 function createPageWithSidebar(sidebarNode) {
-  console.log("with")
   const page = document.createElement('div');
   page.className = 'resume-page resume professional';
   page.style.minHeight = '1122px';
@@ -1510,7 +1512,6 @@ function createPageWithSidebar(sidebarNode) {
 
 
 function createPageWithoutSidebar() {
-  console.log("WITHOUT")
   const page = document.createElement('div');
   page.className = 'resume-page resume professional';
 
@@ -2654,8 +2655,6 @@ document.querySelector('.saveImage').addEventListener('click', () => {
   }, 450);
 })
 
-console.log(profilePicPreview)
-
 function scalePreview() {
   const stage = document.querySelector('.preview-wrap');
   const preview = document.querySelector('#resumePreview');
@@ -2829,11 +2828,34 @@ function cleanAllSections(root) {
   });
 }
 
+function validateInterestAdd() {
+  const firstInterest = data.interests[0];
+
+  const empty =
+    !firstInterest ||
+    firstInterest.trim() === "";
+
+  refs.addinterestBtn.disabled = empty;
+}
+
+function validateLanguageAdd() {
+  const lastLanguage = data.languages[data.languages.length - data.languages.length];
+
+  const empty =
+    !lastLanguage ||
+    !lastLanguage.name ||
+    lastLanguage.name.trim() === "";
+
+  if (addLanguageBtn) {
+    addLanguageBtn.disabled = empty;
+  }
+}
+
+
+
 function validateSkillAdd() {
-  const lastSkill = data.skills[data.skills.length - 1];
-
+  const lastSkill = data.skills[data.skills.length - data.skills.length];
   const nameEmpty = !lastSkill.name || lastSkill.name.trim() === "";
-
   refs.addSkillBtn.disabled = nameEmpty;
 }
 
@@ -3400,9 +3422,6 @@ li {
 
 
 function injectmidnightTemplateStyles() {
-
-  console.log('injectmidnightTemplateStyles();')
-
   if (!document.getElementById('midnight-template-style')) {
 
     const style = document.createElement('style');
