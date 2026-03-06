@@ -2437,7 +2437,7 @@
     }
 
     #addLanguageBtn:disabled {
-       opacity: 0.5;
+      opacity: 0.5;
       cursor: not-allowed;
     }
   </style>
@@ -2752,24 +2752,6 @@
         </div>
       </div>
 
-      <!-- REFERENCES -->
-      <div class="section-block">
-        <div class="section-header">
-          <h4><i class="fa-solid fa-user-check"></i> References</h4>
-          <button class="toggle-btn">
-            <i class="fa-solid fa-chevron-down"></i>
-          </button>
-        </div>
-        <div class="section-content">
-          <div class="section-inner">
-            <button class="small-btn" id="addrefBtn">
-              <i class="fa-solid fa-plus"></i> Add Entry
-            </button>
-            <div id="referencesContainer"></div>
-          </div>
-        </div>
-      </div>
-
       <!-- SKILLS -->
       <div class="section-block">
         <div class="section-header">
@@ -2786,6 +2768,25 @@
             </button>
 
             <div id="skillsContainer"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Languages -->
+      <div class="section-block">
+        <div class="section-header">
+          <h4><i class="fa-solid fa-language"></i> Languages</h4>
+          <button class="toggle-btn">
+            <i class="fa-solid fa-chevron-down"></i>
+          </button>
+        </div>
+
+        <div class="section-content" style="height:auto;">
+          <div class="section-inner">
+            <button class="small-btn" id="addLanguageBtn">
+              <i class="fa-solid fa-plus"></i> Add Language
+            </button>
+            <div id="languagesContainer"></div>
           </div>
         </div>
       </div>
@@ -2808,21 +2809,20 @@
         </div>
       </div>
 
-
+      <!-- REFERENCES -->
       <div class="section-block">
         <div class="section-header">
-          <h4><i class="fa-solid fa-language"></i> Languages</h4>
+          <h4><i class="fa-solid fa-user-check"></i> References</h4>
           <button class="toggle-btn">
             <i class="fa-solid fa-chevron-down"></i>
           </button>
         </div>
-
-        <div class="section-content" style="height:auto;">
+        <div class="section-content">
           <div class="section-inner">
-            <button class="small-btn" id="addLanguageBtn">
-              <i class="fa-solid fa-plus"></i> Add Language
+            <button class="small-btn" id="addrefBtn">
+              <i class="fa-solid fa-plus"></i> Add Entry
             </button>
-            <div id="languagesContainer"></div>
+            <div id="referencesContainer"></div>
           </div>
         </div>
       </div>

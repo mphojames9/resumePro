@@ -1,13 +1,58 @@
-let zoomControl;
+/* =========================
+   DOM ELEMENTS
+========================= */
+const previewOverlay = document.querySelector('.preview-wrap');
+const previewBtns = document.querySelectorAll('#previewBtn');
+const editResumeBtn = document.querySelector('#editResume');
+const navbar = document.querySelector('.navbar');
+const overlayPersonalDetails = document.querySelector('.overlay-personalDetails');
+const editProfileBtn = document.querySelectorAll('#editProfileBtn, .profile-section .left');
+const savePersonalDetails = document.querySelector('.savePersonalDetails')
+const languagesContainer = document.getElementById('languagesContainer');
+const addLanguageBtn = document.getElementById('addLanguageBtn');
+const profilePicPreview = document.querySelectorAll('.backdropBtn');
+const profilePhotoUpload = document.querySelector('#profilePhotoUpload');
+const closeProfilePhotoUpload = document.querySelector('#closeProfilePhotoUpload');
+const previewContent = previewOverlay.querySelector("#resumePreview");
+const resumePreview = document.querySelector('#resumePreview');
+const overlay = document.getElementById('layoutOverlay');
+const track = document.getElementById('carouselTrack');
+const nameEl = document.getElementById('templateName');
 
-let previewRAF = null;
-
+/* =========================
+   GLOBAL STATE
+========================= */
+const TEMPLATE_LIBRARY = [
+  {
+    id: 'midnight',
+    name: 'midnight',
+    image: '/mnt/data/8c084f86-b9fa-4010-988d-7f50782de721.png'
+  },
+  {
+    id: 'goldenexecutive',
+    name: 'goldenexecutive',
+    image: '/images/templates/goldenexecutive.png'
+  },
+  {
+    id: 'creative',
+    name: 'Creative',
+    image: '/images/templates/creative.png'
+  },
+  {
+    id: 'recruiter',
+    name: 'Recruiter',
+    image: '/images/templates/recruiter.png'
+  }
+];
 const LANGUAGE_LEVELS = [
   { value: 'basic', label: 'Basic' },
   { value: 'conversational', label: 'Conversational' },
   { value: 'fluent', label: 'Fluent' },
   { value: 'native', label: 'Native' }
 ];
+
+let zoomControl;
+let previewRAF = null;
 
 function updatePreviewLive() {
   if (previewRAF) return;
@@ -77,7 +122,6 @@ function $all(s) { return Array.from(document.querySelectorAll(s)); }
 // Basic stopwords set (simple)
 const STOPWORDS = new Set(("a about above after again against all am an and any are as at be because been before being below between both but by could did do does doing down during each few for from further had has have having he her here hers herself him himself his how i if in into is it its itself just me more most my yourself yourselves no nor not of off on once only or other our ours ourselves out over own same she should so some such than that the their theirs them themselves then there these they this those through to too under until up very was were what when where which while who whom why with would you your yours").split(" "));
 
-
 // --- DOM refs -------------------------------------------------------------
 const refs = {
   fullName: $id('fullName'),
@@ -123,7 +167,6 @@ const refs = {
   driversLicence: $id('driversLicence'),
 
 };
-
 
 // --- Default data --------------------------------------------------------
 const DEFAULT = {
@@ -266,7 +309,6 @@ function init() {
 }
 
 // --- Photo handling -----------------------------------------------------
-// Max file size ~2MB
 const MAX_FILE_BYTES = 2 * 1024 * 1024;
 const OUTPUT_PIXEL = 400; // square output size (pixels) — decent for print and PDF
 const PHOTO_SCALE_KEY = 'photoScale';
@@ -302,6 +344,7 @@ function handleProfilePicFile(file) {
   reader.readAsDataURL(file);
 }
 const photoScale = document.getElementById("photoScale");
+
 document.addEventListener("DOMContentLoaded", () => {
 
   const avatar = document.querySelector(".photo-wrap_Template_1 .avatar");
@@ -317,7 +360,6 @@ document.addEventListener("DOMContentLoaded", () => {
     localStorage.setItem("photoScale", photoScale.value);
   });
 });
-
 
 function centerCropToDataURL(img, size) {
   // create square canvas, center-crop the source image into it, respecting aspect ratio
@@ -383,7 +425,6 @@ photoScale.addEventListener('input', () => {
     img.style.transformOrigin = 'center';
   });
 });
-
 
 function renderPhotoPreview() {
   const containers =
@@ -880,9 +921,7 @@ validateLanguageAdd();
 
 /* ADD SKILL */
 refs.addSkillBtn.addEventListener("click", () => {
-
   const lastSkill = data.skills[data.skills.length - 1];
-
   if (!lastSkill.name.trim()) {
     validateSkillAdd();
     return;
@@ -912,7 +951,7 @@ refs.skillsContainer.addEventListener('input', e => {
   data.skills[index][field] = e.target.value;
   save();
   renderPreview();
-   validateSkillAdd();
+  validateSkillAdd();
 });
 
 /* REMOVE SKILL */
@@ -927,7 +966,6 @@ refs.skillsContainer.addEventListener('click', e => {
   validateSkillAdd();
   renderPreview();
 });
-
 // --- Input handlers ----------------------------------------------------
 function expInputHandler(e) {
   const idVal = e.target.dataset.id;
@@ -1015,6 +1053,7 @@ function refInputHandler(e) {
   updatePreviewLive();
   save();
 }
+
 function eduButtonHandler(e) {
   const action = e.target.dataset.action;
   const idVal = e.target.dataset.id;
@@ -1027,6 +1066,7 @@ function eduButtonHandler(e) {
   }
   renderLists(); renderPreview(); save();
 }
+
 function refButtonHandler(e) {
   const action = e.target.dataset.action;
   const idVal = e.target.dataset.id;
@@ -1039,12 +1079,14 @@ function refButtonHandler(e) {
   }
   renderLists(); renderPreview(); save();
 }
+
 function skillInputHandler(e) {
   const idx = Number(e.target.dataset.idx);
   data.skills[idx] = e.target.value;
   validateSkillAdd();
   renderPreview(); save();
 }
+
 function skillButtonHandler(e) {
   const action = e.target.dataset.action;
   if (action === 'removeskill') {
@@ -1053,12 +1095,14 @@ function skillButtonHandler(e) {
   }
   renderLists(); renderPreview(); save();
 }
+
 function interestInputHandler(e) {
   const idx = Number(e.target.dataset.idx);
   data.interests[idx] = e.target.value;
   validateInterestAdd()
   renderPreview(); save();
 }
+
 function interestButtonHandler(e) {
   const action = e.target.dataset.action;
   if (action === 'removeinterest') {
@@ -1114,8 +1158,7 @@ function renderLanguageRow(lang, index) {
   `;
 }
 
-const languagesContainer = document.getElementById('languagesContainer');
-const addLanguageBtn = document.getElementById('addLanguageBtn');
+
 
 function renderInterestsPreview() {
   if (!data.interests || !data.interests.length) return '';
@@ -1150,6 +1193,7 @@ function renderInterestsPreview() {
     </section>
   `;
 }
+
 function renderLanguagesPreview() {
   if (!data.languages || !data.languages.length) return '';
 
@@ -1489,6 +1533,7 @@ function microSplitOverflow(pageObj, PAGE_HEIGHT) {
 
   return currentPage;
 }
+
 function createPageWithSidebar(sidebarNode) {
   const page = document.createElement('div');
   page.className = 'resume-page resume professional';
@@ -1509,7 +1554,6 @@ function createPageWithSidebar(sidebarNode) {
 
   return { page, main };
 }
-
 
 function createPageWithoutSidebar() {
   const page = document.createElement('div');
@@ -1538,8 +1582,6 @@ function renderLanguageLevel(level) {
   `;
 }
 
-
-// --- Template renderers -----------------------------------------------
 function photoHtml() {
   const photo = getPhotoSrc();
   if (photo) {
@@ -2529,15 +2571,6 @@ function load() { try { const raw = localStorage.getItem('resume:data'); return 
 // --- Start ----------------------------------------------------------------
 init();
 
-
-const previewOverlay = document.querySelector('.preview-wrap');
-const previewBtns = document.querySelectorAll('#previewBtn');
-const editResumeBtn = document.querySelector('#editResume');
-const navbar = document.querySelector('.navbar');
-const overlayPersonalDetails = document.querySelector('.overlay-personalDetails');
-const editProfileBtn = document.querySelectorAll('#editProfileBtn, .profile-section .left');
-const savePersonalDetails = document.querySelector('.savePersonalDetails')
-
 editProfileBtn.forEach(btn => btn.addEventListener('click', () => {
   overlayPersonalDetails.classList.remove('hidden');
   savePersonalDetails.classList.remove('hidden');
@@ -2588,10 +2621,6 @@ editResumeBtn.addEventListener('click', () => {
   }, 450); // MUST match CSS transition
 });
 
-
-const previewContent = previewOverlay.querySelector("#resumePreview");
-// or use ".preview-content" if that's your wrapper
-
 function closePreview() {
   previewOverlay.classList.remove("opacity");
   document.querySelector('.download-btn-premium').classList.remove('open');
@@ -2630,9 +2659,6 @@ function hidepreviewOverlay() {
   previewOverlay.classList.add('opacity')
 }
 
-const profilePicPreview = document.querySelectorAll('.backdropBtn');
-const profilePhotoUpload = document.querySelector('#profilePhotoUpload');
-const closeProfilePhotoUpload = document.querySelector('#closeProfilePhotoUpload');
 
 profilePicPreview.forEach(profile => profile.addEventListener('click', () => {
   profilePhotoUpload.classList.remove('hidden')
@@ -2705,7 +2731,6 @@ function scalePreview() {
 window.addEventListener('resize', scalePreview);
 scalePreview();
 
-const resumePreview = document.querySelector('#resumePreview');
 resumePreview.addEventListener('click', () => {
   document.querySelector('.preview-wrap').classList.add('open');
   document.querySelector('.download-btn-premium').classList.add('open');
@@ -2851,8 +2876,6 @@ function validateLanguageAdd() {
   }
 }
 
-
-
 function validateSkillAdd() {
   const lastSkill = data.skills[data.skills.length - data.skills.length];
   const nameEmpty = !lastSkill.name || lastSkill.name.trim() === "";
@@ -2910,8 +2933,6 @@ function showToast(message, type = 'info', duration = 5500) {
   }, duration);
 }
 
-const overlay = document.getElementById('layoutOverlay');
-
 function openLayoutPreview() {
   overlay.classList.add('active');
   overlay.setAttribute('aria-hidden', 'false');
@@ -2931,31 +2952,7 @@ window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') closeLayoutPreview();
 });
 
-const TEMPLATE_LIBRARY = [
-  {
-    id: 'midnight',
-    name: 'midnight',
-    image: '/mnt/data/8c084f86-b9fa-4010-988d-7f50782de721.png'
-  },
-  {
-    id: 'goldenexecutive',
-    name: 'goldenexecutive',
-    image: '/images/templates/goldenexecutive.png'
-  },
-  {
-    id: 'creative',
-    name: 'Creative',
-    image: '/images/templates/creative.png'
-  },
-  {
-    id: 'recruiter',
-    name: 'Recruiter',
-    image: '/images/templates/recruiter.png'
-  }
-];
 
-const track = document.getElementById('carouselTrack');
-const nameEl = document.getElementById('templateName');
 
 let currentIndex = 0;
 
@@ -3105,6 +3102,7 @@ document.querySelectorAll(".filter").forEach(button => {
     menu.classList.remove("open")
   })
 })
+
 function injectGoldSlateTemplateStyles(){
   if (!document.getElementById('midnight-goldSlate-style')) {
     const style = document.createElement('style');
@@ -3419,7 +3417,6 @@ li {
     document.head.appendChild(style);
   }
 }
-
 
 function injectmidnightTemplateStyles() {
   if (!document.getElementById('midnight-template-style')) {
