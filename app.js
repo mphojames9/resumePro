@@ -497,7 +497,8 @@ function bindProfileInputs() {
 
 // --- Render lists (experience, education, skills, references) -----------------------
 function renderLists() {
-
+validateReferenceAdd();
+validateSkillAdd();
   // Education
   refs.educationContainer.innerHTML = '';
   data.education.forEach((edu) => {
@@ -877,11 +878,26 @@ function renderLists() {
 }
 
 /* ADD SKILL */
-refs.addSkillBtn.addEventListener('click', () => {
-  data.skills.unshift({ name: '', level: 'basic' });
-  save();
+refs.addSkillBtn.addEventListener("click", () => {
+
+  const lastSkill = data.skills[data.skills.length - 1];
+
+  if (!lastSkill.name.trim()) {
+    validateSkillAdd();
+    return;
+  }
+
+  data.skills.unshift({
+    id: id(),
+    name: "",
+    level: "basic"
+  });
+
   renderLists();
   renderPreview();
+  save();
+
+  validateSkillAdd();
 });
 
 /* UPDATE SKILL */
@@ -895,6 +911,7 @@ refs.skillsContainer.addEventListener('input', e => {
   data.skills[index][field] = e.target.value;
   save();
   renderPreview();
+   validateSkillAdd();
 });
 
 /* REMOVE SKILL */
@@ -990,6 +1007,7 @@ function refInputHandler(e) {
   // 🔥 LIVE editor header update
   if (field === 'name' || field === 'campany') {
     updateRefHeader(refId);
+    validateReferenceAdd();
   }
 
   updatePreviewLive();
@@ -1022,6 +1040,7 @@ function refButtonHandler(e) {
 function skillInputHandler(e) {
   const idx = Number(e.target.dataset.idx);
   data.skills[idx] = e.target.value;
+  validateSkillAdd();
   renderPreview(); save();
 }
 function skillButtonHandler(e) {
@@ -1270,7 +1289,7 @@ function bindButtons() {
   //References
   refs.addRefBtn.addEventListener('click', () => {
     data.references.unshift({ id: id(), name: "", campany: "", position: "", phone: "", email: "" });
-    renderLists(); renderPreview(); save();
+    renderLists(); renderPreview(); save();validateReferenceAdd();
   });
 
 
@@ -2810,6 +2829,14 @@ function cleanAllSections(root) {
   });
 }
 
+function validateSkillAdd() {
+  const lastSkill = data.skills[data.skills.length - 1];
+
+  const nameEmpty = !lastSkill.name || lastSkill.name.trim() === "";
+
+  refs.addSkillBtn.disabled = nameEmpty;
+}
+
 function validateEducationAdd() {
   const firstEdu = data.education[0];
   if (!firstEdu) return;
@@ -2820,7 +2847,15 @@ function validateEducationAdd() {
   refs.addEduBtn.disabled = degreeEmpty || schoolEmpty;
 }
 
+function validateReferenceAdd() {
+  const firstRef = data.references[0];
+  if (!firstRef) return;
 
+  const nameEmpty = !firstRef.name || firstRef.name.trim() === "";
+  const companyEmpty = !firstRef.campany || firstRef.campany.trim() === "";
+
+  refs.addRefBtn.disabled = nameEmpty || companyEmpty;
+}
 
 function validateExperienceAdd() {
   const firstExp = data.experience[0]; // newest item
