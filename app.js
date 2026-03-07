@@ -921,12 +921,6 @@ validateLanguageAdd();
 
 /* ADD SKILL */
 refs.addSkillBtn.addEventListener("click", () => {
-  const lastSkill = data.skills[data.skills.length - 1];
-  if (!lastSkill.name.trim()) {
-    validateSkillAdd();
-    return;
-  }
-
   data.skills.unshift({
     id: id(),
     name: "",
@@ -1836,11 +1830,12 @@ ${data.personal.driversLicence
   line-height:17px;
 ">
 
-<!-- PROFESSIONAL EXPERIENCE HEADING -->
+${hasExperience() ? `
 <div class="heading_Template_1 overflow" style="margin-bottom: 5px; margin-top: 5px;">
   <h2>${ICONS.experience}<span>Professional Experience</span></h2>
   <div class="rule"></div>
 </div>
+` : ``}
 
 ${data.experience.map(exp => `
   <!-- EXPERIENCE ITEM -->
@@ -1872,13 +1867,15 @@ ${data.experience.map(exp => `
 
 
 
-        <!-- EDUCATION HEADING -->
-        <div class="heading_Template_1 overflow overflow" id="h2-edu" style="margin-bottom:5px;">
-          <h2>
-            ${ICONS.education}<span>EDUCATION</span>
-          </h2>
-          <div class="rule"></div>
-        </div>
+        ${hasEducation() && `
+<!-- EDUCATION HEADING -->
+<div class="heading_Template_1 overflow" id="h2-edu" style="margin-bottom:5px;">
+  <h2>
+    ${ICONS.education}<span>EDUCATION</span>
+  </h2>
+  <div class="rule"></div>
+</div>
+`}
 
         <!-- EDUCATION ITEM -->
         ${data.education.map(edu => `
@@ -2204,11 +2201,12 @@ ${data.personal.driversLicence
   line-height:17px;
 ">
 
-<!-- PROFESSIONAL EXPERIENCE HEADING -->
+${hasExperience() ? `
 <div class="heading_Template_2 overflow" style="margin-bottom: 5px; margin-top: 5px;">
   <h2><span>Professional Experience</span></h2>
   <div class="rule"></div>
 </div>
+` : ``}
 
 ${data.experience.map(exp => `
   <!-- EXPERIENCE ITEM -->
@@ -2237,16 +2235,14 @@ ${data.experience.map(exp => `
           : ''
         }
 `).join('')}
-
-
-
-        <!-- EDUCATION HEADING -->
+                ${hasEducation() && `
         <div class="heading_Template_2 overflow" id="h2-edu" style="margin-bottom:5px; margin-top:30px;">
           <h2>
             <span>EDUCATION</span>
           </h2>
           <div class="rule"></div>
         </div>
+`}
 
         <!-- EDUCATION ITEM -->
         ${data.education.map(edu => `
@@ -2267,11 +2263,17 @@ ${data.experience.map(exp => `
               ${renderLanguagesPreview()}
               ${renderInterestsPreview()}
 
-            <section class="section_Template_2 overflow">
+          
+${hasReferences() ? `
+<section class="section_Template_2 overflow">
           <div class="heading_Template_2" style="margin-top:30px">
           <h2><span>References</span></h2>
           <div class="rule"></div>
           </div>
+` : ``}
+
+
+
           ${data.references.map(ref => `
          <div class="ref-card-wrapper">
           <div class="ref-card_Template_2">
@@ -2336,13 +2338,13 @@ function hasEducation() {
 function hasReferences() {
   return data.references && data.references.some(ref =>
     ref.name?.trim() ||
-    ref.company?.trim() ||
+    ref.campany?.trim() ||
     ref.phone?.trim() ||
     ref.email?.trim()
   );
 }
 
-console.log(hasExperience())
+console.log(hasReferences())
 
 function renderPinkCorporate() {
   const p = photoHtml();
@@ -2627,8 +2629,6 @@ ${data.experience.map(exp => `
         }
 `).join('')}
 
-
-
         ${hasEducation() && `
 <!-- EDUCATION HEADING -->
 <div class="heading_Template_3 overflow" id="h2-edu" style="margin-bottom:5px; margin-top:30px;">
@@ -2659,6 +2659,7 @@ ${data.experience.map(exp => `
               ${renderInterestsPreview()}
 
             <section class="section_Template_3 overflow">
+
 ${hasReferences() ? `
 <div class="heading_Template_3" style="margin-top:30px">
   <h2><span>References</span></h2>
@@ -3237,37 +3238,70 @@ function cleanAllSections(root) {
 }
 
 function validateInterestAdd() {
+  const interestLength = data.interests.length;
+
+  // If no interests → allow adding
+  if (!interestLength) {
+    refs.addinterestBtn.disabled = false;
+    return;
+  }
+
+  // Get first interest
   const firstInterest = data.interests[0];
 
-  const empty =
-    !firstInterest ||
-    firstInterest.trim() === "";
+  const empty = !firstInterest || firstInterest.trim() === "";
 
   refs.addinterestBtn.disabled = empty;
 }
 
 function validateLanguageAdd() {
-  const lastLanguage = data.languages[data.languages.length - data.languages.length];
+  const langLength = data.languages.length;
+
+  // If no languages → allow adding
+  if (!langLength) {
+    addLanguageBtn.disabled = false;
+    return;
+  }
+
+  const lastLanguage = data.languages[0];
 
   const empty =
-    !lastLanguage ||
     !lastLanguage.name ||
     lastLanguage.name.trim() === "";
 
-  if (addLanguageBtn) {
-    addLanguageBtn.disabled = empty;
-  }
+  addLanguageBtn.disabled = empty;
 }
 
+
 function validateSkillAdd() {
-  const lastSkill = data.skills[data.skills.length - data.skills.length];
+  const skillLength = data.skills.length;
+
+  // If no skills → allow adding
+  if (!skillLength) {
+    refs.addSkillBtn.disabled = false;
+    return;
+  }
+
+  // Get last skill
+  const lastSkill = data.skills[0];
+
   const nameEmpty = !lastSkill.name || lastSkill.name.trim() === "";
+
+  // Disable add button if last skill name is empty
   refs.addSkillBtn.disabled = nameEmpty;
 }
 
 function validateEducationAdd() {
+  const eduLength = data.education.length;
+
+  // If no education → allow adding
+  if (!eduLength) {
+    refs.addEduBtn.disabled = false;
+    return;
+  }
+
+  // Get first education
   const firstEdu = data.education[0];
-  if (!firstEdu) return;
 
   const degreeEmpty = !firstEdu.degree || firstEdu.degree.trim() === "";
   const schoolEmpty = !firstEdu.school || firstEdu.school.trim() === "";
@@ -3276,24 +3310,41 @@ function validateEducationAdd() {
 }
 
 function validateReferenceAdd() {
+  const refLength = data.references.length;
+
+  // If no references → allow adding
+  if (!refLength) {
+    refs.addRefBtn.disabled = false;
+    return;
+  }
+
+  // Get first reference
   const firstRef = data.references[0];
-  if (!firstRef) return;
 
   const nameEmpty = !firstRef.name || firstRef.name.trim() === "";
-  const companyEmpty = !firstRef.campany || firstRef.campany.trim() === "";
+  const campanyEmpty = !firstRef.campany || firstRef.campany.trim() === "";
 
-  refs.addRefBtn.disabled = nameEmpty || companyEmpty;
+  refs.addRefBtn.disabled = nameEmpty || campanyEmpty;
 }
 
 function validateExperienceAdd() {
-  const firstExp = data.experience[0]; // newest item
-  if (!firstExp) return;
+  const expLength = data.experience.length;
+
+  // If no experience → allow adding
+  if (!expLength) {
+    refs.addExpBtn.disabled = false;
+    return;
+  }
+
+  // Get first experience
+  const firstExp = data.experience[0];
 
   const roleEmpty = !firstExp.role || firstExp.role.trim() === "";
-  const companyEmpty = !firstExp.campany || firstExp.campany.trim() === "";
+  const campanyEmpty = !firstExp.campany || firstExp.campany.trim() === "";
 
-  refs.addExpBtn.disabled = roleEmpty || companyEmpty;
+  refs.addExpBtn.disabled = roleEmpty || campanyEmpty;
 }
+
 function showToast(message, type = 'info', duration = 5500) {
   const container = document.getElementById('toast-container');
   if (!container) return;

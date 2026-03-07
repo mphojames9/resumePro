@@ -44,3 +44,12 @@ refs.addSkillBtn.addEventListener("click", () => {
   data.skills.unshift({ name: "" });
   renderLists();
 });
+
+function hasEducation() {
+  return data.education && data.education.some(edu =>
+    edu.school?.trim() ||
+    edu.degree?.trim() ||
+    edu.year?.trim() ||
+    edu.discription?.trim()
+  );
+}
