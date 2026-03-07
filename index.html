@@ -2440,6 +2440,27 @@
       opacity: 0.5;
       cursor: not-allowed;
     }
+
+    #summaryCounter {
+      margin-top: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #6b7280;
+      text-align: right;
+      letter-spacing: 0.3px;
+      transition: all .25s ease;
+    }
+
+    /* Near limit warning */
+    #summaryCounter.warning {
+      color: #f59e0b;
+    }
+
+    /* Limit reached */
+    #summaryCounter.limit {
+      color: #ef4444;
+      font-weight: 600;
+    }
   </style>
 </head>
 
@@ -2841,7 +2862,10 @@
               <i class="fa-solid fa-user-pen"></i>
               Summary
             </h4>
-            <textarea id="summary" placeholder="Professional Summary"></textarea>
+            <textarea id="summary" placeholder="Professional Summary" maxlength="250" oninput="updateCounter()">
+</textarea>
+
+            <div id="summaryCounter">0 / 250</div>
 
             <div class="section-header">
               <h4><i class="fa-solid fa-id-card"></i>Personal Details</h4>
