@@ -1008,11 +1008,10 @@ validateLanguageAdd();
           `).join('')}
         </div>
 
-        <button class="addbullet midnight-add">
-          <i class="fa-solid fa-plus"
-             data-action="addbullet"
-             data-id="${exp.id}"></i>
-          Add Responsibility
+
+        <button class="addbullet midnight-add" data-action="addbullet" data-id="${exp.id}">
+        <i class="fa-solid fa-plus"></i>
+        Add Responsibility
         </button>
       </div>
 
