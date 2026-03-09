@@ -149,14 +149,8 @@
   gap: 4px;
 }
 
-.lang-level .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  border: 1px solid #6f93c1;
-}
-
-.lang-level .dot.filled {
-  background: #6f93c1;
+.test{
+  flex-direction: column-reverse;
+  position: absolute;
 }
 

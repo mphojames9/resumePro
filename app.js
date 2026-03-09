@@ -19,6 +19,259 @@ const overlay = document.getElementById('layoutOverlay');
 const track = document.getElementById('carouselTrack');
 const nameEl = document.getElementById('templateName');
 
+  const icon = (svg) =>
+    `<span style="display:inline-flex;align-items:center;margin-right:6px;color:#6f93c1">
+      ${svg}
+    </span>`;
+
+
+  const ICONS = {
+    interests: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <path d="M12 21s-6-4.35-9-8.5C1 9 3.5 6 6.5 6c1.74 0 3.41 1.01 4.5 2.09C12.09 7.01 13.76 6 15.5 6 18.5 6 21 9 21 12.5 18 16.65 12 21 12 21z"
+        stroke="rgb(117,125,129)" stroke-width="1.5"></path>
+      </svg>`,
+
+    language: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <path d="M4 5h16M4 12h10M4 19h16"
+          stroke="rgb(117,125,129)" stroke-width="1.5"></path>
+      </svg>`,
+
+       skill: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <path d="M12 2l2.5 5 5.5.8-4 4 .9 5.7-4.9-2.6-4.9 2.6.9-5.7-4-4 5.5-.8L12 2z"
+          stroke="rgb(117,125,129)" stroke-width="1.5"></path>
+      </svg>`,
+
+      profile: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <circle cx="12" cy="8" r="4" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+        <path d="M4 20a8 8 0 0 1 16 0" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+      </svg>`,
+
+    education: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <path d="M3 7l9-4 9 4-9 4-9-4z" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+        <path d="M5 10v6c0 1 3 3 7 3s7-2 7-3v-6" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+      </svg>`,
+
+    experience: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <rect x="3" y="7" width="18" height="13" rx="2" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+        <path d="M9 7V5h6v2" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+      </svg>`,
+
+    references: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <circle cx="12" cy="7" r="3.5" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+        <path d="M5 21a7 7 0 0 1 14 0" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+      </svg>`,
+
+    contact: `
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+        <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2
+        C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
+        stroke="rgb(117, 125, 129)" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>`,
+
+
+    interests: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2
+        4 4 0 0 1 7 2c0 5.6-7 10-7 10z"
+        stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+      </svg>`,
+
+    phone: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
+        stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`,
+
+    email: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      <rect x="3" y="5" width="18" height="14" rx="2" stroke="#6f93c1" stroke-width="1.5"/>
+      <path d="M3 7l9 6 9-6" stroke="#6f93c1" stroke-width="1.5"/>
+    </svg>`,
+
+    location: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      <path d="M12 22s7-7 7-12a7 7 0 1 0-14 0c0 5 7 12 7 12z"
+        stroke="#6f93c1" stroke-width="1.5"/>
+      <circle cx="12" cy="10" r="2.5" stroke="#6f93c1" stroke-width="1.5"/>
+    </svg>`,
+
+    website: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      <circle cx="12" cy="12" r="9" stroke="#6f93c1" stroke-width="1.5"/>
+      <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"
+        stroke="#6f93c1" stroke-width="1.5"/>
+    </svg>`,
+
+    linkedin: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+      <rect x="3" y="3" width="18" height="18" rx="3"
+        stroke="#6f93c1" stroke-width="1.5"/>
+      <path d="M8 11v5M8 8h.01M12 16v-3a2 2 0 0 1 4 0v3"
+        stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>`,
+
+
+    skills: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+      <path d="M12 2l2.5 5 5.5.8-4 4 .9 5.7-4.9-2.6-4.9 2.6.9-5.7-4-4 5.5-.8L12 2z"
+        stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
+    </svg>`,
+
+    campany: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none">
+    <rect x="3" y="7" width="18" height="13" rx="2"
+      stroke="#6f93c1" stroke-width="1.5"/>
+    <path d="M9 7V5h6v2"
+      stroke="#6f93c1" stroke-width="1.5"/>
+  </svg>`,
+
+    calendar: `
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+  <rect x="3" y="4" width="18" height="17" rx="2"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <path d="M8 2v4M16 2v4M3 10h18"
+    stroke="#6f93c1" stroke-width="1.5"/>
+</svg>`,
+
+    heart: `
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+  <path d="M12 21s-7-4.5-7-10.5a4 4 0 0 1 7-2.5
+           4 4 0 0 1 7 2.5c0 6-7 10.5-7 10.5z"
+    stroke="#6f93c1" stroke-width="1.5"/>
+</svg>`,
+
+    user: `
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+  <circle cx="12" cy="7.5" r="3.5"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <path d="M4.5 20a7.5 7.5 0 0 1 15 0"
+    stroke="#6f93c1" stroke-width="1.5"/>
+</svg>`,
+
+    faith: `
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+  <path d="M12 2.5v19M5.5 9.5h13"
+    stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round"/>
+</svg>`,
+
+    group: `
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+  <circle cx="7.5" cy="9" r="3"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <circle cx="16.5" cy="9" r="3"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <path d="M2.5 20a6 6 0 0 1 10 0M11.5 20a6 6 0 0 1 10 0"
+    stroke="#6f93c1" stroke-width="1.5"/>
+</svg>`,
+
+    car: `
+<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
+  <rect x="3" y="9" width="18" height="7" rx="2"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <path d="M6 9l2-4h8l2 4"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <circle cx="7.5" cy="17" r="1.5"
+    stroke="#6f93c1" stroke-width="1.5"/>
+  <circle cx="16.5" cy="17" r="1.5"
+    stroke="#6f93c1" stroke-width="1.5"/>
+</svg>`,
+
+    language: `
+<svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+  <path d="M4 5h16M4 12h10M4 19h16"
+    stroke="rgb(117,125,129)" stroke-width="1.5"/>
+</svg>`,
+
+   contact_w: `
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
+        <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2
+        C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
+        stroke="#fafafa" stroke-width="1.6" stroke-linecap="round"/>
+      </svg>`,
+
+
+    phone_w: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+      <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
+        stroke="#fafafa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`,
+
+    email_w: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+      <rect x="3" y="5" width="18" height="14" rx="2" stroke="#fafafa" stroke-width="1.6"/>
+      <path d="M3 7l9 6 9-6" stroke="#fafafa" stroke-width="1.6"/>
+    </svg>`,
+
+    location_w: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+      <path d="M12 22s7-7 7-12a7 7 0 1 0-14 0c0 5 7 12 7 12z"
+        stroke="#fafafa" stroke-width="1.6"/>
+      <circle cx="12" cy="10" r="2.5" stroke="#fafafa" stroke-width="1.6"/>
+    </svg>`,
+
+    website_w: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+      <circle cx="12" cy="12" r="9" stroke="#fafafa" stroke-width="1.5"/>
+      <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"
+       stroke="#fafafa" stroke-width="1.6"/>
+    </svg>`,
+
+    linkedin_w: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+      <rect x="3" y="3" width="20" height="20" rx="3"
+        stroke="#f1f1f1" stroke-width="1.5"/>
+      <path d="M8 11v5M8 8h.01M12 16v-3a2 2 0 0 1 4 0v3"
+        stroke="#fafafa" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>`,
+
+    calendar_w: `
+<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+  <rect x="3" y="4" width="18" height="17" rx="2"
+    stroke="#fafafa" stroke-width="1.6""/>
+  <path d="M8 2v4M16 2v4M3 10h18"
+    stroke="#fafafa" stroke-width="1.6"/>
+</svg>`,
+
+    heart_w: `
+<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+  <path d="M12 21s-7-4.5-7-10.5a4 4 0 0 1 7-2.5
+           4 4 0 0 1 7 2.5c0 6-7 10.5-7 10.5z"
+    stroke="#fafafa" stroke-width="1.6"/>
+</svg>`,
+
+    user_w: `
+<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+  <circle cx="12" cy="7.5" r="3.5"
+    stroke="#fafafa" stroke-width="1.6"/>
+  <path d="M4.5 20a7.5 7.5 0 0 1 15 0"
+    stroke="#fafafa" stroke-width="1.6"/>
+</svg>`,
+
+    faith_w: `
+<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+  <path d="M12 2.5v19M5.5 9.5h13"
+    stroke="#fafafa" stroke-width="1.6" stroke-linecap="round"/>
+</svg>`,
+
+    group_w: `
+<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+  <circle cx="7.5" cy="9" r="3"
+    stroke="#fafafa" stroke-width="1.6"/>
+  <circle cx="16.5" cy="9" r="3"
+    stroke="#fafafa" stroke-width="1.6"/>
+  <path d="M2.5 20a6 6 0 0 1 10 0M11.5 20a6 6 0 0 1 10 0"
+    stroke="#fafafa" stroke-width="1.6"/>
+</svg>`,
+
+    car_w: `
+<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
+  <rect x="3" y="9" width="18" height="7" rx="2"
+    stroke="#fafafa" stroke-width="1.6"/>
+  <path d="M6 9l2-4h8l2 4"
+    stroke="#fafafa" stroke-width="1.6"/>
+  <circle cx="7.5" cy="17" r="1.5"
+    stroke="#fafafa" stroke-width="1.6"/>
+  <circle cx="16.5" cy="17" r="1.5"
+    stroke="#fafafa" stroke-width="1.6"/>
+</svg>`,
+
+  };
+
 /* =========================
    GLOBAL STATE
 ========================= */
@@ -28,10 +281,22 @@ const TEMPLATE_LIBRARY = [
     name: 'midnight',
     image: '/mnt/data/8c084f86-b9fa-4010-988d-7f50782de721.png'
   },
+
+  {
+    id: 'promidnight',
+    name: 'promidnight',
+    image: '/mnt/data/8c084f86-b9fa-4010-988d-7f50782de721.png'
+  },
+
   {
     id: 'goldenexecutive',
     name: 'goldenexecutive',
     image: '/images/templates/goldenexecutive.png'
+  },
+
+   {   id: 'goldenexecutiveII',
+    name: 'goldenexecutiveII',
+    image: '/images/templates/goldenexecutiveII.png'
   },
   {
     id: 'creative',
@@ -41,6 +306,17 @@ const TEMPLATE_LIBRARY = [
   {
     id: 'pinkcorporate',
     name: 'pinkcorporate',
+    image: '/images/templates/recruiter.png'
+  },
+    {
+    id: 'pinkcorporateII',
+    name: 'pinkcorporateII',
+    image: '/images/templates/recruiter.png'
+  },
+
+      {
+    id: 'Modernats',
+    name: 'Modernats',
     image: '/images/templates/recruiter.png'
   }
 ];
@@ -1154,107 +1430,6 @@ function renderLanguageRow(lang, index) {
 
 
 
-function renderInterestsPreview() {
-  if (!data.interests || !data.interests.length) return '';
-
-  const ICONS = {
-    interests: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <path d="M12 21s-6-4.35-9-8.5C1 9 3.5 6 6.5 6c1.74 0 3.41 1.01 4.5 2.09C12.09 7.01 13.76 6 15.5 6 18.5 6 21 9 21 12.5 18 16.65 12 21 12 21z"
-        stroke="rgb(117,125,129)" stroke-width="1.5"></path>
-      </svg>`
-  };
-
-  return `
-    <section class="section_Template_1 overflow">
-      <div class="heading_Template_1">
-        <h2>
-          ${ICONS.interests}
-          <span>Interests</span>
-        </h2>
-        <div class="rule"></div>
-      </div>
-
-      <ul class="skills-list_Template_1 interests-list_Template_1">
-        ${data.interests
-          .filter(i => i && i.trim() !== '')
-          .map(i => `
-            <li class="interest-item_Template_2">
-              ${escapeHtml(i)}
-            </li>
-          `).join('')}
-      </ul>
-    </section>
-  `;
-}
-
-function renderLanguagesPreview() {
-  if (!data.languages || !data.languages.length) return '';
-
-  const ICONS = {
-    language: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <path d="M4 5h16M4 12h10M4 19h16"
-          stroke="rgb(117,125,129)" stroke-width="1.5"></path>
-      </svg>`
-  };
-
-  return `
-    <section class="section_Template_1 overflow">
-      <div class="heading_Template_1">
-        <h2>
-          ${ICONS.language}
-          <span>Languages</span>
-        </h2>
-        <div class="rule"></div>
-      </div>
-
-      <ul class="skills-list_Template_1 languages-list_Template_1 overflow">
-        ${data.languages.map(lang => `
-          <li class="language-item_Template_1">
-            <span class="language-name_Template_1">
-              ${escapeHtml(lang.name)}
-            </span>
-            ${renderLanguageLevel(lang.level)}
-          </li>
-        `).join('')}
-      </ul>
-    </section>
-  `;
-}
-
-function renderSkillsPreview() {
-  if (!data.skills || !data.skills.length) return '';
-
-  const ICONS = {
-    skill: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <path d="M12 2l2.5 5 5.5.8-4 4 .9 5.7-4.9-2.6-4.9 2.6.9-5.7-4-4 5.5-.8L12 2z"
-          stroke="rgb(117,125,129)" stroke-width="1.5"></path>
-      </svg>`
-  };
-
-  return `
-    <section class="section_Template_1 overflow">
-      <div class="heading_Template_1">
-        <h2>
-          ${ICONS.skill}<span>Skills</span>
-        </h2>
-        <div class="rule"></div>
-      </div>
-
-      <ul class="skills-list_Template_1">
-        ${data.skills.map(skill => `
-          <li>
-            ${escapeHtml(skill.name)}
-            ${renderLanguageLevel(skill.level)}
-          </li>
-        `).join('')}
-      </ul>
-    </section>
-  `;
-}
-
 function renderLanguagesEditor() {
   languagesContainer.innerHTML = data.languages
     .map(renderLanguageRow)
@@ -1437,8 +1612,12 @@ function renderPreview(highlightKeywords) {
   const html = (() => {
     switch (data.template) {
       case 'goldenexecutive': return renderGoldenExecutive();
+      case 'goldenexecutiveII': return renderGoldenExecutiveII();
       case 'creative': return renderCreative();
       case 'pinkcorporate': return renderPinkCorporate();
+      case 'pinkcorporateII': return renderPinkCorporateII();
+      case 'Modernats': return ModernAtsPhoto();
+      case 'promidnight': return renderpromidnight();
       case 'ats': return renderATS();
       default: return rendermidnight();
     }
@@ -1528,17 +1707,22 @@ function microSplitOverflow(pageObj, PAGE_HEIGHT) {
   return currentPage;
 }
 
+
+
 function createPageWithSidebar(sidebarNode) {
+  const selectedTemplate = data.template;
+console.log(selectedTemplate)  
   const page = document.createElement('div');
   page.className = 'resume-page resume professional';
   page.style.minHeight = '1122px';
 
   const wrapper = document.createElement('div');
-  wrapper.className = 'resume_Template_1';
+  wrapper.className = `resume_Template_1 ${selectedTemplate}`;
 
   const sidebarClone = sidebarNode.cloneNode(true);
   const main = document.createElement('main');
   main.className = 'content_Template_1';
+  main.id = `${selectedTemplate}`
 
   wrapper.appendChild(sidebarClone);
   wrapper.appendChild(main);
@@ -1587,156 +1771,59 @@ function photoHtml() {
   }
 }
 
+
+function hasExperience() {
+  return data.experience && data.experience.some(exp =>
+    exp.role?.trim() ||
+    exp.campany?.trim() ||
+    exp.start?.trim() ||
+    exp.end?.trim() ||
+    (exp.bullets && exp.bullets.some(b => b?.trim()))
+  );
+}
+
+function hasEducation() {
+  return data.education && data.education.some(edu =>
+    edu.school?.trim() ||
+    edu.degree?.trim() ||
+    edu.year?.trim() ||
+    edu.discription?.trim()
+  );
+}
+
+function hasSkills() {
+  return data.skills?.some(skill =>
+    skill.name?.trim()
+  );
+}
+
+function hasLanguage() {
+  return data.languages && data.languages.some(lang =>
+    lang.name?.trim()
+  );
+}
+
+function hasInterest() {
+  return data.interests && data.interests.some(i =>
+    i?.trim()
+  );
+}
+
+function hasReferences() {
+  return data.references && data.references.some(ref =>
+    ref.name?.trim() ||
+    ref.campany?.trim() ||
+    ref.phone?.trim() ||
+    ref.email?.trim()
+  );
+}
+
+
 function rendermidnight() {
-  injectmidnightTemplateStyles();
   const p = photoHtml();
-
-  const icon = (svg) =>
-    `<span style="display:inline-flex;align-items:center;margin-right:6px;color:#6f93c1">
-      ${svg}
-    </span>`;
-
-  const ICONS = {
-
-    profile: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <circle cx="12" cy="8" r="4" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-        <path d="M4 20a8 8 0 0 1 16 0" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    education: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <path d="M3 7l9-4 9 4-9 4-9-4z" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-        <path d="M5 10v6c0 1 3 3 7 3s7-2 7-3v-6" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    experience: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <rect x="3" y="7" width="18" height="13" rx="2" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-        <path d="M9 7V5h6v2" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    references: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <circle cx="12" cy="7" r="3.5" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-        <path d="M5 21a7 7 0 0 1 14 0" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    contact: `
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-        <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2
-        C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
-        stroke="rgb(117, 125, 129)" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>`,
+  injectmidnightTemplateStyles()
 
 
-    interests: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2
-        4 4 0 0 1 7 2c0 5.6-7 10-7 10z"
-        stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    phone: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-      <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
-        stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>`,
-
-    email: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-      <rect x="3" y="5" width="18" height="14" rx="2" stroke="#6f93c1" stroke-width="1.5"/>
-      <path d="M3 7l9 6 9-6" stroke="#6f93c1" stroke-width="1.5"/>
-    </svg>`,
-
-    location: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-      <path d="M12 22s7-7 7-12a7 7 0 1 0-14 0c0 5 7 12 7 12z"
-        stroke="#6f93c1" stroke-width="1.5"/>
-      <circle cx="12" cy="10" r="2.5" stroke="#6f93c1" stroke-width="1.5"/>
-    </svg>`,
-
-    website: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-      <circle cx="12" cy="12" r="9" stroke="#6f93c1" stroke-width="1.5"/>
-      <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"
-        stroke="#6f93c1" stroke-width="1.5"/>
-    </svg>`,
-
-    linkedin: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-      <rect x="3" y="3" width="18" height="18" rx="3"
-        stroke="#6f93c1" stroke-width="1.5"/>
-      <path d="M8 11v5M8 8h.01M12 16v-3a2 2 0 0 1 4 0v3"
-        stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>`,
-
-
-    skills: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-      <path d="M12 2l2.5 5 5.5.8-4 4 .9 5.7-4.9-2.6-4.9 2.6.9-5.7-4-4 5.5-.8L12 2z"
-        stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-    </svg>`,
-
-    campany: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none">
-    <rect x="3" y="7" width="18" height="13" rx="2"
-      stroke="#6f93c1" stroke-width="1.5"/>
-    <path d="M9 7V5h6v2"
-      stroke="#6f93c1" stroke-width="1.5"/>
-  </svg>`,
-
-    calendar: `
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-  <rect x="3" y="4" width="18" height="17" rx="2"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <path d="M8 2v4M16 2v4M3 10h18"
-    stroke="#6f93c1" stroke-width="1.5"/>
-</svg>`,
-
-    heart: `
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-  <path d="M12 21s-7-4.5-7-10.5a4 4 0 0 1 7-2.5
-           4 4 0 0 1 7 2.5c0 6-7 10.5-7 10.5z"
-    stroke="#6f93c1" stroke-width="1.5"/>
-</svg>`,
-
-    user: `
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-  <circle cx="12" cy="7.5" r="3.5"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <path d="M4.5 20a7.5 7.5 0 0 1 15 0"
-    stroke="#6f93c1" stroke-width="1.5"/>
-</svg>`,
-
-    faith: `
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-  <path d="M12 2.5v19M5.5 9.5h13"
-    stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round"/>
-</svg>`,
-
-    group: `
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-  <circle cx="7.5" cy="9" r="3"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <circle cx="16.5" cy="9" r="3"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <path d="M2.5 20a6 6 0 0 1 10 0M11.5 20a6 6 0 0 1 10 0"
-    stroke="#6f93c1" stroke-width="1.5"/>
-</svg>`,
-
-    car: `
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-  <rect x="3" y="9" width="18" height="7" rx="2"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <path d="M6 9l2-4h8l2 4"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <circle cx="7.5" cy="17" r="1.5"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <circle cx="16.5" cy="17" r="1.5"
-    stroke="#6f93c1" stroke-width="1.5"/>
-</svg>`,
-
-    language: `
-<svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-  <path d="M4 5h16M4 12h10M4 19h16"
-    stroke="rgb(117,125,129)" stroke-width="1.5"/>
-</svg>`,
-
-  }
   return `
   <div class="resume_Template_1">
     <aside class="sidebar_Template_1">
@@ -1856,7 +1943,7 @@ ${data.experience.map(exp => `
   ${exp.bullets && exp.bullets.length
           ? `
     ${exp.bullets.map(b => `
-     <li class="overflow ${b?.trim() ? 'li' : ''}">
+     <li class="overflow ${b?.trim() ? 'li' : ''}" style="color:#475569;">
     ${escapeHtml(b)}
         </li>
           `).join('')}
@@ -1887,13 +1974,323 @@ ${data.experience.map(exp => `
               <li class="overflow" style="display:flex;white-space:pre-wrap;">
               </li>
 
-              <li class="overflow ${edu.discription?.trim() ? 'li' : ''}">
+              <li class="overflow ${edu.discription?.trim() ? 'li' : ''}" style="color:#475569; line-height: 1.3">
              ${escapeHtml(edu.discription)}
              </li>
               `).join('')}
 
-              ${renderSkillsPreview()}
-              ${renderLanguagesPreview()}
+            <section class="section_Template_1 overflow">
+        ${hasSkills() ? `
+       <div class="heading_Template_1">
+       <h2>
+        ${ICONS.skill}
+         <span>Skills</span>
+         </h2>
+         <div class="rule"></div>
+         </div>
+         ` : ""}
+
+        <ul class="skills-list_Template_1 overflow">
+         ${data.skills
+        .filter(skill => skill.name?.trim())
+        .map(skill => `
+        <li>
+          ${escapeHtml(skill.name)}
+          ${skill.level ? renderLanguageLevel(skill.level) : ""}
+        </li>
+        `).join('')}
+          </ul>
+        </section>
+
+            <section class="section_Template_1 overflow">
+            ${hasLanguage() ? `
+            <div class="heading_Template_1">
+            <h2>
+            ${ICONS.language}
+            <span>Languages</span>
+           </h2>
+            <div class="rule"></div>
+           </div>
+            ` : ""}
+
+      <ul class="skills-list_Template_1 languages-list_Template_1 overflow">
+        ${data.languages
+        .filter(lang => lang.name?.trim())
+         .map(lang => `
+        <li class="language-item_Template_1">
+         <span class="language-name_Template_1">
+          ${escapeHtml(lang.name)}
+         </span>
+       ${renderLanguageLevel(lang.level)}
+        </li>
+      `).join('')}
+      </ul>
+    </section>
+
+           <section class="section_Template_1 overflow">
+              <div class="heading_Template_1">
+                <h2>${ICONS.interests}<span>Interests</span>
+                </h2>
+                <div class="rule"></div>
+              </div>
+              <ul class="skills-list_Template_1">
+                <li>${data.interests.map(i => `<li>${escapeHtml(i)}</li>`).join('')}</li>
+              </ul>
+            </section> 
+
+            <section class="section_Template_1 overflow">
+          <div class="heading_Template_1">
+          <h2>${ICONS.references}<span>References</span></h2>
+          <div class="rule"></div>
+          </div>
+          ${data.references.map(ref => `
+         <div class="ref-card-wrapper">
+          <div class="ref-card_Template_1">
+
+        ${ref.name ? `<h4>${escapeHtml(ref.name)}</h4>` : ''}
+
+         ${(ref.campany || ref.position) ? `
+         <p class="ref-line">
+          ${ICONS.campany}
+          ${[
+              ref.campany
+                ? `<strong>${escapeHtml(ref.campany)}</strong>`
+                : '',
+              ref.position
+                ? escapeHtml(ref.position)
+                : ''
+            ].filter(Boolean).join(' / ')}
+        </p>
+      ` : ''}
+
+      ${ref.phone ? `
+        <p class="ref-line">
+          ${ICONS.phone}
+          ${escapeHtml(ref.phone)}
+        </p>
+      ` : ''}
+
+      ${ref.email ? `
+        <p class="ref-line">
+          ${ICONS.email}
+          ${escapeHtml(ref.email)}
+        </p>
+      ` : ''}
+          </div>
+        </div>
+        `).join('')}
+      </section>
+        </main>
+  </div>
+  `;
+}
+
+function renderpromidnight() {
+  injectpromidnighttTemplateStylesII()
+  const p = photoHtml();
+
+  return `
+  <div class="resume_Template_1">
+    <aside class="sidebar_Template_1">
+      <div class="photo-wrap_Template_1">${p}</div>
+      <div style="margin-top:85px;text-align:center">
+        <div class="name_Template_1">${escapeHtml(data.personal.fullName || '')}</div>
+        <div class="role_Template_1">${escapeHtml(data.personal.title || '')}</div>
+      </div>
+
+      ${data.summary && data.summary.trim()
+      ? `
+<section class="section_Template_1 summary">
+  <div  class="heading_Template_1">
+    <h2>${ICONS.profile}<span>Profile</span></h2>
+  </div>
+  <p class="about_Template_1">${escapeHtml(data.summary)}</p>
+</section>
+`
+      : ''}
+
+${(
+      data.personal.phone ||
+      data.personal.email ||
+      data.personal.location ||
+      data.personal.website ||
+      data.personal.linkedin
+    ) ? `
+<div class="side-section_Template_1">
+  <div class="section-title_Template_1">
+    ${ICONS.contact} Contact
+  </div>
+  <ul class="contact-list_Template_1">
+
+    ${data.personal.phone
+      ? `<li>${icon(ICONS.phone)}${escapeHtml(data.personal.phone)}</li>`
+      : ''}
+
+    ${data.personal.email
+      ? `<li>${icon(ICONS.email)}${escapeHtml(data.personal.email)}</li>`
+      : ''}
+
+    ${data.personal.location
+      ? `<li>${icon(ICONS.location)}${escapeHtml(data.personal.location)}</li>`
+      : ''}
+
+    ${data.personal.website
+      ? `<li>${icon(ICONS.website)}${escapeHtml(data.personal.website)}</li>`
+      : ''}
+
+    ${data.personal.linkedin
+      ? `<li>${icon(ICONS.linkedin)}${escapeHtml(data.personal.linkedin)}</li>`
+      : ''}
+
+    ${data.personal.dob
+      ? `<li>${icon(ICONS.calendar)}${escapeHtml(data.personal.dob)}</li>`
+      : ''}
+    ${data.personal.gender
+      ? `<li>${icon(ICONS.user)}${escapeHtml(data.personal.gender)}</li>`
+      : ''}
+
+${data.personal.race
+      ? `<li>${icon(ICONS.group)}${escapeHtml(data.personal.race)}</li>`
+      : ''}
+
+${data.personal.religion
+      ? `<li>${icon(ICONS.faith)}${escapeHtml(data.personal.religion)}</li>`
+      : ''}
+
+${data.personal.maritalStatus
+      ? `<li>${icon(ICONS.heart)}${escapeHtml(data.personal.maritalStatus)}</li>`
+      : ''}
+
+${data.personal.driversLicence
+      ? `<li>${icon(ICONS.car)}${escapeHtml(data.personal.driversLicence)}</li>`
+      : ''}
+
+  </ul>
+</div>
+` : ''}
+
+
+    </aside>
+<main class="content_Template_1" style="
+  display:flex;
+  flex-direction:column;
+  flex-grow:1;
+  background:#fff;
+  color:#0f172a;
+  font-size:10.5pt;
+  line-height:17px;
+  position:absolute;
+  left:0;
+">
+
+${hasExperience() ? `
+<div class="heading_Template_1 overflow" style="margin-bottom: 5px; margin-top: 5px;">
+  <h2>${ICONS.experience}<span>Professional Experience</span></h2>
+  <div class="rule"></div>
+</div>
+` : ``}
+
+${data.experience.map(exp => `
+  <!-- EXPERIENCE ITEM -->
+  <div class="overflow" style="margin-top:1rem;font-weight:bold; display:flex; justify-content:space-between;">
+    <p style="font-weight:800">${escapeHtml(exp.campany)}</p>
+    ${[exp.start, exp.end].some(d => d && d.trim())
+          ? `<i style="font-weight:400;font-size:13px;">${[exp.start, exp.end]
+            .filter(d => d && d.trim())
+            .join(' – ')}</i>`
+          : ''
+        }
+  </div>
+
+  <p class="overflow" style="margin:0;font-weight:600;color:rgb(59,57,57); margin-bottom: 5px;">
+    ${escapeHtml(exp.role)}
+  </p>
+
+  ${exp.bullets && exp.bullets.length
+          ? `
+    ${exp.bullets.map(b => `
+     <li class="overflow ${b?.trim() ? 'li' : ''}" style="color:#475569; line-height: 1.3">
+    ${escapeHtml(b)}
+        </li>
+          `).join('')}
+      `
+          : ''
+        }
+`).join('')}
+
+
+
+        ${hasEducation() && `
+<!-- EDUCATION HEADING -->
+<div class="heading_Template_1 overflow" id="h2-edu" style="margin-bottom:5px;">
+  <h2>
+    ${ICONS.education}<span>EDUCATION</span>
+  </h2>
+  <div class="rule"></div>
+</div>
+`}
+
+        <!-- EDUCATION ITEM -->
+        ${data.education.map(edu => `
+              <div class="overflow" style="margin-top:1rem;;font-weight:bold; display: flex; justify-content: space-between;">
+              <p style="font-weight: 800">${escapeHtml(edu.degree)}</p>
+              <i style="margin:0; float: right; font-weight:400; font-size: 13px; list-style-type: none;">${escapeHtml(edu.year || '')}</i>
+            </div>
+            <p class="overflow" style="margin:0; font-weight: 600; margin-bottom:5px; color: rgb(59, 57, 57);">${escapeHtml(edu.school)}</p>
+              <li class="overflow" style="display:flex;white-space:pre-wrap;">
+              </li>
+
+              <li class="overflow ${edu.discription?.trim() ? 'li' : ''}" style="color:#475569; line-height: 1.3">
+             ${escapeHtml(edu.discription)}
+             </li>
+              `).join('')}
+
+             <section class="section_Template_1 overflow">
+        ${hasSkills() ? `
+       <div class="heading_Template_1">
+       <h2>
+        ${ICONS.skill}
+         <span>Skills</span>
+         </h2>
+         <div class="rule"></div>
+         </div>
+         ` : ""}
+
+        <ul class="skills-list_Template_1 overflow">
+         ${data.skills
+        .filter(skill => skill.name?.trim())
+        .map(skill => `
+        <li>
+          ${escapeHtml(skill.name)}
+          ${skill.level ? renderLanguageLevel(skill.level) : ""}
+        </li>
+        `).join('')}
+          </ul>
+        </section>
+                          <section class="section_Template_1 overflow">
+                ${hasLanguage() ? `
+            <div class="heading_Template_1">
+            <h2>
+            ${ICONS.language}
+            <span>Languages</span>
+           </h2>
+            <div class="rule"></div>
+           </div>
+            ` : ""}
+
+      <ul class="skills-list_Template_1 languages-list_Template_1 overflow">
+        ${data.languages
+        .filter(lang => lang.name?.trim())
+         .map(lang => `
+        <li class="language-item_Template_1">
+         <span class="language-name_Template_1">
+          ${escapeHtml(lang.name)}
+         </span>
+       ${renderLanguageLevel(lang.level)}
+        </li>
+      `).join('')}
+      </ul>
+    </section>
 
             <section class="section_Template_1 overflow">
               <div class="heading_Template_1">
@@ -1956,157 +2353,6 @@ ${data.experience.map(exp => `
 function renderGoldenExecutive() {
   const p = photoHtml();
   injectGoldSlateTemplateStyles()
-
-  const icon = (svg) =>
-    `<span style="display:inline-flex;align-items:center;margin-right:6px;color:#6f93c1">
-      ${svg}
-    </span>`;
-
-  const ICONS = {
-
-    profile: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <circle cx="12" cy="8" r="4" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-        <path d="M4 20a8 8 0 0 1 16 0" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    education: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <path d="M3 7l9-4 9 4-9 4-9-4z" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-        <path d="M5 10v6c0 1 3 3 7 3s7-2 7-3v-6" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    experience: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <rect x="3" y="7" width="18" height="13" rx="2" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-        <path d="M9 7V5h6v2" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    references: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <circle cx="12" cy="7" r="3.5" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-        <path d="M5 21a7 7 0 0 1 14 0" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    contact: `
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-        <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2
-        C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
-        stroke="rgb(117, 125, 129)" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>`,
-
-
-    interests: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2
-        4 4 0 0 1 7 2c0 5.6-7 10-7 10z"
-        stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    phone: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-      <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
-        stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>`,
-
-    email: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-      <rect x="3" y="5" width="18" height="14" rx="2" stroke="#6f93c1" stroke-width="1.5"/>
-      <path d="M3 7l9 6 9-6" stroke="#6f93c1" stroke-width="1.5"/>
-    </svg>`,
-
-    location: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-      <path d="M12 22s7-7 7-12a7 7 0 1 0-14 0c0 5 7 12 7 12z"
-        stroke="#6f93c1" stroke-width="1.5"/>
-      <circle cx="12" cy="10" r="2.5" stroke="#6f93c1" stroke-width="1.5"/>
-    </svg>`,
-
-    website: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-      <circle cx="12" cy="12" r="9" stroke="#6f93c1" stroke-width="1.5"/>
-      <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"
-        stroke="#6f93c1" stroke-width="1.5"/>
-    </svg>`,
-
-    linkedin: `<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-      <rect x="3" y="3" width="18" height="18" rx="3"
-        stroke="#6f93c1" stroke-width="1.5"/>
-      <path d="M8 11v5M8 8h.01M12 16v-3a2 2 0 0 1 4 0v3"
-        stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round"/>
-    </svg>`,
-
-
-    skills: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-      <path d="M12 2l2.5 5 5.5.8-4 4 .9 5.7-4.9-2.6-4.9 2.6.9-5.7-4-4 5.5-.8L12 2z"
-        stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-    </svg>`,
-
-    campany: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none">
-    <rect x="3" y="7" width="18" height="13" rx="2"
-      stroke="#6f93c1" stroke-width="1.5"/>
-    <path d="M9 7V5h6v2"
-      stroke="#6f93c1" stroke-width="1.5"/>
-  </svg>`,
-
-    calendar: `
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-  <rect x="3" y="4" width="18" height="17" rx="2"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <path d="M8 2v4M16 2v4M3 10h18"
-    stroke="#6f93c1" stroke-width="1.5"/>
-</svg>`,
-
-    heart: `
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-  <path d="M12 21s-7-4.5-7-10.5a4 4 0 0 1 7-2.5
-           4 4 0 0 1 7 2.5c0 6-7 10.5-7 10.5z"
-    stroke="#6f93c1" stroke-width="1.5"/>
-</svg>`,
-
-    user: `
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-  <circle cx="12" cy="7.5" r="3.5"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <path d="M4.5 20a7.5 7.5 0 0 1 15 0"
-    stroke="#6f93c1" stroke-width="1.5"/>
-</svg>`,
-
-    faith: `
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-  <path d="M12 2.5v19M5.5 9.5h13"
-    stroke="#6f93c1" stroke-width="1.5" stroke-linecap="round"/>
-</svg>`,
-
-    group: `
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-  <circle cx="7.5" cy="9" r="3"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <circle cx="16.5" cy="9" r="3"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <path d="M2.5 20a6 6 0 0 1 10 0M11.5 20a6 6 0 0 1 10 0"
-    stroke="#6f93c1" stroke-width="1.5"/>
-</svg>`,
-
-    car: `
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none">
-  <rect x="3" y="9" width="18" height="7" rx="2"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <path d="M6 9l2-4h8l2 4"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <circle cx="7.5" cy="17" r="1.5"
-    stroke="#6f93c1" stroke-width="1.5"/>
-  <circle cx="16.5" cy="17" r="1.5"
-    stroke="#6f93c1" stroke-width="1.5"/>
-</svg>`,
-
-    language: `
-<svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-  <path d="M4 5h16M4 12h10M4 19h16"
-    stroke="rgb(117,125,129)" stroke-width="1.5"/>
-</svg>`,
-
-  }
-
-
-  // Inject ATS + Template CSS once
-
 
   return `
   <div class="resume_Template_1">
@@ -2204,7 +2450,6 @@ ${data.personal.driversLicence
 ${hasExperience() ? `
 <div class="heading_Template_2 overflow" style="margin-bottom: 5px; margin-top: 5px;">
   <h2><span>Professional Experience</span></h2>
-  <div class="rule"></div>
 </div>
 ` : ``}
 
@@ -2227,7 +2472,7 @@ ${data.experience.map(exp => `
   ${exp.bullets && exp.bullets.length
           ? `
     ${exp.bullets.map(b => `
-     <li class="overflow ${b?.trim() ? 'li' : ''}">
+     <li class="overflow ${b?.trim() ? 'li' : ''}" style="color:#475569; line-height: 1.3">
     ${escapeHtml(b)}
         </li>
           `).join('')}
@@ -2240,7 +2485,6 @@ ${data.experience.map(exp => `
           <h2>
             <span>EDUCATION</span>
           </h2>
-          <div class="rule"></div>
         </div>
 `}
 
@@ -2254,21 +2498,85 @@ ${data.experience.map(exp => `
               <li class="overflow" style="display:flex;white-space:pre-wrap;">
               </li>
 
-              <li class="overflow ${edu.discription?.trim() ? 'li' : ''}">
+              <li class="overflow ${edu.discription?.trim() ? 'li' : ''}" style="color:#475569; line-height: 1.3">
              ${escapeHtml(edu.discription)}
              </li>
               `).join('')}
 
-              ${renderSkillsPreview()}
-              ${renderLanguagesPreview()}
-              ${renderInterestsPreview()}
+              <section class="section_Template_1 overflow">
+        ${hasSkills() ? `
+       <div class="heading_Template_1">
+       <h2>
+        ${ICONS.skill}
+         <span>Skills</span>
+         </h2>
+         <div class="rule"></div>
+         </div>
+         ` : ""}
+
+        <ul class="skills-list_Template_1 overflow">
+         ${data.skills
+        .filter(skill => skill.name?.trim())
+        .map(skill => `
+        <li>
+          ${escapeHtml(skill.name)}
+          ${skill.level ? renderLanguageLevel(skill.level) : ""}
+        </li>
+        `).join('')}
+          </ul>
+        </section>
+                          <section class="section_Template_1 overflow">
+                ${hasLanguage() ? `
+            <div class="heading_Template_1">
+            <h2>
+            ${ICONS.language}
+            <span>Languages</span>
+           </h2>
+            <div class="rule"></div>
+           </div>
+            ` : ""}
+
+      <ul class="skills-list_Template_1 languages-list_Template_1 overflow">
+        ${data.languages
+        .filter(lang => lang.name?.trim())
+         .map(lang => `
+        <li class="language-item_Template_1">
+         <span class="language-name_Template_1">
+          ${escapeHtml(lang.name)}
+         </span>
+       ${renderLanguageLevel(lang.level)}
+        </li>
+      `).join('')}
+      </ul>
+    </section>
+
+              ${hasInterest() && `
+          <section class="section_Template_1 overflow">
+           <div class="heading_Template_1">
+            <h2>
+            ${ICONS.interests}
+           <span>Interests</span>
+           </h2>
+          <div class="rule"></div>
+          </div>
+        `}
+
+          <ul class="skills-list_Template_1 interests-list_Template_1">
+         ${data.interests
+          .filter(i => i && i.trim() !== '')
+          .map(i => `
+            <li class="interest-item_Template_2">
+              ${escapeHtml(i)}
+            </li>
+          `).join('')}
+         </ul>
+        </section>
 
           
 ${hasReferences() ? `
 <section class="section_Template_2 overflow">
           <div class="heading_Template_2" style="margin-top:30px">
           <h2><span>References</span></h2>
-          <div class="rule"></div>
           </div>
 ` : ``}
 
@@ -2316,208 +2624,27 @@ ${hasReferences() ? `
   `;
 }
 
-function hasExperience() {
-  return data.experience && data.experience.some(exp =>
-    exp.role?.trim() ||
-    exp.campany?.trim() ||
-    exp.start?.trim() ||
-    exp.end?.trim() ||
-    (exp.bullets && exp.bullets.some(b => b?.trim()))
-  );
-}
-
-function hasEducation() {
-  return data.education && data.education.some(edu =>
-    edu.school?.trim() ||
-    edu.degree?.trim() ||
-    edu.year?.trim() ||
-    edu.discription?.trim()
-  );
-}
-
-function hasReferences() {
-  return data.references && data.references.some(ref =>
-    ref.name?.trim() ||
-    ref.campany?.trim() ||
-    ref.phone?.trim() ||
-    ref.email?.trim()
-  );
-}
-
-console.log(hasReferences())
-
-function renderPinkCorporate() {
+function renderGoldenExecutiveII() {
   const p = photoHtml();
-  injectPinkCorporateTemplateStyles()
-
-  const icon = (svg) =>
-    `<span style="display:inline-flex;align-items:center;margin-right:6px;color:#6f93c1">
-      ${svg}
-    </span>`;
-
-  const ICONS = {
-
-    profile: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <circle cx="12" cy="8" r="4" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-        <path d="M4 20a8 8 0 0 1 16 0" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    education: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <path d="M3 7l9-4 9 4-9 4-9-4z" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-        <path d="M5 10v6c0 1 3 3 7 3s7-2 7-3v-6" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    experience: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <rect x="3" y="7" width="18" height="13" rx="2" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-        <path d="M9 7V5h6v2" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    references: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <circle cx="12" cy="7" r="3.5" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-        <path d="M5 21a7 7 0 0 1 14 0" stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    contact: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2
-        C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
-        stroke="#fafafa" stroke-width="1.6" stroke-linecap="round"/>
-      </svg>`,
-
-
-    interests: `
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-        <path d="M12 21s-7-4.4-7-10a4 4 0 0 1 7-2
-        4 4 0 0 1 7 2c0 5.6-7 10-7 10z"
-        stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-      </svg>`,
-
-    phone: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-      <path d="M3 5a2 2 0 0 1 2-2h3l2 5-2 1a11 11 0 0 0 5 5l1-2 5 2v3a2 2 0 0 1-2 2C9.8 19 5 14.2 5 7a2 2 0 0 1-2-2z"
-        stroke="#fafafa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>`,
-
-    email: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-      <rect x="3" y="5" width="18" height="14" rx="2" stroke="#fafafa" stroke-width="1.6"/>
-      <path d="M3 7l9 6 9-6" stroke="#fafafa" stroke-width="1.6"/>
-    </svg>`,
-
-    location: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-      <path d="M12 22s7-7 7-12a7 7 0 1 0-14 0c0 5 7 12 7 12z"
-        stroke="#fafafa" stroke-width="1.6"/>
-      <circle cx="12" cy="10" r="2.5" stroke="#fafafa" stroke-width="1.6"/>
-    </svg>`,
-
-    website: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-      <circle cx="12" cy="12" r="9" stroke="#fafafa" stroke-width="1.5"/>
-      <path d="M3 12h18M12 3a15 15 0 0 1 0 18M12 3a15 15 0 0 0 0 18"
-       stroke="#fafafa" stroke-width="1.6"/>
-    </svg>`,
-
-    linkedin: `<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-      <rect x="3" y="3" width="20" height="20" rx="3"
-        stroke="#f1f1f1" stroke-width="1.5"/>
-      <path d="M8 11v5M8 8h.01M12 16v-3a2 2 0 0 1 4 0v3"
-        stroke="#fafafa" stroke-width="1.6" stroke-linecap="round"/>
-    </svg>`,
-
-
-    skills: `<svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-      <path d="M12 2l2.5 5 5.5.8-4 4 .9 5.7-4.9-2.6-4.9 2.6.9-5.7-4-4 5.5-.8L12 2z"
-        stroke="rgb(117, 125, 129)" stroke-width="1.5"/>
-    </svg>`,
-
-    campany: `<svg viewBox="0 0 24 24" width="14" height="14" fill="none">
-    <rect x="3" y="7" width="18" height="13" rx="2"
-      stroke="#6f93c1" stroke-width="1.5"/>
-    <path d="M9 7V5h6v2"
-      stroke="#6f93c1" stroke-width="1.5"/>
-  </svg>`,
-
-    calendar: `
-<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-  <rect x="3" y="4" width="18" height="17" rx="2"
-    stroke="#fafafa" stroke-width="1.6""/>
-  <path d="M8 2v4M16 2v4M3 10h18"
-    stroke="#fafafa" stroke-width="1.6"/>
-</svg>`,
-
-    heart: `
-<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-  <path d="M12 21s-7-4.5-7-10.5a4 4 0 0 1 7-2.5
-           4 4 0 0 1 7 2.5c0 6-7 10.5-7 10.5z"
-    stroke="#fafafa" stroke-width="1.6"/>
-</svg>`,
-
-    user: `
-<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-  <circle cx="12" cy="7.5" r="3.5"
-    stroke="#fafafa" stroke-width="1.6"/>
-  <path d="M4.5 20a7.5 7.5 0 0 1 15 0"
-    stroke="#fafafa" stroke-width="1.6"/>
-</svg>`,
-
-    faith: `
-<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-  <path d="M12 2.5v19M5.5 9.5h13"
-    stroke="#fafafa" stroke-width="1.6" stroke-linecap="round"/>
-</svg>`,
-
-    group: `
-<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-  <circle cx="7.5" cy="9" r="3"
-    stroke="#fafafa" stroke-width="1.6"/>
-  <circle cx="16.5" cy="9" r="3"
-    stroke="#fafafa" stroke-width="1.6"/>
-  <path d="M2.5 20a6 6 0 0 1 10 0M11.5 20a6 6 0 0 1 10 0"
-    stroke="#fafafa" stroke-width="1.6"/>
-</svg>`,
-
-    car: `
-<svg viewBox="0 0 24 24" width="20" height="20" fill="none">
-  <rect x="3" y="9" width="18" height="7" rx="2"
-    stroke="#fafafa" stroke-width="1.6"/>
-  <path d="M6 9l2-4h8l2 4"
-    stroke="#fafafa" stroke-width="1.6"/>
-  <circle cx="7.5" cy="17" r="1.5"
-    stroke="#fafafa" stroke-width="1.6"/>
-  <circle cx="16.5" cy="17" r="1.5"
-    stroke="#fafafa" stroke-width="1.6"/>
-</svg>`,
-
-    language: `
-<svg viewBox="0 0 24 24" width="22" height="22" fill="none">
-  <path d="M4 5h16M4 12h10M4 19h16"
-    stroke="rgb(117,125,129)" stroke-width="1.5"/>
-</svg>`,
-
-  }
-
-
-  // Inject ATS + Template CSS once
-
+  injectGoldSlateTemplateStylesII()
 
   return `
   <div class="resume_Template_1">
-    <aside class="sidebar_Template_3">
-      <div class="photo-wrap_Template_3">${p}</div>
+    <aside class="sidebar_Template_2">
+      <div class="photo-wrap_Template_2">${p}</div>
 
       <div style="margin-top:35px;text-align:center">
-        <div class="name_Template_3">${escapeHtml(data.personal.fullName || '')}</div>
-        <div class="role_Template_3">${escapeHtml(data.personal.title || '')}</div>
+        <div class="name_Template_2">${escapeHtml(data.personal.fullName || '')}</div>
+        <div class="role_Template_2">${escapeHtml(data.personal.title || '')}</div>
       </div>
 
       ${data.summary && data.summary.trim()
       ? `
-<section class="section_Template_3 summary">
-  <div  class="heading_Template_3">
+<section class="section_Template_2 summary">
+  <div  class="heading_Template_2">
     <h2><span>Profile</span></h2>
   </div>
-  <p class="about_Template_3">${escapeHtml(data.summary)}</p>
+  <p class="about_Template_2">${escapeHtml(data.summary)}</p>
 </section>
 `
       : ''}
@@ -2529,11 +2656,11 @@ ${(
       data.personal.website ||
       data.personal.linkedin
     ) ? `
-<div class="side-section_Template_3">
-  <div class="section-title_Template_3">
+<div class="side-section_Template_2">
+  <div class="section-title_Template_2">
     ${ICONS.contact} Contact
   </div>
-  <ul class="contact-list_Template_3">
+  <ul class="contact-list_Template_2">
 
     ${data.personal.phone
       ? `<li>${icon(ICONS.phone)}${escapeHtml(data.personal.phone)}</li>`
@@ -2595,9 +2722,8 @@ ${data.personal.driversLicence
 ">
 
 ${hasExperience() ? `
-<div class="heading_Template_3 overflow" style="margin-bottom: 5px; margin-top: 5px;">
-  <h2>${ICONS.experience}<span>Professional Experience</span></h2>
-  <div class="rule"></div>
+<div class="heading_Template_2 overflow" style="margin-bottom: 5px; margin-top: 5px;">
+  <h2><span>Professional Experience</span></h2>
 </div>
 ` : ``}
 
@@ -2620,7 +2746,7 @@ ${data.experience.map(exp => `
   ${exp.bullets && exp.bullets.length
           ? `
     ${exp.bullets.map(b => `
-     <li class="overflow ${b?.trim() ? 'li' : ''}">
+     <li class="overflow ${b?.trim() ? 'li' : ''}" style="color:#475569; line-height: 1.3">
     ${escapeHtml(b)}
         </li>
           `).join('')}
@@ -2628,15 +2754,12 @@ ${data.experience.map(exp => `
           : ''
         }
 `).join('')}
-
-        ${hasEducation() && `
-<!-- EDUCATION HEADING -->
-<div class="heading_Template_3 overflow" id="h2-edu" style="margin-bottom:5px; margin-top:30px;">
-  <h2>
-    ${ICONS.education}<span>EDUCATION</span>
-  </h2>
-  <div class="rule"></div>
-</div>
+                ${hasEducation() && `
+        <div class="heading_Template_2 overflow" id="h2-edu" style="margin-bottom:5px; margin-top:30px;">
+          <h2>
+            <span>EDUCATION</span>
+          </h2>
+        </div>
 `}
 
         <!-- EDUCATION ITEM -->
@@ -2649,26 +2772,93 @@ ${data.experience.map(exp => `
               <li class="overflow" style="display:flex;white-space:pre-wrap;">
               </li>
 
-              <li class="overflow ${edu.discription?.trim() ? 'li' : ''}">
+              <li class="overflow ${edu.discription?.trim() ? 'li' : ''}" style="color:#475569; line-height: 1.3">
              ${escapeHtml(edu.discription)}
              </li>
               `).join('')}
 
-              ${renderSkillsPreview()}
-              ${renderLanguagesPreview()}
-              ${renderInterestsPreview()}
+              <section class="section_Template_1 overflow">
+        ${hasSkills() ? `
+       <div class="heading_Template_1">
+       <h2>
+        ${ICONS.skill}
+         <span>Skills</span>
+         </h2>
+         <div class="rule"></div>
+         </div>
+         ` : ""}
 
-            <section class="section_Template_3 overflow">
+        <ul class="skills-list_Template_1 overflow">
+         ${data.skills
+        .filter(skill => skill.name?.trim())
+        .map(skill => `
+        <li>
+          ${escapeHtml(skill.name)}
+          ${skill.level ? renderLanguageLevel(skill.level) : ""}
+        </li>
+        `).join('')}
+          </ul>
+        </section>
+                          <section class="section_Template_1 overflow">
+                ${hasLanguage() ? `
+            <div class="heading_Template_1">
+            <h2>
+            ${ICONS.language}
+            <span>Languages</span>
+           </h2>
+            <div class="rule"></div>
+           </div>
+            ` : ""}
 
+      <ul class="skills-list_Template_1 languages-list_Template_1 overflow">
+        ${data.languages
+        .filter(lang => lang.name?.trim())
+         .map(lang => `
+        <li class="language-item_Template_1">
+         <span class="language-name_Template_1">
+          ${escapeHtml(lang.name)}
+         </span>
+       ${renderLanguageLevel(lang.level)}
+        </li>
+      `).join('')}
+      </ul>
+    </section>
+              
+              ${hasInterest() && `
+          <section class="section_Template_1 overflow">
+           <div class="heading_Template_1">
+            <h2>
+            ${ICONS.interests}
+           <span>Interests</span>
+           </h2>
+          <div class="rule"></div>
+          </div>
+        `}
+
+          <ul class="skills-list_Template_1 interests-list_Template_1">
+         ${data.interests
+          .filter(i => i && i.trim() !== '')
+          .map(i => `
+            <li class="interest-item_Template_2">
+              ${escapeHtml(i)}
+            </li>
+          `).join('')}
+         </ul>
+        </section>
+
+          
 ${hasReferences() ? `
-<div class="heading_Template_3" style="margin-top:30px">
-  <h2><span>References</span></h2>
-  <div class="rule"></div>
-</div>
+<section class="section_Template_2 overflow">
+          <div class="heading_Template_2" style="margin-top:30px">
+          <h2><span>References</span></h2>
+          </div>
 ` : ``}
+
+
+
           ${data.references.map(ref => `
          <div class="ref-card-wrapper">
-          <div class="ref-card_Template_3">
+          <div class="ref-card_Template_2">
 
         ${ref.name ? `<h4>${escapeHtml(ref.name)}</h4>` : ''}
 
@@ -2707,6 +2897,850 @@ ${hasReferences() ? `
   </div>
   `;
 }
+
+function renderPinkCorporate() {
+  const p = photoHtml();
+  injectPinkCorporateTemplateStyles()
+
+  return `
+  <div class="resume_Template_1">
+    <aside class="sidebar_Template_3">
+      <div class="photo-wrap_Template_3">${p}</div>
+
+      <div style="margin-top:35px;text-align:center">
+        <div class="name_Template_3">${escapeHtml(data.personal.fullName || '')}</div>
+        <div class="role_Template_3">${escapeHtml(data.personal.title || '')}</div>
+      </div>
+
+      ${data.summary && data.summary.trim()
+      ? `
+<section class="section_Template_3 summary">
+  <div  class="heading_Template_3">
+    <h2><span>Profile</span></h2>
+  </div>
+  <p class="about_Template_3">${escapeHtml(data.summary)}</p>
+</section>
+`
+      : ''}
+
+${(
+      data.personal.phone ||
+      data.personal.email ||
+      data.personal.location ||
+      data.personal.website ||
+      data.personal.linkedin
+    ) ? `
+<div class="side-section_Template_3">
+  <div class="section-title_Template_3">
+    ${ICONS.contact_w} Contact
+  </div>
+  <ul class="contact-list_Template_3">
+
+    ${data.personal.phone
+      ? `<li>${icon(ICONS.phone_w)}${escapeHtml(data.personal.phone)}</li>`
+      : ''}
+
+    ${data.personal.email
+      ? `<li>${icon(ICONS.email_w)}${escapeHtml(data.personal.email)}</li>`
+      : ''}
+
+    ${data.personal.location
+      ? `<li>${icon(ICONS.location_w)}${escapeHtml(data.personal.location)}</li>`
+      : ''}
+
+    ${data.personal.website
+      ? `<li>${icon(ICONS.website_w)}${escapeHtml(data.personal.website)}</li>`
+      : ''}
+
+    ${data.personal.linkedin
+      ? `<li>${icon(ICONS.linkedin_w)}${escapeHtml(data.personal.linkedin)}</li>`
+      : ''}
+
+    ${data.personal.dob
+      ? `<li>${icon(ICONS.calendar_w)}${escapeHtml(data.personal.dob)}</li>`
+      : ''}
+    ${data.personal.gender
+      ? `<li>${icon(ICONS.user_w)}${escapeHtml(data.personal.gender)}</li>`
+      : ''}
+
+${data.personal.race
+      ? `<li>${icon(ICONS.group_w)}${escapeHtml(data.personal.race)}</li>`
+      : ''}
+
+${data.personal.religion
+      ? `<li>${icon(ICONS.faith_w)}${escapeHtml(data.personal.religion)}</li>`
+      : ''}
+
+${data.personal.maritalStatus
+      ? `<li>${icon(ICONS.heart_w)}${escapeHtml(data.personal.maritalStatus)}</li>`
+      : ''}
+
+${data.personal.driversLicence
+      ? `<li>${icon(ICONS.car_w)}${escapeHtml(data.personal.driversLicence)}</li>`
+      : ''}
+
+  </ul>
+</div>
+` : ''}
+
+
+    </aside>
+<main class="content_Template_1" style="
+  display:flex;
+  flex-direction:column;
+  flex-grow:1;
+  background:#fff;
+  color:#0f172a;
+  font-size:10.5pt;
+  line-height:17px;
+">
+
+${hasExperience() ? `
+<div class="heading_Template_3 overflow" style="margin-bottom: 5px; margin-top: 5px;">
+  <h2>${ICONS.experience}<span>Professional Experience</span></h2>
+</div>
+` : ``}
+
+${data.experience.map(exp => `
+  <!-- EXPERIENCE ITEM -->
+  <div class="overflow" style="margin-top:1rem;font-weight:bold; display:flex; justify-content:space-between;">
+    <p style="font-weight:800">${escapeHtml(exp.campany)}</p>
+    ${[exp.start, exp.end].some(d => d && d.trim())
+          ? `<i style="font-weight:400;font-size:13px;">${[exp.start, exp.end]
+            .filter(d => d && d.trim())
+            .join(' – ')}</i>`
+          : ''
+        }
+  </div>
+
+  <p class="overflow" style="margin:0;font-weight:600;color:rgb(59,57,57); margin-bottom: 5px;">
+    ${escapeHtml(exp.role)}
+  </p>
+
+  ${exp.bullets && exp.bullets.length
+          ? `
+    ${exp.bullets.map(b => `
+     <li class="overflow ${b?.trim() ? 'li' : ''}" style="color:#475569; line-height: 1.3">
+    ${escapeHtml(b)}
+        </li>
+          `).join('')}
+      `
+          : ''
+        }
+`).join('')}
+
+        ${hasEducation() && `
+<!-- EDUCATION HEADING -->
+<div class="heading_Template_3 overflow" id="h2-edu" style="margin-bottom:5px; margin-top:30px;">
+  <h2>
+    ${ICONS.education}<span>EDUCATION</span>
+  </h2>
+</div>
+`}
+
+        <!-- EDUCATION ITEM -->
+        ${data.education.map(edu => `
+              <div class="overflow" style="margin-top:1rem;;font-weight:bold; display: flex; justify-content: space-between;">
+              <p style="font-weight: 800">${escapeHtml(edu.degree)}</p>
+              <i style="margin:0; float: right; font-weight:400; font-size: 13px; list-style-type: none;">${escapeHtml(edu.year || '')}</i>
+            </div>
+            <p class="overflow" style="margin:0; font-weight: 600; margin-bottom:5px; color: rgb(59, 57, 57);">${escapeHtml(edu.school)}</p>
+              <li class="overflow" style="display:flex;white-space:pre-wrap;">
+              </li>
+
+              <li class="overflow ${edu.discription?.trim() ? 'li' : ''}" style="color:#475569; line-height: 1.3">
+             ${escapeHtml(edu.discription)}
+             </li>
+              `).join('')}
+
+              <section class="section_Template_1 overflow">
+        ${hasSkills() ? `
+       <div class="heading_Template_1">
+       <h2>
+        ${ICONS.skill}
+         <span>Skills</span>
+         </h2>
+         <div class="rule"></div>
+         </div>
+         ` : ""}
+
+        <ul class="skills-list_Template_1 overflow">
+         ${data.skills
+        .filter(skill => skill.name?.trim())
+        .map(skill => `
+        <li>
+          ${escapeHtml(skill.name)}
+          ${skill.level ? renderLanguageLevel(skill.level) : ""}
+        </li>
+        `).join('')}
+          </ul>
+        </section>
+              
+
+          
+            <section class="section_Template_1 overflow">
+            ${hasLanguage() ? `
+            <div class="heading_Template_1">
+            <h2>
+            ${ICONS.language}
+            <span>Languages</span>
+           </h2>
+            <div class="rule"></div>
+           </div>
+            ` : ""}
+
+           <ul class="skills-list_Template_1 languages-list_Template_1 overflow">
+          ${data.languages
+         .filter(lang => lang.name?.trim())
+         .map(lang => `
+         <li class="language-item_Template_1">
+         <span class="language-name_Template_1">
+          ${escapeHtml(lang.name)}
+         </span>
+          ${renderLanguageLevel(lang.level)}
+         </li>
+        `).join('')}
+         </ul>
+       </section>
+
+              ${hasInterest() && `
+          <section class="section_Template_1 overflow">
+           <div class="heading_Template_1">
+            <h2>
+            ${ICONS.interests}
+           <span>Interests</span>
+           </h2>
+          <div class="rule"></div>
+          </div>
+        `}
+
+          <ul class="skills-list_Template_1 interests-list_Template_1">
+         ${data.interests
+          .filter(i => i && i.trim() !== '')
+          .map(i => `
+            <li class="interest-item_Template_2">
+              ${escapeHtml(i)}
+            </li>
+          `).join('')}
+         </ul>
+        </section>
+
+            <section class="section_Template_3 overflow">
+
+${hasReferences() ? `
+<div class="heading_Template_3" style="margin-top:30px">
+  <h2><span>References</span></h2>
+</div>
+` : ``}
+          ${data.references.map(ref => `
+         <div class="ref-card-wrapper">
+          <div class="ref-card_Template_1">
+
+        ${ref.name ? `<h4>${escapeHtml(ref.name)}</h4>` : ''}
+
+         ${(ref.campany || ref.position) ? `
+         <p class="ref-line">
+          ${ICONS.campany}
+          ${[
+              ref.campany
+                ? `<strong>${escapeHtml(ref.campany)}</strong>`
+                : '',
+              ref.position
+                ? escapeHtml(ref.position)
+                : ''
+            ].filter(Boolean).join(' / ')}
+        </p>
+      ` : ''}
+
+      ${ref.phone ? `
+        <p class="ref-line">
+          ${ICONS.phone}
+          ${escapeHtml(ref.phone)}
+        </p>
+      ` : ''}
+
+      ${ref.email ? `
+        <p class="ref-line">
+          ${ICONS.email}
+          ${escapeHtml(ref.email)}
+        </p>
+      ` : ''}
+          </div>
+        </div>
+        `).join('')}
+      </section>
+        </main>
+  </div>
+  `;
+}
+
+function renderPinkCorporateII() {
+  const p = photoHtml();
+  injectPinkCorporateTemplateStylesII()
+
+  return `
+  <div class="resume_Template_1">
+    <aside class="sidebar_Template_3">
+      <div class="photo-wrap_Template_3">${p}</div>
+
+      <div style="margin-top:35px;text-align:center">
+        <div class="name_Template_3">${escapeHtml(data.personal.fullName || '')}</div>
+        <div class="role_Template_3">${escapeHtml(data.personal.title || '')}</div>
+      </div>
+
+      ${data.summary && data.summary.trim()
+      ? `
+<section class="section_Template_3 summary">
+  <div  class="heading_Template_3">
+    <h2><span>Profile</span></h2>
+  </div>
+  <p class="about_Template_3">${escapeHtml(data.summary)}</p>
+</section>
+`
+      : ''}
+
+${(
+      data.personal.phone ||
+      data.personal.email ||
+      data.personal.location ||
+      data.personal.website ||
+      data.personal.linkedin
+    ) ? `
+<div class="side-section_Template_3">
+  <div class="section-title_Template_3">
+    ${ICONS.contact_w} Contact
+  </div>
+  <ul class="contact-list_Template_3">
+
+    ${data.personal.phone
+      ? `<li>${icon(ICONS.phone_w)}${escapeHtml(data.personal.phone)}</li>`
+      : ''}
+
+    ${data.personal.email
+      ? `<li>${icon(ICONS.email_w)}${escapeHtml(data.personal.email)}</li>`
+      : ''}
+
+    ${data.personal.location
+      ? `<li>${icon(ICONS.location_w)}${escapeHtml(data.personal.location)}</li>`
+      : ''}
+
+    ${data.personal.website
+      ? `<li>${icon(ICONS.website_w)}${escapeHtml(data.personal.website)}</li>`
+      : ''}
+
+    ${data.personal.linkedin
+      ? `<li>${icon(ICONS.linkedin_w)}${escapeHtml(data.personal.linkedin)}</li>`
+      : ''}
+
+    ${data.personal.dob
+      ? `<li>${icon(ICONS.calendar_w)}${escapeHtml(data.personal.dob)}</li>`
+      : ''}
+    ${data.personal.gender
+      ? `<li>${icon(ICONS.user_w)}${escapeHtml(data.personal.gender)}</li>`
+      : ''}
+
+${data.personal.race
+      ? `<li>${icon(ICONS.group_w)}${escapeHtml(data.personal.race)}</li>`
+      : ''}
+
+${data.personal.religion
+      ? `<li>${icon(ICONS.faith_w)}${escapeHtml(data.personal.religion)}</li>`
+      : ''}
+
+${data.personal.maritalStatus
+      ? `<li>${icon(ICONS.heart_w)}${escapeHtml(data.personal.maritalStatus)}</li>`
+      : ''}
+
+${data.personal.driversLicence
+      ? `<li>${icon(ICONS.car_w)}${escapeHtml(data.personal.driversLicence)}</li>`
+      : ''}
+
+  </ul>
+</div>
+` : ''}
+
+
+    </aside>
+<main class="content_Template_1" style="
+  display:flex;
+  flex-direction:column;
+  flex-grow:1;
+  background:#fff;
+  color:#0f172a;
+  font-size:10.5pt;
+  line-height:17px;
+">
+
+${hasExperience() ? `
+<div class="heading_Template_3 overflow" style="margin-bottom: 5px; margin-top: 5px;">
+  <h2>${ICONS.experience}<span>Professional Experience</span></h2>
+</div>
+` : ``}
+
+${data.experience.map(exp => `
+  <!-- EXPERIENCE ITEM -->
+  <div class="overflow" style="margin-top:1rem;font-weight:bold; display:flex; justify-content:space-between;">
+    <p style="font-weight:800">${escapeHtml(exp.campany)}</p>
+    ${[exp.start, exp.end].some(d => d && d.trim())
+          ? `<i style="font-weight:400;font-size:13px;">${[exp.start, exp.end]
+            .filter(d => d && d.trim())
+            .join(' – ')}</i>`
+          : ''
+        }
+  </div>
+
+  <p class="overflow" style="margin:0;font-weight:600;color:rgb(59,57,57); margin-bottom: 5px;">
+    ${escapeHtml(exp.role)}
+  </p>
+
+  ${exp.bullets && exp.bullets.length
+          ? `
+    ${exp.bullets.map(b => `
+     <li class="overflow ${b?.trim() ? 'li' : ''}" style="color:#475569; line-height: 1.3">
+    ${escapeHtml(b)}
+        </li>
+          `).join('')}
+      `
+          : ''
+        }
+`).join('')}
+
+        ${hasEducation() && `
+<!-- EDUCATION HEADING -->
+<div class="heading_Template_3 overflow" id="h2-edu" style="margin-bottom:5px; margin-top:30px;">
+  <h2>
+    ${ICONS.education}<span>EDUCATION</span>
+  </h2>
+</div>
+`}
+
+        <!-- EDUCATION ITEM -->
+        ${data.education.map(edu => `
+              <div class="overflow" style="margin-top:1rem;;font-weight:bold; display: flex; justify-content: space-between;">
+              <p style="font-weight: 800">${escapeHtml(edu.degree)}</p>
+              <i style="margin:0; float: right; font-weight:400; font-size: 13px; list-style-type: none;">${escapeHtml(edu.year || '')}</i>
+            </div>
+            <p class="overflow" style="margin:0; font-weight: 600; margin-bottom:5px; color: rgb(59, 57, 57);">${escapeHtml(edu.school)}</p>
+              <li class="overflow" style="display:flex;white-space:pre-wrap;">
+              </li>
+
+              <li class="overflow ${edu.discription?.trim() ? 'li' : ''}" style="color:#475569; line-height: 1.3">
+             ${escapeHtml(edu.discription)}
+             </li>
+              `).join('')}
+
+
+        <section class="section_Template_1 overflow">
+        ${hasSkills() ? `
+       <div class="heading_Template_1">
+       <h2>
+        ${ICONS.skill}
+         <span>Skills</span>
+         </h2>
+         <div class="rule"></div>
+         </div>
+         ` : ""}
+
+        <ul class="skills-list_Template_1 overflow">
+         ${data.skills
+        .filter(skill => skill.name?.trim())
+        .map(skill => `
+        <li>
+          ${escapeHtml(skill.name)}
+          ${skill.level ? renderLanguageLevel(skill.level) : ""}
+        </li>
+        `).join('')}
+          </ul>
+        </section>
+
+
+
+            <section class="section_Template_1 overflow">
+            ${hasLanguage() ? `
+            <div class="heading_Template_1">
+            <h2>
+            ${ICONS.language}
+            <span>Languages</span>
+           </h2>
+            <div class="rule"></div>
+           </div>
+            ` : ""}
+
+      <ul class="skills-list_Template_1 languages-list_Template_1 overflow">
+        ${data.languages
+        .filter(lang => lang.name?.trim())
+         .map(lang => `
+        <li class="language-item_Template_1">
+         <span class="language-name_Template_1">
+          ${escapeHtml(lang.name)}
+         </span>
+       ${renderLanguageLevel(lang.level)}
+        </li>
+      `).join('')}
+      </ul>
+    </section>
+
+              ${hasInterest() && `
+          <section class="section_Template_1 overflow">
+           <div class="heading_Template_1">
+            <h2>
+            ${ICONS.interests}
+           <span>Interests</span>
+           </h2>
+          <div class="rule"></div>
+          </div>
+        `}
+
+          <ul class="skills-list_Template_1 interests-list_Template_1">
+         ${data.interests
+          .filter(i => i && i.trim() !== '')
+          .map(i => `
+            <li class="interest-item_Template_2">
+              ${escapeHtml(i)}
+            </li>
+          `).join('')}
+         </ul>
+        </section>
+
+            <section class="section_Template_3 overflow">
+
+${hasReferences() ? `
+<div class="heading_Template_3" style="margin-top:30px">
+  <h2><span>References</span></h2>
+</div>
+` : ``}
+          ${data.references.map(ref => `
+         <div class="ref-card-wrapper">
+          <div class="ref-card_Template_1">
+
+        ${ref.name ? `<h4>${escapeHtml(ref.name)}</h4>` : ''}
+
+         ${(ref.campany || ref.position) ? `
+         <p class="ref-line">
+          ${ICONS.campany}
+          ${[
+              ref.campany
+                ? `<strong>${escapeHtml(ref.campany)}</strong>`
+                : '',
+              ref.position
+                ? escapeHtml(ref.position)
+                : ''
+            ].filter(Boolean).join(' / ')}
+        </p>
+      ` : ''}
+
+      ${ref.phone ? `
+        <p class="ref-line">
+          ${ICONS.phone}
+          ${escapeHtml(ref.phone)}
+        </p>
+      ` : ''}
+
+      ${ref.email ? `
+        <p class="ref-line">
+          ${ICONS.email}
+          ${escapeHtml(ref.email)}
+        </p>
+      ` : ''}
+          </div>
+        </div>
+        `).join('')}
+      </section>
+        </main>
+  </div>
+  `;
+}
+
+function ModernAtsPhoto() {
+  injectModernAtsTemplateStyles()
+  const p = photoHtml();
+
+  return `
+  <div class="resume_Template_1">
+            <aside class="header" 
+        style="background: linear-gradient(135deg, #0f172a, #1e293b, #0ea5a4);
+            padding: 40px 40px 80px 40px;
+            color: white;
+            position: relative;">
+
+            <div class="header-grid" 
+            style="display: flex;
+            justify-content: space-between;
+            align-items: center;">
+            <div>
+
+                    <div class="name"
+                     style="font-size: 42px;
+                    font-family: Space Grotesk;
+                    font-weight: 700;
+                    letter-spacing: 2px;">${escapeHtml(data.personal.fullName || '')}</div>
+
+                    <div class="title" 
+                    style="opacity: .85;
+                    margin-top: 6px;
+                    letter-spacing: 2px;
+                    font-size: 14px;">${escapeHtml(data.personal.title || '')}</div>
+                    </div>
+
+                <ul class="contact-list_Template_1" style="display: grid;grid-template-columns: 1fr 1fr;">
+
+    ${data.personal.phone
+      ? `<li style="font-size:14px">${icon(ICONS.phone_w)}${escapeHtml(data.personal.phone)}</li>`
+      : ''}
+
+    ${data.personal.email
+      ? `<li style="font-size:14px">${icon(ICONS.email_w)}${escapeHtml(data.personal.email)}</li>`
+      : ''}
+
+    ${data.personal.location
+      ? `<li style="font-size:14px">${icon(ICONS.location_w)}${escapeHtml(data.personal.location)}</li>`
+      : ''}
+
+    ${data.personal.website
+      ? `<li style="font-size:14px">${icon(ICONS.website_w)}${escapeHtml(data.personal.website)}</li>`
+      : ''}
+
+    ${data.personal.linkedin
+      ? `<li style="font-size:14px">${icon(ICONS.linkedin_w)}${escapeHtml(data.personal.linkedin)}</li>`
+      : ''}
+
+    ${data.personal.dob
+      ? `<li style="font-size:14px">${icon(ICONS.calendar_w)}${escapeHtml(data.personal.dob)}</li>`
+      : ''}
+    ${data.personal.gender
+      ? `<li style="font-size:14px">${icon(ICONS.user_w)}${escapeHtml(data.personal.gender)}</li>`
+      : ''}
+
+${data.personal.race
+      ? `<li style="font-size:14px">${icon(ICONS.group_w)}${escapeHtml(data.personal.race)}</li>`
+      : ''}
+
+${data.personal.religion
+      ? `<li style="font-size:14px">${icon(ICONS.faith_w)}${escapeHtml(data.personal.religion)}</li>`
+      : ''}
+
+${data.personal.maritalStatus
+      ? `<li style="font-size:14px">${icon(ICONS.heart_w)}${escapeHtml(data.personal.maritalStatus)}</li>`
+      : ''}
+
+${data.personal.driversLicence
+      ? `<li style="font-size:14px">${icon(ICONS.car_w)}${escapeHtml(data.personal.driversLicence)}</li>`
+      : ''}
+  </ul>
+            </div>
+
+            <div class="profile" 
+            style="position: absolute;
+            display: flex;
+            justify-content: center;
+            bottom: -55px;
+            left: 60px;
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 6px solid white;
+            background: #0f172a;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .25);">
+            <div>${p}</div>
+            </div>
+        </aside>
+        <main
+            style="padding: 100px 60px 60px 60px;">
+            <!-- LEFT SIDE -->
+
+            <div>
+          ${data.summary && data.summary.trim()
+           ? `
+          <section class="overflow" style="margin-top:50px">
+         <div>
+         <h2 style="margin-bottom:20px">${ICONS.profile}<span style="margin-left:30px">Profile</span></h2>
+         </div>
+         <p style="color:#475569; line-height: 1.6;">${escapeHtml(data.summary)}</p>
+          </section>
+            `: ''}
+            </div>
+
+            ${hasExperience() ? `
+            <div class="heading_Template_1 overflow" style="margin-bottom: 5px; margin-top: 40px;">
+            <h2>${ICONS.experience}<span>Professional Experience</span></h2>
+           <div class="rule" style="background: linear-gradient(135deg, #0f172a, #1e293b, #0ea5a4);"></div>
+           </div>
+            ` : ``}
+
+          ${data.experience.map(exp => `
+          <!-- EXPERIENCE ITEM -->
+          <div class="overflow" style="margin-top:1rem;font-weight:bold; display:flex; justify-content:space-between;">
+          <p style="font-weight:800">${escapeHtml(exp.campany)}</p>
+          ${[exp.start, exp.end].some(d => d && d.trim())
+          ? `<i style="font-weight:400;font-size:13px;">${[exp.start, exp.end]
+            .filter(d => d && d.trim())
+            .join(' – ')}</i>`
+          : ''
+        }
+  </div>
+
+          <p class="overflow" style="margin:0;font-weight:600;color:rgb(59,57,57); margin-bottom: 5px;">
+          ${escapeHtml(exp.role)}
+           </p>
+
+        ${exp.bullets && exp.bullets.length
+          ? `
+       ${exp.bullets.map(b => `
+        <li class="overflow ${b?.trim() ? 'li' : ''}" style="color:#475569; line-height: 1.3">
+       ${escapeHtml(b)}
+        </li>
+          `).join('')}
+      `
+          : ''
+        }
+`).join('')}
+
+${hasEducation() && `
+<!-- EDUCATION HEADING -->
+<div class="heading_Template_1 overflow" id="h2-edu" style="margin-bottom:5px;">
+  <h2>
+    ${ICONS.education}<span>EDUCATION</span>
+  </h2>
+  <div class="rule" style="background: linear-gradient(135deg, #0f172a, #1e293b, #0ea5a4);"></div>
+</div>
+`}
+
+        <!-- EDUCATION ITEM -->
+        ${data.education.map(edu => `
+              <div class="overflow" style="margin-top:1rem;;font-weight:bold; display: flex; justify-content: space-between;">
+              <p style="font-weight: 800">${escapeHtml(edu.degree)}</p>
+              <i style="margin:0; float: right; font-weight:400; font-size: 13px; list-style-type: none;">${escapeHtml(edu.year || '')}</i>
+            </div>
+            <p class="overflow" style="margin:0; font-weight: 600; margin-bottom:5px; color: rgb(59, 57, 57);">${escapeHtml(edu.school)}</p>
+              <li class="overflow" style="display:flex;white-space:pre-wrap;">
+              </li>
+
+              <li class="overflow ${edu.discription?.trim() ? 'li' : ''}" style="color:#475569; line-height: 1.3">
+             ${escapeHtml(edu.discription)}
+             </li>
+              `).join('')}
+              
+              
+              <section class="section_Template_1 overflow">
+              ${hasSkills() ? `
+              <div class="heading_Template_1">
+              <h2>
+              ${ICONS.skill}
+             <span>Skills</span>
+              </h2>
+            <div class="rule" style="background: linear-gradient(135deg, #0f172a, #1e293b, #0ea5a4);"></div>
+            </div>
+             ` : ""}
+
+           <ul class="skills-list_Template_1 overflow">
+           ${data.skills
+         .filter(skill => skill.name?.trim())
+         .map(skill => `
+          <li style="color:#475569;">
+          ${escapeHtml(skill.name)}
+          ${skill.level ? renderLanguageLevel(skill.level) : ""}
+          </li>
+          `).join('')}
+           </ul>
+          </section>
+
+            <section class="section_Template_1 overflow">
+                ${hasLanguage() ? `
+            <div class="heading_Template_1">
+            <h2>
+            ${ICONS.language}
+            <span>Languages</span>
+           </h2>
+            <div class="rule" style="background: linear-gradient(135deg, #0f172a, #1e293b, #0ea5a4);"></div>
+           </div>
+            ` : ""}
+
+      <ul class="skills-list_Template_1 languages-list_Template_1 overflow">
+        ${data.languages
+        .filter(lang => lang.name?.trim())
+         .map(lang => `
+        <li class="language-item_Template_1" style="color:#475569;">
+         <span class="language-name_Template_1">
+          ${escapeHtml(lang.name)}
+         </span>
+       ${renderLanguageLevel(lang.level)}
+        </li>
+      `).join('')}
+      </ul>
+    </section>
+
+            
+          ${hasInterest() && `
+          <section class="section_Template_1 overflow">
+           <div class="heading_Template_1">
+            <h2>
+            ${ICONS.interests}
+           <span>Interests</span>
+           </h2>
+          <div class="rule" style="background: linear-gradient(135deg, #0f172a, #1e293b, #0ea5a4);"></div>
+          </div>
+        `}
+
+          <ul class="skills-list_Template_1 interests-list_Template_1">
+         ${data.interests
+          .filter(i => i && i.trim() !== '')
+          .map(i => `
+            <li class="interest-item_Template_2" style="color:#475569;">
+              ${escapeHtml(i)}
+            </li>
+          `).join('')}
+         </ul>
+        </section>
+
+            <section class="section_Template_1 overflow">
+         ${hasReferences() ? `
+        <div class="heading_Template_3" style="margin-top:30px">
+        <h2><span>References</span></h2>
+        </div>
+        ` : ``}
+          ${data.references.map(ref => `
+         <div class="ref-card-wrapper">
+          <div class="ref-card_Template_1">
+
+        ${ref.name ? `<h4>${escapeHtml(ref.name)}</h4>` : ''}
+
+         ${(ref.campany || ref.position) ? `
+         <p class="ref-line">
+          ${ICONS.campany}
+          ${[
+              ref.campany
+                ? `<strong>${escapeHtml(ref.campany)}</strong>`
+                : '',
+              ref.position
+                ? escapeHtml(ref.position)
+                : ''
+            ].filter(Boolean).join(' / ')}
+        </p>
+      ` : ''}
+
+      ${ref.phone ? `
+        <p class="ref-line">
+          ${ICONS.phone}
+          ${escapeHtml(ref.phone)}
+        </p>
+      ` : ''}
+
+      ${ref.email ? `
+        <p class="ref-line">
+          ${ICONS.email}
+          ${escapeHtml(ref.email)}
+        </p>
+      ` : ''}
+          </div>
+        </div>
+        `).join('')}
+
+        </main>
+  </div>
+  `;
+}
+
 
 function renderCreative() {
   const p = photoHtml();
@@ -3492,7 +4526,6 @@ function selectTemplate(template) {
   renderPreview()
   closeLayoutPreview()
   bindProfileInputs()
-  injectmidnightTemplateStyles()
   save()
 }
 
@@ -3537,323 +4570,6 @@ document.querySelectorAll(".filter").forEach(button => {
   })
 })
 
-function injectGoldSlateTemplateStyles(){
-  if (!document.getElementById('midnight-goldSlate-style')) {
-    const style = document.createElement('style');
-    style.id = 'midnight-template-style';
-
-    style.textContent = `
-    :root {
-  --fa-primary: #1f4d53;   /* dark teal */
-  --fa-accent: #c8a24d;    /* gold */
-  --dark: #1f4d53;
-  --gray: #6b7280;
-  --light: #f4f1eb;        /* beige */
-  --border: #e5e1d8;
-}
-
-.skill {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-/* ATS-skills */
-.ATS-skills {
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-  gap: 15px;
-}
-
-.resume {
-  width: 794px;
-  min-width: 794px;
-  min-height: 1122px;
-  max-height: 1122px;
-  margin-bottom: 30px;
-}
-
-.resume_Template_1 {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #f4f1eb; /* changed */
-  width: 794px;
-  min-width: 794px;
-  min-height: 1122px;
-  font-family: Rubik, Arial, Helvetica, "Noto Sans Devanagari", "Noto Sans CJK SC Thin", "Noto Sans SC", "Noto Sans Hebrew", "Noto Sans Bengali", sans-serif;      
-}
-
-/* ================================
-   SIDEBAR
-================================ */
-.sidebar_Template_2 {
-  width: 34%;
-  padding: 50px 30px;
-  background: #1f4d53; /* changed from gradient */
-  color: #ffffff; /* pure white */
-  position: relative;
-  max-height: 1122px;
-  overflow-y: hidden;
-}
-
-.photo-wrap_Template_2 {
-  width: 140px;
-  height: 140px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin: 0 auto 25px;
-  border: 4px solid #c8a24d; /* gold */
-  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
-}
-
-.photo-wrap_Template_2 img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.section-title_Template_2 {
-  font-size: 13px;
-  font-weight: 600;
-  margin-bottom: 15px;
-  text-transform: uppercase;
-  letter-spacing: 1.5px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #c8a24d; /* gold */
-}
-
-.name_Template_2 {
-  font-size: 24px;
-  font-weight: 700;
-  text-align: center;
-  letter-spacing: 0.5px;
-  color: #ffffff;
-}
-
-.role_Template_2 {
-  font-size: 14px;
-  text-align: center;
-  margin-top: 6px;
-  color: #e5e7eb; /* softer white */
-}
-
-.side-section_Template_2 {
-  margin-top: 40px;
-}
-
-.contact-list_Template_2,
-.skills-list_Template_2 {
-  list-style: none;
-}
-
-.summary {
-  margin-top: 1rem;
-}
-
-.summary .heading_Template_2 h2 {
-  font-size: 16px;
-  color: #ffffff;
-  margin-top: 1rem;
-  margin-bottom: -0.5rem;
-  width: 100%;
-  text-align: center;
-  border: none;
-}
-
-.skills-list_Template_2 {
-  border-left: 2px solid #c8a24d; /* gold */
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-}
-
-.language-row {
-  display: grid;
-  grid-template-columns: 1fr 140px auto;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.language-list li {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.lang-level {
-  display: flex;
-  gap: 4px;
-}
-
-.lang-level .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: 1px solid #c8a24d; /* gold */
-}
-
-.lang-level .dot.filled {
-  background: #c8a24d; /* gold */
-}
-
-.contact-list_Template_2 li {
-  font-size: 13px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #ffffff;
-  line-height: 1.5;
-}
-
-.skills-list_Template_2 li {
-  font-size: 14px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #1f4d53; /* dark teal */
-  line-height: 1.5;
-  padding-left: 20px;
-  font-weight: 600;
-}
-
-.timeline_Template_2 {
-  margin-bottom: 25px;
-  padding-left: 20px;
-  border-left: 2px solid #c8a24d; /* gold */
-  position: relative;
-}
-
-/* ================================
-   MAIN CONTENT
-================================ */
-.content_Template_1 {
-  width: 66%;
-  padding: 50px 50px;
-}
-
-.heading_Template_2 {
-  margin: 5px 0 15px 0;
-}
-
-.heading_Template_2 h2 {
-  display: inline-block;
-  padding: 6px 22px;
-  background: #c8a24d; /* gold pill */
-  color: #ffffff;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  width: 100%;
-  text-align: center;
-}
-
-.rule {
-  display: none; /* remove blue gradient line */
-}
-
-.about_Template_2 {
-  font-size: 14px;
-  line-height: 1.8;
-  color: #ffffff;
-}
-
-/* ============================
-   SKILLS EDITOR
-============================ */
-
-.skill-row {
-  display: grid;
-  grid-template-columns: 1fr 140px auto;
-  gap: 8px;
-  margin-bottom: 8px;
-}
-
-.skill-row .input_data {
-  width: 100%;
-}
-
-.skill-row .language-level {
-  width: 100%;
-  padding: 8px;
-  border-radius: 8px;
-  border: 1px solid #c8a24d;
-  background: #fff;
-  font-size: 13px;
-}
-
-/* ================================
-   REFERENCES
-================================ */
-.ref-card-wrapper {
-  margin-bottom: 15px;
-}
-
-.ref-card_Template_2 {
-  background: #ffffff;
-  padding: 18px 20px;
-  border-radius: 12px;
-  border: 1px solid #e5e1d8;
-  transition: all 0.2s ease;
-}
-
-.ref-card_Template_2:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.05);
-}
-
-.ref-card_Template_2 h4 {
-  font-size: 14px;
-  margin-bottom: 6px;
-  font-weight: 600;
-}
-
-.ref-line {
-  font-size: 13px;
-  margin-bottom: 6px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.section_Template_2,
-.ref-card_Template_2 {
-  break-inside: avoid;
-}
-
-li {
-  list-style-type: none;
-}
-
-.li {
-  position: relative;
-  list-style: none;
-  margin-left: 40px;
-}
-
-.li::before {
-  content: "";
-  position: absolute;
-  left: -20px;
-  top: 0.6em;
-  width: 5px;
-  height: 5px;
-  background: #c8a24d; /* gold bullet */
-  border-radius: 50%;
-}
-`;
-
-    document.head.appendChild(style);
-  }
-}
-
-
 function injectmidnightTemplateStyles() {
   if (!document.getElementById('midnight-template-style')) {
 
@@ -3870,6 +4586,7 @@ function injectmidnightTemplateStyles() {
       --light: #f8fafc;
       --border: #e2e8f0;
     }
+
     .skill {
       display: flex;
       flex-direction: column;
@@ -3890,17 +4607,6 @@ function injectmidnightTemplateStyles() {
     max-height: 1122px;
     margin-bottom: 30px;
     background: #ffffff;
-}
-
-.resume_Template_1 {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  background: #ffffff;
-      width: 794px;
-    min-width: 794px;
-    min-height: 1122px;
 }
 
 /* ================================
@@ -4006,26 +4712,6 @@ function injectmidnightTemplateStyles() {
   gap: 4px;
 }
 
-.lang-level .dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  border: 1px solid #2878e0;
-}
-
-.lang-level .dot.filled {
-  background: #2878e0;
-}
-.contact-list_Template_1 li {
-  font-size: 13px;
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  color: #e2e8f0;
-  line-height: 1.5;
-}
-
 .skills-list_Template_1 li {
   font-size: 14px;
   margin-bottom: 10px;
@@ -4070,13 +4756,6 @@ function injectmidnightTemplateStyles() {
   letter-spacing: 1.5px;
 }
 
-.rule {
-  height: 2px;
-  width: 50px;
-  background: linear-gradient(to right, #6f93c1, #4f46e5);
-  margin-top: 8px;
-  border-radius: 2px;
-}
 
 .about_Template_1 {
   font-size: 14px;
@@ -4125,11 +4804,6 @@ function injectmidnightTemplateStyles() {
   transition: all 0.2s ease;
 }
 
-.ref-card_Template_1:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px rgba(15,23,42,0.05);
-}
-
 .ref-card_Template_1 h4 {
   font-size: 14px;
   margin-bottom: 6px;
@@ -4163,22 +4837,557 @@ li {
   margin-left: 40px;
 }
 
-.li::before {
-  content: "";
-  position: absolute;
-  left: -20px;
-  top: 0.6em;         /* aligns bullet with text */
-  width: 5px;
-  height: 5px;
-  background: #6f93c1;
-  border-radius: 50%;
-}
     `;
 
     document.head.appendChild(style);
   }
 }
 
+function injectGoldSlateTemplateStyles(){
+  if (!document.getElementById('midnight-goldSlate-style')) {
+    const style = document.createElement('style');
+    style.id = 'midnight-template-style';
+
+    style.textContent = `
+    :root {
+  --fa-primary: #1f4d53;   /* dark teal */
+  --fa-accent: #c8a24d;    /* gold */
+  --dark: #1f4d53;
+  --gray: #6b7280;
+  --light: #f4f1eb;        /* beige */
+  --border: #e5e1d8;
+}
+
+.skill {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ATS-skills */
+.ATS-skills {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 15px;
+}
+
+.resume {
+  width: 794px;
+  min-width: 794px;
+  min-height: 1122px;
+  max-height: 1122px;
+  margin-bottom: 30px;
+}
+
+/* ================================
+   SIDEBAR
+================================ */
+.sidebar_Template_2 {
+  width: 34%;
+  padding: 50px 30px;
+  background: #1f4d53; /* changed from gradient */
+  color: #ffffff; /* pure white */
+  position: relative;
+  max-height: 1122px;
+  overflow-y: hidden;
+}
+
+.photo-wrap_Template_2 {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 25px;
+  border: 4px solid #c8a24d; /* gold */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.photo-wrap_Template_2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.section-title_Template_2 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #c8a24d; /* gold */
+}
+
+.name_Template_2 {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+}
+
+.role_Template_2 {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 6px;
+  color: #e5e7eb; /* softer white */
+}
+
+.side-section_Template_2 {
+  margin-top: 40px;
+}
+
+.contact-list_Template_2,
+.skills-list_Template_2 {
+  list-style: none;
+}
+
+.summary {
+  margin-top: 1rem;
+}
+
+.summary .heading_Template_2 h2 {
+  font-size: 16px;
+  color: #ffffff;
+  margin-top: 1rem;
+  margin-bottom: -0.5rem;
+  width: 100%;
+  text-align: center;
+  border: none;
+}
+
+.skills-list_Template_2 {
+  border-left: 2px solid #c8a24d; /* gold */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.language-row {
+  display: grid;
+  grid-template-columns: 1fr 140px auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.language-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lang-level {
+  display: flex;
+  gap: 4px;
+}
+
+.contact-list_Template_2 li {
+  font-size: 13px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+.skills-list_Template_2 li {
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1f4d53; /* dark teal */
+  line-height: 1.5;
+  padding-left: 20px;
+  font-weight: 600;
+}
+
+.timeline_Template_2 {
+  margin-bottom: 25px;
+  padding-left: 20px;
+  border-left: 2px solid #c8a24d; /* gold */
+  position: relative;
+}
+
+/* ================================
+   MAIN CONTENT
+================================ */
+.content_Template_1 {
+  width: 66%;
+  padding: 50px 50px;
+}
+
+.heading_Template_2 {
+  margin: 5px 0 15px 0;
+}
+
+.heading_Template_2 h2 {
+  display: inline-block;
+  padding: 6px 22px;
+  background: #c8a24d; /* gold pill */
+  color: #ffffff;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  width: 100%;
+  text-align: center;
+}
+
+.about_Template_2 {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #ffffff;
+}
+
+/* ============================
+   SKILLS EDITOR
+============================ */
+
+.skill-row {
+  display: grid;
+  grid-template-columns: 1fr 140px auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.skill-row .input_data {
+  width: 100%;
+}
+
+.skill-row .language-level {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #c8a24d;
+  background: #fff;
+  font-size: 13px;
+}
+
+/* ================================
+   REFERENCES
+================================ */
+.ref-card-wrapper {
+  margin-bottom: 15px;
+}
+
+.ref-card_Template_2 {
+  background: #ffffff;
+  padding: 18px 20px;
+  border-radius: 12px;
+  border: 1px solid #e5e1d8;
+  transition: all 0.2s ease;
+}
+
+.ref-card_Template_2 h4 {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.ref-line {
+  font-size: 13px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.section_Template_2,
+.ref-card_Template_2 {
+  break-inside: avoid;
+}
+
+li {
+  list-style-type: none;
+}
+
+.li {
+  position: relative;
+  list-style: none;
+  margin-left: 40px;
+}
+`;
+
+    document.head.appendChild(style);
+  }
+}
+
+function injectGoldSlateTemplateStylesII(){
+  if (!document.getElementById('goldSlate-styleII')) {
+    const style = document.createElement('style');
+    style.id = 'goldSlate-styleII';
+
+    style.textContent = `
+    :root {
+  --fa-primary: #1f4d53;   /* dark teal */
+  --fa-accent: #c8a24d;    /* gold */
+  --dark: #1f4d53;
+  --gray: #6b7280;
+  --light: #f4f1eb;        /* beige */
+  --border: #e5e1d8;
+}
+
+.skill {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ATS-skills */
+.ATS-skills {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 15px;
+}
+
+.resume {
+  width: 794px;
+  min-width: 794px;
+  min-height: 1122px;
+  max-height: 1122px;
+  margin-bottom: 30px;
+}
+
+/* ================================
+   SIDEBAR
+================================ */
+.sidebar_Template_2 {
+  width: 34%;
+  padding: 50px 30px;
+  background: #1f4d53; /* changed from gradient */
+  color: #ffffff; /* pure white */
+  position: relative;
+  max-height: 1122px;
+  overflow-y: hidden;
+}
+
+.photo-wrap_Template_2 {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 25px;
+  border: 4px solid #c8a24d; /* gold */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.photo-wrap_Template_2 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.section-title_Template_2 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #c8a24d; /* gold */
+}
+
+.name_Template_2 {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+}
+
+.role_Template_2 {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 6px;
+  color: #e5e7eb; /* softer white */
+}
+
+.side-section_Template_2 {
+  margin-top: 40px;
+}
+
+.contact-list_Template_2,
+.skills-list_Template_2 {
+  list-style: none;
+}
+
+.summary {
+  margin-top: 1rem;
+}
+
+.summary .heading_Template_2 h2 {
+  font-size: 16px;
+  color: #ffffff;
+  margin-top: 1rem;
+  margin-bottom: -0.5rem;
+  width: 100%;
+  text-align: center;
+  border: none;
+}
+
+.skills-list_Template_2 {
+  border-left: 2px solid #c8a24d; /* gold */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.language-row {
+  display: grid;
+  grid-template-columns: 1fr 140px auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.language-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lang-level {
+  display: flex;
+  gap: 4px;
+}
+
+.contact-list_Template_2 li {
+  font-size: 13px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffffff;
+  line-height: 1.5;
+}
+
+.skills-list_Template_2 li {
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1f4d53; /* dark teal */
+  line-height: 1.5;
+  padding-left: 20px;
+  font-weight: 600;
+}
+
+.timeline_Template_2 {
+  margin-bottom: 25px;
+  padding-left: 20px;
+  border-left: 2px solid #c8a24d; /* gold */
+  position: relative;
+}
+
+/* ================================
+   MAIN CONTENT
+================================ */
+.content_Template_1 {
+  width: 66%;
+  padding: 50px 50px;
+}
+
+.heading_Template_2 {
+  margin: 5px 0 15px 0;
+}
+
+.heading_Template_2 h2 {
+  display: inline-block;
+  padding: 6px 22px;
+  background: #c8a24d; /* gold pill */
+  color: #ffffff;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  width: 100%;
+  text-align: center;
+}
+
+.about_Template_2 {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #ffffff;
+}
+
+/* ============================
+   SKILLS EDITOR
+============================ */
+
+.skill-row {
+  display: grid;
+  grid-template-columns: 1fr 140px auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.skill-row .input_data {
+  width: 100%;
+}
+
+.skill-row .language-level {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #c8a24d;
+  background: #fff;
+  font-size: 13px;
+}
+
+/* ================================
+   REFERENCES
+================================ */
+.ref-card-wrapper {
+  margin-bottom: 15px;
+}
+
+.ref-card_Template_2 {
+  background: #ffffff;
+  padding: 18px 20px;
+  border-radius: 12px;
+  border: 1px solid #e5e1d8;
+  transition: all 0.2s ease;
+}
+
+.ref-card_Template_2 h4 {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.ref-line {
+  font-size: 13px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.section_Template_2,
+.ref-card_Template_2 {
+  break-inside: avoid;
+}
+
+li {
+  list-style-type: none;
+}
+
+.li {
+  position: relative;
+  list-style: none;
+  margin-left: 40px;
+}
+`;
+
+    document.head.appendChild(style);
+  }
+}
 
 function injectPinkCorporateTemplateStyles(){
   if (!document.getElementById('pink-corporate-style')) {
@@ -4186,15 +5395,6 @@ function injectPinkCorporateTemplateStyles(){
     style.id = 'pink-corporate-style';
 
     style.textContent = `
-/* ====================
-RESUME PAGE
-==================== */
-.resume_Template_1{
-  display:flex;
-  width:794px;
-  min-height:1122px;
-  background:#f5f5f5;
-}
 
 /* ====================
 SIDEBAR
@@ -4205,13 +5405,6 @@ SIDEBAR
   background:linear-gradient(180deg,#f472a1 0%, #e75480 100%);
   color:white;
 
-}
-
-.ref-card_Template_3 {
-  margin-top: 1rem;
-  padding: 10px;
-  border: 1px rgba(255, 192, 203, 0.432) solid;
-  border-radius: 10px;
 }
 
 .ref-card_Template_3 h4 {
@@ -4301,7 +5494,7 @@ MAIN CONTENT
 /* ABOUT TEXT */
 .about_Template_3{
   font-size:15px;
-  line-height:1.8;
+  line-height:1.5;
   color: white;
   font-weight: 500;
 }
@@ -4324,34 +5517,433 @@ MAIN CONTENT
   color:white;
 }
 
-/* BULLETS */
-.li::before{
-  content:"";
-  position:absolute;
-  left:-20px;
-  top:0.6em;
-  width:6px;
-  height:6px;
-  background:white;
-  border-radius:50%;
-}
-
-
-.rule {
-    height: 2px;
-    width: 50px;
-    background: linear-gradient(180deg,#eb407f 0%, #df285f 100%);
-    margin-top: 8px;
-    border-radius: 2px;
-}
-
-.lang-level .dot.filled {
-  
-}
 `;
     document.head.appendChild(style);
   }
 }
+
+function injectPinkCorporateTemplateStylesII(){
+  if (!document.getElementById('pink-corporate-styleII')) {
+    const style = document.createElement('style');
+    style.id = 'pink-corporate-styleII';
+
+    style.textContent = `
+
+/* ====================
+SIDEBAR
+==================== */
+.sidebar_Template_3{
+  width:34%;
+  padding:50px 30px;
+  background:linear-gradient(180deg,#f472a1 0%, #e75480 100%);
+  color:white;
+
+}
+
+.ref-card_Template_3 h4 {
+  margin: 10px 0;
+
+}
+
+/* PHOTO */
+.photo-wrap_Template_3{
+  width:140px;
+  height:140px;
+  border-radius:50%;
+  overflow:hidden;
+  margin:0 auto 25px;
+  border:5px solid white;
+  box-shadow:0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* SIDEBAR TITLES */
+.section-title_Template_3{
+  font-size:16px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  margin-bottom:15px;
+  color:white;
+  
+  
+
+}
+
+/* NAME */
+.name_Template_3{
+      font-size: 24px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.5px;
+  color:var(--dark);
+}
+
+.role_Template_3{
+  font-size: 14px;
+    text-align: center;
+    margin-top: 6px;
+  color: whitesmoke;
+}
+
+/* CONTACT */
+.contact-list_Template_3 li{
+  font-size:13px;
+  margin-bottom:10px;
+  color:white;
+}
+
+.side-section_Template_3 {
+  margin-top:10px ;
+}
+
+.side-section_Template_3 li {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+/* ====================
+MAIN CONTENT
+==================== */
+.content_Template_1{
+  width:66%;
+  padding:50px;
+  background:white;
+}
+
+/* SECTION HEADINGS */
+.heading_Template_3 h2{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  font-size:17px;
+  font-weight:700;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  border-bottom:2px solid #fce7ef;
+  padding-bottom:6px;
+  margin-bottom:15px;
+}
+
+/* ABOUT TEXT */
+.about_Template_3{
+  font-size:15px;
+  line-height:1.5;
+  color: white;
+  font-weight: 500;
+}
+
+/* TIMELINE */
+.timeline_Template_3{
+  margin-bottom:25px;
+  padding-left:20px;
+  border-left:2px solid #f80961;
+}
+
+/* SKILLS */
+.skills-list_Template_3{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+
+.skills-list_Template_3 li{
+  font-size:14px;
+  color:white;
+}
+
+`;
+    document.head.appendChild(style);
+  }
+}
+
+function injectpromidnighttTemplateStylesII() {
+  if (!document.getElementById('promidnight-template-style')) {
+
+    const style = document.createElement('style');
+    style.id = 'midnight-template-style';
+
+    style.textContent = `
+      
+    :root {
+      --fa-primary: #68687a;
+      --fa-accent: #9cc7d1;
+      --dark: #191c24;
+      --gray: #64748b;
+      --light: #f8fafc;
+      --border: #e2e8f0;
+    }
+
+    .skill {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    /* ATS-skills */
+    .ATS-skills {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+      gap: 15px;
+    }
+    
+.resume {
+    width: 794px;
+    min-width: 794px;
+    min-height: 1122px;
+    max-height: 1122px;
+    margin-bottom: 30px;
+    background: #ffffff;
+}
+
+/* ================================
+   SIDEBAR – GLASS + GRADIENT
+================================ */
+.sidebar_Template_1 {
+  width: 34%;
+  padding: 50px 30px;
+  background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+  color: #e2e8f0;
+  position: relative;
+  max-height: 1122px;
+  overflow-y: hidden;
+}
+
+.photo-wrap_Template_1 {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 25px;
+  border: 4px solid rgba(255,255,255,0.15);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+}
+
+.photo-wrap_Template_1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.section-title_Template_1 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #cbd5e1;
+}
+
+.name_Template_1 {
+  font-size: 24px;
+  font-weight: 700;
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+
+.role_Template_1 {
+  font-size: 14px;
+  text-align: center;
+  margin-top: 6px;
+  color: #94a3b8;
+}
+
+.side-section_Template_1 {
+  margin-top: 40px;
+}
+
+
+
+.contact-list_Template_1,
+.skills-list_Template_1 {
+  list-style: none;
+ 
+}
+
+.summary {
+  margin-top: 1rem;
+}
+
+.summary .heading_Template_1 h2 {
+  font-size: 13px;
+  color:#e2e8f0 ;
+  margin-top: 2rem;
+  margin-bottom: -0.5rem;
+}
+
+.skills-list_Template_1 {
+ border-left: 2px solid #e2e8f0;
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+}
+
+
+.language-row {
+  display: grid;
+  grid-template-columns: 1fr 140px auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.language-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lang-level {
+  display: flex;
+  gap: 4px;
+}
+
+.skills-list_Template_1 li {
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #0f172a;
+  line-height: 1.5;
+  padding-left: 20px;
+  font-weight: 600;
+}
+
+.timeline_Template_1 {
+    margin-bottom: 25px;
+    padding-left: 20px;
+    border-left: 2px solid #e2e8f0;
+    position: relative;
+}
+
+/* ================================
+   MAIN CONTENT – CLEAN + AIRY
+================================ */
+.content_Template_1 {
+  width: 66%;
+  padding: 50px 50px;
+  background: #ffffff;
+}
+
+.heading_Template_1 {
+  margin: 45px 0 15px 0;
+  color: #3e3e3e;
+}
+
+.heading_Template_1 h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+
+.about_Template_1 {
+  font-size: 14px;
+  line-height: 1.8;
+  color: #e2e8f0;
+}
+
+/* ============================
+   SKILLS EDITOR (with level)
+============================ */
+
+.skill-row {
+  display: grid;
+  grid-template-columns: 1fr 140px auto;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.skill-row .input_data {
+  width: 100%;
+}
+
+.skill-row .language-level {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  font-size: 13px;
+}
+
+
+
+/* ================================
+   REFERENCES – CARD STYLE
+================================ */
+.ref-card-wrapper {
+  margin-bottom: 15px;
+}
+
+.ref-card_Template_1 {
+  background: #f8fafc;
+  padding: 18px 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  transition: all 0.2s ease;
+}
+
+.ref-card_Template_1 h4 {
+  font-size: 14px;
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.ref-line {
+  font-size: 13px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #0f172a;
+}
+
+
+
+.section_Template_1,
+.ref-card_Template_1 {
+  break-inside: avoid;
+}
+
+li {
+    list-style-type: none;
+}
+
+.li {
+  position: relative; /* REQUIRED */
+  list-style: none;   /* Remove default bullet */
+  margin-left: 40px;
+}
+
+    `;
+
+    document.head.appendChild(style);
+  }
+}
+
+function injectModernAtsTemplateStyles() {
+  if (!document.getElementById('Modern-ATS-template-style')) {
+
+    const style = document.createElement('style');
+    style.id = 'Modern-ATS-template-style';
+
+    style.textContent = `
+
+    `;
+
+    document.head.appendChild(style);
+  }
+}
+
+
+
 function updateCounter(){
   const textarea = document.getElementById("summary");
   const counter = document.getElementById("summaryCounter");

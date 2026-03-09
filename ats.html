@@ -1,350 +1,357 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Modern 2026 Resume</title>
+    <title>Modern 2026 Resume</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+        rel="stylesheet">
 
-<style>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-}
+        body {
+            font-family: Inter, sans-serif;
+            padding: 40px;
+            background:#0f172a;
+        }
 
-body{
-background:#0f172a;
-font-family:Inter, sans-serif;
-padding:40px;
-}
+        /* MAIN CONTAINER */
 
-/* MAIN CONTAINER */
+        .resume_Template_1 {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #ffffff;
+            width: 794px;
+            min-width: 794px;
+            min-height: 1122px;
+            margin: 0 auto;
+        }
 
-.resume{
-max-width:1000px;
-margin:auto;
-background:#ffffff;
-border-radius:18px;
-overflow:hidden;
-box-shadow:0 40px 80px rgba(0,0,0,0.35);
-}
+        /* HEADER */
 
-/* HEADER */
+        .header {
+            background: linear-gradient(135deg, #0f172a, #1e293b, #0ea5a4);
+            padding: 60px 60px 120px 60px;
+            color: white;
+            position: relative;
+        }
 
-.header{
-background:linear-gradient(135deg,#0f172a,#1e293b,#0ea5a4);
-padding:60px 60px 120px 60px;
-color:white;
-position:relative;
-}
+        .header-grid {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.header-grid{
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
+        .name {
+            font-size: 42px;
+            font-family: "Space Grotesk";
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
 
-.name{
-font-size:42px;
-font-family:"Space Grotesk";
-font-weight:700;
-letter-spacing:2px;
-}
+        .title {
+            opacity: .85;
+            margin-top: 6px;
+            letter-spacing: 2px;
+            font-size: 14px;
+        }
 
-.title{
-opacity:.85;
-margin-top:6px;
-letter-spacing:2px;
-font-size:14px;
-}
+        .contact {
+            text-align: right;
+            font-size: 13px;
+            line-height: 1.7;
+            opacity: .9;
+        }
 
-.contact{
-text-align:right;
-font-size:13px;
-line-height:1.7;
-opacity:.9;
-}
+        /* PROFILE IMAGE */
 
-/* PROFILE IMAGE */
+        .profile {
+            position: absolute;
+            bottom: -55px;
+            left: 60px;
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 6px solid white;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, .25);
+        }
 
-.profile{
-position:absolute;
-bottom:-55px;
-left:60px;
-width:110px;
-height:110px;
-border-radius:50%;
-overflow:hidden;
-border:6px solid white;
-box-shadow:0 10px 25px rgba(0,0,0,.25);
-}
+        .profile img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
 
-.profile img{
-width:100%;
-height:100%;
-object-fit:cover;
-}
+        /* MAIN GRID */
 
-/* MAIN GRID */
+        .content_Template_1 {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 50px;
+            padding: 100px 60px 60px 60px;
+        }
 
-.main{
-display:grid;
-grid-template-columns:2fr 1fr;
-gap:50px;
-padding:100px 60px 60px 60px;
-}
+        /* SECTION */
 
-/* SECTION */
+        .section {
+            margin-bottom: 40px;
+        }
 
-.section{
-margin-bottom:40px;
-}
+        .section-title {
+            font-size: 14px;
+            letter-spacing: 3px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #0f172a;
+        }
 
-.section-title{
-font-size:14px;
-letter-spacing:3px;
-font-weight:700;
-margin-bottom:20px;
-color:#0f172a;
-}
+        .job {
+            margin-bottom: 25px;
+        }
 
-.job{
-margin-bottom:25px;
-}
+        .job-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
 
-.job-title{
-font-weight:600;
-font-size:14px;
-margin-bottom:6px;
-}
+        .job-meta {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
 
-.job-meta{
-font-size:12px;
-color:#64748b;
-margin-bottom:8px;
-}
+        .job-desc {
+            font-size: 13px;
+            color: #475569;
+            line-height: 1.6;
+        }
 
-.job-desc{
-font-size:13px;
-color:#475569;
-line-height:1.6;
-}
+        /* SKILLS */
 
-/* SKILLS */
+        .skill {
+            margin-bottom: 16px;
+        }
 
-.skill{
-margin-bottom:16px;
-}
+        .skill-name {
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
 
-.skill-name{
-font-size:13px;
-margin-bottom:6px;
-}
+        .skill-bar {
+            height: 7px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            overflow: hidden;
+        }
 
-.skill-bar{
-height:7px;
-background:#e2e8f0;
-border-radius:20px;
-overflow:hidden;
-}
+        .skill-level {
+            height: 100%;
+            background: linear-gradient(90deg, #14b8a6, #22d3ee);
+        }
 
-.skill-level{
-height:100%;
-background:linear-gradient(90deg,#14b8a6,#22d3ee);
-}
+        /* EDUCATION */
 
-/* EDUCATION */
+        .edu {
+            margin-bottom: 18px;
+        }
 
-.edu{
-margin-bottom:18px;
-}
+        .edu-title {
+            font-size: 14px;
+            font-weight: 600;
+        }
 
-.edu-title{
-font-size:14px;
-font-weight:600;
-}
+        .edu-meta {
+            font-size: 12px;
+            color: #64748b;
+        }
 
-.edu-meta{
-font-size:12px;
-color:#64748b;
-}
+        /* TAG SKILLS */
 
-/* TAG SKILLS */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
 
-.tags{
-display:flex;
-flex-wrap:wrap;
-gap:8px;
-}
+        .tag {
+            background: #f1f5f9;
+            padding: 6px 10px;
+            font-size: 12px;
+            border-radius: 20px;
+        }
 
-.tag{
-background:#f1f5f9;
-padding:6px 10px;
-font-size:12px;
-border-radius:20px;
-}
+        /* RESPONSIVE */
 
-/* RESPONSIVE */
+        @media(max-width:900px) {
 
-@media(max-width:900px){
+            .main {
+                grid-template-columns: 1fr;
+            }
 
-.main{
-grid-template-columns:1fr;
-}
+            .contact {
+                text-align: left;
+                margin-top: 20px;
+            }
 
-.contact{
-text-align:left;
-margin-top:20px;
-}
+            .header-grid {
+                flex-direction: column;
+                align-items: flex-start;
+            }
 
-.header-grid{
-flex-direction:column;
-align-items:flex-start;
-}
+            .profile {
+                left: 40px;
+            }
 
-.profile{
-left:40px;
-}
-
-}
-
-</style>
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="resume">
+    <div class="resume_Template_1">
 
-<div class="header">
+        <div class="header">
 
-<div class="header-grid">
+            <div class="header-grid">
 
-<div>
-<div class="name">JOHN RESUMGO</div>
-<div class="title">GRAPHIC DESIGNER</div>
-</div>
+                <div>
+                    <div class="name">JOHN RESUMGO</div>
+                    <div class="title">GRAPHIC DESIGNER</div>
+                </div>
 
-<div class="contact">
-john@email.com<br>
-+1 123 456 789<br>
-linkedin.com/john<br>
-New York, USA
-</div>
+                <div class="contact">
+                    john@email.com<br>
+                    +1 123 456 789<br>
+                    linkedin.com/john<br>
+                    New York, USA
+                </div>
 
-</div>
+            </div>
 
-<div class="profile">
-<img src="https://i.pravatar.cc/300">
-</div>
+            <div class="profile">
+                <img src="https://i.pravatar.cc/300">
+            </div>
 
-</div>
+        </div>
 
-<div class="main">
+        <div class="content_Template_1">
 
-<!-- LEFT SIDE -->
+            <!-- LEFT SIDE -->
 
-<div>
+            <div>
 
-<div class="section">
-<div class="section-title">PROFILE</div>
+                <div class="section">
+                    <div class="section-title">PROFILE</div>
 
-<p class="job-desc">
-Creative graphic designer with 8+ years experience creating digital products, brand systems, and UI/UX designs for startups and global companies.
-</p>
-</div>
+                    <p class="job-desc">
+                        Creative graphic designer with 8+ years experience creating digital products, brand systems, and
+                        UI/UX designs for startups and global companies.
+                    </p>
+                </div>
 
-<div class="section">
-<div class="section-title">EXPERIENCE</div>
+                <div class="section">
+                    <div class="section-title">EXPERIENCE</div>
 
-<div class="job">
-<div class="job-title">Senior Graphic Designer</div>
-<div class="job-meta">Creative Studio • 2019 – Present</div>
-<p class="job-desc">
-Lead design initiatives for digital marketing campaigns, product UI systems, and branding across multiple platforms.
-</p>
-</div>
+                    <div class="job">
+                        <div class="job-title">Senior Graphic Designer</div>
+                        <div class="job-meta">Creative Studio • 2019 – Present</div>
+                        <p class="job-desc">
+                            Lead design initiatives for digital marketing campaigns, product UI systems, and branding
+                            across multiple platforms.
+                        </p>
+                    </div>
 
-<div class="job">
-<div class="job-title">UI Designer</div>
-<div class="job-meta">Tech Agency • 2016 – 2019</div>
-<p class="job-desc">
-Designed modern user interfaces and design systems used by SaaS companies and enterprise clients.
-</p>
-</div>
+                    <div class="job">
+                        <div class="job-title">UI Designer</div>
+                        <div class="job-meta">Tech Agency • 2016 – 2019</div>
+                        <p class="job-desc">
+                            Designed modern user interfaces and design systems used by SaaS companies and enterprise
+                            clients.
+                        </p>
+                    </div>
 
-</div>
+                </div>
 
-<div class="section">
-<div class="section-title">EDUCATION</div>
+                <div class="section">
+                    <div class="section-title">EDUCATION</div>
 
-<div class="edu">
-<div class="edu-title">Bachelor of Graphic Design</div>
-<div class="edu-meta">University of Design • 2012 – 2016</div>
-</div>
+                    <div class="edu">
+                        <div class="edu-title">Bachelor of Graphic Design</div>
+                        <div class="edu-meta">University of Design • 2012 – 2016</div>
+                    </div>
 
-</div>
+                </div>
 
-</div>
+            </div>
 
-<!-- RIGHT SIDE -->
+            <!-- RIGHT SIDE -->
 
-<div>
+            <div>
 
-<div class="section">
-<div class="section-title">SKILLS</div>
+                <div class="section">
+                    <div class="section-title">SKILLS</div>
 
-<div class="skill">
-<div class="skill-name">UI / UX Design</div>
-<div class="skill-bar">
-<div class="skill-level" style="width:90%"></div>
-</div>
-</div>
+                    <div class="skill">
+                        <div class="skill-name">UI / UX Design</div>
+                        <div class="skill-bar">
+                            <div class="skill-level" style="width:90%"></div>
+                        </div>
+                    </div>
 
-<div class="skill">
-<div class="skill-name">Figma</div>
-<div class="skill-bar">
-<div class="skill-level" style="width:85%"></div>
-</div>
-</div>
+                    <div class="skill">
+                        <div class="skill-name">Figma</div>
+                        <div class="skill-bar">
+                            <div class="skill-level" style="width:85%"></div>
+                        </div>
+                    </div>
 
-<div class="skill">
-<div class="skill-name">Branding</div>
-<div class="skill-bar">
-<div class="skill-level" style="width:80%"></div>
-</div>
-</div>
+                    <div class="skill">
+                        <div class="skill-name">Branding</div>
+                        <div class="skill-bar">
+                            <div class="skill-level" style="width:80%"></div>
+                        </div>
+                    </div>
 
-<div class="skill">
-<div class="skill-name">HTML / CSS</div>
-<div class="skill-bar">
-<div class="skill-level" style="width:75%"></div>
-</div>
-</div>
+                    <div class="skill">
+                        <div class="skill-name">HTML / CSS</div>
+                        <div class="skill-bar">
+                            <div class="skill-level" style="width:75%"></div>
+                        </div>
+                    </div>
 
-</div>
+                </div>
 
-<div class="section">
-<div class="section-title">TOOLS</div>
+                <div class="section">
+                    <div class="section-title">TOOLS</div>
 
-<div class="tags">
-<div class="tag">Figma</div>
-<div class="tag">Adobe XD</div>
-<div class="tag">Photoshop</div>
-<div class="tag">Illustrator</div>
-<div class="tag">Notion</div>
-</div>
+                    <div class="tags">
+                        <div class="tag">Figma</div>
+                        <div class="tag">Adobe XD</div>
+                        <div class="tag">Photoshop</div>
+                        <div class="tag">Illustrator</div>
+                        <div class="tag">Notion</div>
+                    </div>
 
-</div>
+                </div>
 
-</div>
+            </div>
 
-</div>
+        </div>
 
-</div>
+    </div>
 
 </body>
+
 </html>
